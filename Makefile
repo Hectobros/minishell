@@ -6,17 +6,17 @@
 #    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/26 12:25:23 by nschmitt          #+#    #+#              #
-#    Updated: 2021/12/05 11:56:17 by nschmitt         ###   ########.fr        #
+#    Updated: 2021/12/07 14:41:12 by nschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-LIBFTDIR = libft 
+LIBFTDIR = ./src/libft 
 
 NAME = minishell
 
-SRC = main.c
+SRC = ./src/minishell.c
 
-OBJ = main.o
+OBJ = ./src/minishell.o
 
 CC = cc
 
@@ -32,7 +32,7 @@ LIB :
 	make -C ${LIBFTDIR}
 
 CRR : ${OBJ}
-	${CC} -o ${NAME} ${OBJ} ${CFLAGS} ./libft/libftprintf.a ${CSUPP}
+	${CC} -o ${NAME} ${OBJ} ${CFLAGS} ./src/libft/libftprintf.a ${CSUPP}
 
 libftclean:
 	make clean -C ${LIBFTDIR}
