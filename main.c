@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/08 18:07:20 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/08 18:10:40 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,17 @@ int	main(void)
 	char	*line;
 	const char	*prompt;
 
-//	prompt = "jvermeer@e3r2p18:~/Desktop/minishell$";
-	prompt = "you>";
-	line = readline(prompt);
+	//	prompt = "jvermeer@e3r2p18:~/Desktop/minishell$";
+	prompt = "minishell$ ";
 
-	ret = check_open_quotes(line);
-	if (ret)
-		printf("fail\n");
-	else
-		printf("ok\n");
+	while (1)
+	{
+		line = readline(prompt);
+		ret = check_open_quotes(line);
+		if (ret)
+			printf("fail\n");
+		else
+			printf("ok\n");
+	}
 	return (0);
 }
