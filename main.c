@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niels <niels@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/26 11:20:27 by nschmitt          #+#    #+#             */
-/*   Updated: 2019/12/28 14:41:23 by niels            ###   ########.fr       */
+/*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
+/*   Updated: 2021/12/08 10:34:59 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_isalpha(int c)
+int	main(void)
 {
-	if ((c > 64 && c < 91) || (c > 96 && c < 123))
-		return (1);
-	else
-		return (0);
+	printf("yo\n");
+	return (0);
 }
