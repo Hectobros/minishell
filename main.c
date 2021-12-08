@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/08 18:10:40 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/08 18:15:51 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	main(void)
 	while (1)
 	{
 		line = readline(prompt);
+		if (ft_strlen(line) != 0)
+			add_history (line);
 		ret = check_open_quotes(line);
 		if (ret)
 			printf("fail\n");

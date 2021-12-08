@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/08 18:15:44 by jvermeer         ###   ########.fr       */
+/*   Created: 2020/11/26 17:31:24 by jvermeer          #+#    #+#             */
+/*   Updated: 2021/12/08 18:15:06 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
 
-size_t	ft_strlen(const char *s);
-
-#endif
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
+}
