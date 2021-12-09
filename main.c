@@ -6,11 +6,18 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/09 11:46:34 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/09 14:41:36 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	isoperator(char c)
+{
+	if (c == '>' || c == '<' || c == '|' || c == '\'' || c == '"')
+		return (1);
+	return (0);
+}
 
 char	*dup_until_space(const char *src)
 {
@@ -28,7 +35,7 @@ char	*dup_until_space(const char *src)
 	dest = malloc(sizeof(char) * size);
 	if (dest == NULL)
 		return (NULL);
-	while (src[i] && src[i] != ' ')
+	while (src[i] && !isoperator(src[i]))
 	{
 		dest[i] = src[i];
 		i++;
@@ -36,7 +43,7 @@ char	*dup_until_space(const char *src)
 	dest[i] = '\0';
 	return (dest);
 }
-
+/*
 char	*dup_until_quotes(const char *src, char c)
 {
 	const char	*tmp;
@@ -66,27 +73,19 @@ char	*dup_until_quotes(const char *src, char c)
 
 int	split_all_content(char *line, t_content **lst)
 {
-	char		*content;
+	char c;
+	char *content;
 
 	while (*line)
 	{
 		while (*line == ' ')
 			line++;
-		if (*line == '"')
+		if (*line == '"' || *line == '\'')
 		{
-			content = dup_until_quotes(line, '"');
+			c = *line;
+			content = dup_until_quotes(line++, c);
 			add_back(lst, new_lst(content));
-			line++;
-			while (*line && *line != '"')
-				line++;
-			line++;
-		}
-		else if (*line == '\'')
-		{
-			content = dup_until_quotes(line, '\'');
-			add_back(lst, new_lst(content));
-			line++;
-			while (*line && *line != '\'')
+			while (*line && *line != c)
 				line++;
 			line++;
 		}
@@ -94,7 +93,64 @@ int	split_all_content(char *line, t_content **lst)
 		{
 			content = dup_until_space(line);
 			add_back(lst, new_lst(content));
-			while (*line && *line != ' ')
+			while (*line && !isoperator(*line))
+				line++;
+		}
+	}
+
+	return (0);
+}
+*/
+char	*dup_until_quotes(const char *src, char c)
+{
+	const char	*tmp;
+	int		size;
+	char	*dest;
+	int		i;
+
+	i = 0;
+	size = 1;
+	tmp = src;
+	while (*tmp && *tmp++ != c)
+		++size;
+	size = size + 2;
+	dest = malloc(sizeof(char) * size);
+	if (dest == NULL)
+		return (NULL);
+	dest[i++] = c;
+	while (src[i] && src[i] != c)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i++] = c;
+	dest[i] = '\0';
+	return (dest);
+}
+
+int	split_all_content(char *line, t_content **lst)
+{
+	char c;
+	char *content;
+
+	while (*line)
+	{
+		while (*line == ' ')
+			line++;
+		if (*line == '"' || *line == '\'')
+		{
+			c = *line;
+			content = dup_until_quotes(line++, c);
+			add_back(lst, new_lst(content));
+			while (*line && *line != c)
+				line++;
+			line++;
+		}
+		else if (*line)
+		{
+			content = dup_until_space(line);
+			add_back(lst, new_lst(content));
+			while (*line && !isoperator(*line))
 				line++;
 		}
 	}
@@ -102,7 +158,7 @@ int	split_all_content(char *line, t_content **lst)
 	return (0);
 }
 
-int	lexer_maker(char *line, t_content **lst)
+int	make_token(char *line, t_content **lst)
 {
 	if (check_open_quotes(line))
 		return (1);
@@ -128,7 +184,7 @@ int	main(void)
 		line = readline(prompt);
 		if (ft_strlen(line) != 0)
 			add_history (line);
-		if (lexer_maker(line, &lst))
+		if (make_token(line, &lst))
 			printf("Error\n");
 		while (lst)
 		{
