@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/10 12:02:48 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/10 12:49:54 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_tree
 
 typedef struct s_content
 {
-	int					token;// W=1  >=1 <=2 >>=3 <<=4 |=5
+	int					token;// W:1  >:2  >>:3  <:4  <<:5  |:6
 	char				*content;//W = anything O=">"
 	struct s_content	*next;
 }				t_content;

@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/10 12:21:47 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/10 12:54:56 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	print_lst(t_content *lst)
 {
 	while (lst)
 	{
+		printf("token:%d  ", lst->token);
 		printf("content:%s\n", lst->content);
 		lst = lst->next;
 	}
@@ -131,7 +132,7 @@ int	split_all_content(char *line, t_content **lst)
 {
 	char	*content;
 	int		add;
-	
+
 	while (*line)
 	{
 		if (*line == ' ' || *line == '\t' || *line == '\n')
@@ -175,7 +176,7 @@ int	regroup_redir(t_content *lst)
 			{
 				new = malloc(sizeof(char) * 3);
 				if (!new)
-					return (0);
+					return (-1);
 				new[0] = redir;
 				new[1] = redir;
 				new[2] = '\0';
@@ -188,7 +189,52 @@ int	regroup_redir(t_content *lst)
 		}
 		lst = lst->next;
 	}
-	return (1);
+	return (0);
+}
+
+void	delete_empty_content(t_content *lst)
+{
+	t_content *tmp;
+	t_content *beg;
+
+	beg = lst;
+	while (lst)
+	{
+		tmp = lst;
+		tmp = tmp->next;
+		if (tmp && *tmp->content == '\0')
+		{
+			lst->next = tmp->next;
+			free(tmp->content);
+			free(tmp);
+			lst = beg;
+		}
+		else
+			lst = lst->next;
+	}
+}
+
+void	give_token(t_content *lst)
+{
+	char	*tmp;
+
+	while (lst)
+	{
+		tmp = lst->content;
+		if (tmp[0] == '|')
+			lst->token = 6;
+		else if (tmp[0] == '>' && tmp[1] == '\0')
+			lst->token = 2;
+		else if (tmp[0] == '>' && tmp[1] == '>')
+			lst->token = 3;
+		else if (tmp[0] == '<' && tmp[1] == '\0')
+			lst->token = 4;
+		else if (tmp[0] == '<' && tmp[1] == '<')
+			lst->token = 5;
+		else
+			lst->token = 1;
+		lst = lst->next;
+	}
 }
 
 int	make_token(char *line, t_content **lst)
@@ -197,18 +243,18 @@ int	make_token(char *line, t_content **lst)
 		return (-1);
 	if (split_all_content(line, lst))
 		return (-1);
-	regroup_redir(*lst);
-
+	if (regroup_redir(*lst))
+		return (-1);
+	give_token(*lst);
 	print_lst(*lst);
-//join redir
 
 	//PLACE TOKEN
 
 	//REPLACE PATHH
 
-//		remove_quotes(*lst);
-//		printf("///////////////////////////////remove quotes\n");
-//		print_lst(*lst);
+	//		remove_quotes(*lst);
+	//	delete_empty_content(*lst);
+	//		printf("///////////////////////////////remove quotes\n");
 	return (0);
 }
 
