@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/10 11:21:25 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/10 12:21:47 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,13 +158,50 @@ int	split_all_content(char *line, t_content **lst)
 	return (0);
 }
 
+int	regroup_redir(t_content *lst)
+{
+	t_content *tmp;
+	char	*new;
+	char	redir;
+
+	while (lst)
+	{
+		if (*lst->content == '>' || *lst->content == '<')
+		{
+			redir = *lst->content;
+			tmp = lst;
+			tmp = tmp->next;
+			if (tmp && *tmp->content == redir)
+			{
+				new = malloc(sizeof(char) * 3);
+				if (!new)
+					return (0);
+				new[0] = redir;
+				new[1] = redir;
+				new[2] = '\0';
+				free(lst->content);
+				lst->content = new;
+				lst->next = tmp->next;
+				free(tmp->content);
+				free(tmp);
+			}
+		}
+		lst = lst->next;
+	}
+	return (1);
+}
+
 int	make_token(char *line, t_content **lst)
 {
 	if (check_open_quotes(line))
 		return (-1);
 	if (split_all_content(line, lst))
 		return (-1);
+	regroup_redir(*lst);
+
 	print_lst(*lst);
+//join redir
+
 	//PLACE TOKEN
 
 	//REPLACE PATHH
