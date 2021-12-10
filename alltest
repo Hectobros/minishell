@@ -4,3 +4,4 @@ echo bloblo > file > file1 > file2
 echo $$
 echo $999
 echo $034
+cat f1 | grep b > new1 | cat < new1 #dinguerie !? *-*

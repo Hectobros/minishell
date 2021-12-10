@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/10 19:33:59 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/10 21:18:57 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,7 +377,7 @@ char	*dol_is_env(int *i, int *len, char *dest, const char **rl)
 }
 
 char	*replace_dol(int *i, int *len, char *dest, const char **rl)//NEED TO ADD $$
-{
+{// ADD : id < or > before $FAIL   --->   $FAIL persiste
 	(*rl)++;
 	if ((**rl >= '1' && **rl <= '9'))
 		(*rl)++;

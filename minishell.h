@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/10 17:36:33 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/10 21:21:27 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,15 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-typedef struct s_tree
+typedef struct s_mini
 {
-	int		pipe;//pipe=1 or pipe=0
-
-
-	int		redirection; //table des redir: >:1   >>:10  <:15 <<:20  ou 0
+	int		pi[2];
+	int		po[2];
 	char	**cmd;//cmd name + all flags + argus
-	char	*input;
-	char	*ouput; //NULL ? 
-
-}				t_tree;
-
-
-// 	< file1 > file2 cmd1 arg1 flag1 | 
+	int		fdin;// = -500
+	int		fdout;// = -500
+	struct s_mini	*next;
+}				t_mini;
 
 typedef struct s_content
 {
