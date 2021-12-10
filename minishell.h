@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/10 12:49:54 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/10 17:36:33 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,9 @@ typedef struct s_content
 void			add_back(t_content **lst, t_content *lnew);
 t_content		*new_lst(char *content);
 
+int			ft_isalnum(int c);
 size_t		ft_strlen(const char *s);
-int			check_open_quotes(char *str);
+char		*ft_strdup(const char *src);
+int			check_open_quotes(const char *str);
 
 #endif

@@ -1,41 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_open_quotes.c                                :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/08 17:17:57 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/10 17:37:38 by jvermeer         ###   ########.fr       */
+/*   Created: 2020/11/26 17:31:02 by jvermeer          #+#    #+#             */
+/*   Updated: 2021/12/10 14:22:45 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-const char *quote_open(const char *str, char c, int *quote)
+char	*ft_strdup(const char *src)
 {
-	*quote = 1;
-	while (*str && *str != c)
-		str++;
-	if (*str == c)
-		*quote = 0;
-	return (str);
-}
+	int		size;
+	char	*dest;
+	int		i;
 
-int	check_open_quotes(const char *str)
-{
-	int	quote;
-
-	quote = 0;
-	while (*str)
+	size = ft_strlen(src) + 1;
+	dest = malloc(sizeof(char) * size);
+	if (dest == NULL)
+		return (NULL);
+	i = 0;
+	while (src[i])
 	{
-		if (*str == '\'')
-			str = quote_open(++str, '\'', &quote);
-		if (*str == '"')
-			str = quote_open(++str, '"', &quote);
-		str++;
+		dest[i] = src[i];
+		i++;
 	}
-	if (quote == 1)
-		return (1);
-	return (0);
+	dest[i] = '\0';
+	if (dest == NULL)
+		return (NULL);
+	return (dest);
 }

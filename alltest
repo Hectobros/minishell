@@ -1,3 +1,6 @@
 
 echo $""
-echo bloblo > file > file1 > file2 
+echo bloblo > file > file1 > file2
+echo $$
+echo $999
+echo $034
