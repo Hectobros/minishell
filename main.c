@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/09 18:28:14 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/10 11:21:25 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,6 @@ void	print_lst(t_content *lst)
 		printf("content:%s\n", lst->content);
 		lst = lst->next;
 	}
-}
-
-int	is_metachar(char c)
-{
-	if (c == '>' || c == '<' || c == '|' || c == '\n' || c == ' ' || c == '\t')
-		return (1);
-	return (0);
-}
-
-int	is_operator(char c)
-{
-	if (c == '>' || c == '<' || c == '|')
-		return (1);
-	return (0);
-}
-
-int	is_whitespace(char c)
-{
-	if (c == '\n' || c == ' ' || c == '\t')
-		return (1);
-	return (0);
 }
 
 int		remove_quote(char *str, char c)
@@ -110,70 +89,52 @@ void	remove_quotes(t_content *lst)
 	}
 }
 
-
-
-
-
-char	*dup_non_meta(const char *src)
+int	is_metachar(char c)
 {
-	const char	*tmp;
-	int		size;
-	char	*dest;
-	int		i;
-
-	i = 0;
-	size = 1;
-	tmp = src;
-	while (*tmp && !is_metachar(*tmp++))
-		++size;
-	size = size + 1;
-	dest = malloc(sizeof(char) * size);
-	if (dest == NULL)
-		return (NULL);
-	while (src[i] && !is_metachar(src[i]))
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
+	if (c == '>' || c == '<' || c == '|' || c == '\n' || c == ' ' || c == '\t')
+		return (1);
+	return (0);
 }
 
-char	*dup_until_quotes(const char *src, char c)
+int	dup_non_meta(const char *src, char **dest)
 {
-	const char	*tmp;
 	int		size;
-	char	*dest;
 	int		i;
+	char	c;
 
 	i = 0;
-	size = 1;
-	tmp = src;
-	while (*tmp && *tmp++ != c)
-		++size;
-	size = size + 2;
-	dest = malloc(sizeof(char) * size);
-	if (dest == NULL)
-		return (NULL);
-	dest[i++] = c;
-	while (src[i] && src[i] != c)
+	size = ft_strlen(src);
+	dest[0] = malloc(sizeof(char) * (size + 1));
+	if (!dest[0])
+		return (0);
+	while (src[i] && !is_metachar(src[i]))
 	{
-		dest[i] = src[i];
+		if (src[i] == '\'' || src[i] == '"')
+		{
+			c = src[i];
+			dest[0][i] = src[i];
+			i++;
+			while(src[i] != c)
+			{
+				dest[0][i] = src[i];
+				i++;
+			}
+		}
+		dest[0][i] = src[i];
 		i++;
 	}
-	dest[i++] = c;
-	dest[i] = '\0';
-	return (dest);
+	dest[0][i] = '\0';
+	return (i);
 }
 
 int	split_all_content(char *line, t_content **lst)
 {
-	char *content;
-	char c;
-
+	char	*content;
+	int		add;
+	
 	while (*line)
 	{
-		if (is_metachar(*line))
+		if (*line == ' ' || *line == '\t' || *line == '\n')
 			line++;
 		else if (is_metachar(*line))
 		{
@@ -185,24 +146,13 @@ int	split_all_content(char *line, t_content **lst)
 			add_back(lst, new_lst(content));
 			line++;
 		}
-		else if (*line == '\'' || *line == '"')
+		else
 		{
-			c = *line;
-			content = dup_until_quotes(line, c);
+			add = dup_non_meta(line, &content);
 			if (!content)
 				return (-1);
 			add_back(lst, new_lst(content));
-			while (*line && !is_metachar(*line))
-				line++;
-		}
-		else if (!is_metachar(*line))
-		{
-			content = dup_non_meta(line);
-			if (!content)
-				return (-1);
-			add_back(lst, new_lst(content));
-			while (*line && !is_metachar(*line))
-				line++;
+			line = line + add;
 		}
 	}
 	return (0);
@@ -211,17 +161,17 @@ int	split_all_content(char *line, t_content **lst)
 int	make_token(char *line, t_content **lst)
 {
 	if (check_open_quotes(line))
-		return (1);
+		return (-1);
 	if (split_all_content(line, lst))
-		return (1);
+		return (-1);
 	print_lst(*lst);
 	//PLACE TOKEN
 
 	//REPLACE PATHH
 
-	remove_quotes(*lst);
-	printf("///////////////////////////////remove quotes\n");
-	print_lst(*lst);
+//		remove_quotes(*lst);
+//		printf("///////////////////////////////remove quotes\n");
+//		print_lst(*lst);
 	return (0);
 }
 

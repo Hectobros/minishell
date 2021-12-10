@@ -1,2 +1,3 @@
 
 echo $""
+echo bloblo > file > file1 > file2 
