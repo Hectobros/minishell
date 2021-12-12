@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/11 21:14:26 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/12 19:28:46 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,20 +424,152 @@ char	*replace_env(const char *rl)
 	return (dest);
 }
 
+
+
+
+
+
+void	close_heredoc_pipes(t_content *lst)
+{
+	while (lst)
+	{
+		if (lst->token == 5)
+		{
+			close(lst->pfd[0]);
+		}
+		lst = lst->next;
+	}
+}
+
+int		str_cmp(const char *line, const char *match)
+{
+	while (*line && *match)
+	{
+		if (*line != *match)
+			return (1);
+		line++;
+		match++;
+	}
+	if (*line != *match)
+		return (1);
+	return (0);
+}
+
+void	write_in_fd(const char *line, int fd)
+{
+	while (*line)
+	{
+		write(fd, line, 1);
+		line++;
+	}
+	write(fd, "\n", 1);
+}
+
+void	create_double(int pfd[2], const char *match)
+{
+	char	*line;
+
+	line = readline(">");
+	while (str_cmp(line, match))
+	{
+		write_in_fd(line, pfd[1]);
+		line = readline(">");
+	}
+}
+
+void	create_heredoc(t_content *lst)
+{
+	while (lst)
+	{
+		if (lst->token == 5)
+		{
+			pipe(lst->pfd);
+			create_double(lst->pfd, lst->next->content);
+			close(lst->pfd[1]);
+		}
+		lst = lst->next;
+	}
+}
+
+int	check_correct_heredoc(t_content *lst)
+{
+	t_content	*tmp;
+
+	while (lst)
+	{
+		if (lst->token == 5)
+		{
+			tmp = lst;
+			tmp = tmp->next;
+			if (!tmp)
+				return (-1);
+			if (tmp->token != 1)
+				return (-1);
+		}
+		lst = lst->next;
+	}
+	return (0);
+}
+
+
+
+
+
+
+
+void	test_inside_fd(int pfd[2])
+{
+	char	**test;
+	int		pid;
+	int		savein;
+
+	test = malloc(sizeof(char*) * 2);
+
+	test[0] = ft_strdup("cat"); 
+	test[1] = NULL;
+	savein = dup2(pfd[0], 0);
+	pid = fork();
+	if (pid == 0)
+		printf("child:%d\n", execve("/usr/bin/cat", test, NULL));
+	waitpid(0, NULL, 0);
+	dup2(savein, 0);
+
+}
+
+void	read_heredoc(t_content *lst)
+{
+	while (lst)
+	{
+		if (lst->token == 5)
+			test_inside_fd(lst->pfd);
+		lst = lst->next;
+	}
+	printf("HERE\n");
+}
+
+
 int	make_token(const char *rl, t_content **lst)
 {
 	char	*line;
 
 	if (check_open_quotes(rl))
 		return (-1);
-	//CAS special; <<
 	line = replace_env(rl);
 	if (!line)
-		return (-1);
+		return (33);
 	if (split_all_content(line, lst))
-		return (-1);
+		return (33);
 	give_token(*lst);
 	remove_quotes(*lst);
+//	if (check_correct_heredoc(*lst))//NEED to be mixed with create enculados
+//		return (33);
+//	create_heredoc(*lst);
+	//traduction when writting inside pipe;
+
+//	read_heredoc(*lst);//temporaire
+//	close_heredoc_pipes(*lst);// pour NIELS
+	//create function which change path into env name
+
 	print_lst(*lst);
 	free(line);
 	return (0);
@@ -463,6 +595,7 @@ int	main(void)
 			printf("Error\n");
 			return (1);
 		}
+		//HERE
 		free_content_lst(lst);
 	}
 	return (0);

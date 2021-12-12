@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:07:24 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/12 17:08:56 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/12 19:14:50 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int	main(int ac, char **av, char **envp)
 
 	pipe(fdp);
 	create_double(fdp, "yoo", &psize);
-//	create_double(fdp, "end", &psize);
+	create_double(fdp, "end", &psize);
 
 	test = malloc(sizeof(char*) * 5);
 	test[0] = ft_strdup("cat"); 
