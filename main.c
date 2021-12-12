@@ -6,46 +6,12 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/10 21:18:57 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/11 21:14:26 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*   if > > ???
-	 int	regroup_redir(t_content *lst)
-	 {
-	 t_content *tmp;
-	 char	*new;
-	 char	redir;
-
-	 while (lst)
-	 {
-	 if (*lst->content == '>' || *lst->content == '<')
-	 {
-	 redir = *lst->content;
-	 tmp = lst;
-	 tmp = tmp->next;
-	 if (tmp && *tmp->content == redir)
-	 {
-	 new = malloc(sizeof(char) * 3);
-	 if (!new)
-	 return (-1);
-	 new[0] = redir;
-	 new[1] = redir;
-	 new[2] = '\0';
-	 free(lst->content);
-	 lst->content = new;
-	 lst->next = tmp->next;
-	 free(tmp->content);
-	 free(tmp);
-	 }
-	 }
-	 lst = lst->next;
-	 }
-	 return (0);
-	 }
- */
 int	is_metachar(char c)
 {
 	if (c == '>' || c == '<' || c == '|' || c == '\n' || c == ' ' || c == '\t')
@@ -77,7 +43,7 @@ void	print_lst(t_content *lst)
 	}
 }
 
-int		remove_quote(char *str, char c)
+int	remove_quote(char *str, char c)
 {
 	char	*tmp;
 
@@ -99,7 +65,7 @@ int		remove_quote(char *str, char c)
 
 int	remove_both_quotes(char *tmp, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	remove_quote(tmp, c);
@@ -114,7 +80,7 @@ int	remove_both_quotes(char *tmp, char c)
 
 void	remove_quotes(t_content *lst)
 {
-	char *tmp;
+	char	*tmp;
 
 	while (lst)
 	{
@@ -125,7 +91,6 @@ void	remove_quotes(t_content *lst)
 				tmp = tmp + remove_both_quotes(tmp, *tmp);
 			else
 				tmp++;
-
 		}
 		lst = lst->next;
 	}
@@ -149,7 +114,7 @@ int	dup_non_meta(const char *src, char **dest)
 			c = src[i];
 			dest[0][i] = src[i];
 			i++;
-			while(src[i] != c)
+			while (src[i] != c)
 			{
 				dest[0][i] = src[i];
 				i++;
@@ -220,10 +185,11 @@ int	split_all_content(char *line, t_content **lst)
 	}
 	return (0);
 }
+
 void	delete_empty_content(t_content *lst)
 {
-	t_content *tmp;
-	t_content *beg;
+	t_content	*tmp;
+	t_content	*beg;
 
 	beg = lst;
 	while (lst)
@@ -265,14 +231,12 @@ void	give_token(t_content *lst)
 	}
 }
 
-
-
 char	*get_env_name(const char *cont)
 {
 	const char	*tmp;
-	char	*dest;
-	int		size;
-	int		i;
+	char		*dest;
+	int			size;
+	int			i;
 
 	i = 0;
 	size = 0;
@@ -339,18 +303,44 @@ char	*dol_is_bash(int *i, int *len, char *dest, const char **rl)
 
 	p = *rl;
 	size = 0;
-	while (*p >= '0' && *p++ <= '9')
-		size++;
-	*len = *len + 4 + size;
+	*len = *len + 4;
 	dest = re_alloc(dest, *len, *i);
 	str_addback(dest, i, "bash", 4);
 	(*rl)++;
-	while (**rl >= '0' && **rl <= '9')
-	{
-		dest[(*i)++] = **rl;
-		(*rl)++;
-	}
 	return (dest);
+}
+
+char	*dol_is_interrog(int *i, int *len, char *dest, const char **rl)
+{
+	(void)len;
+	(void)i;
+	(void)rl;
+	return (dest);
+}
+
+int	is_after_redir(char *dest, int *i)
+{
+	int	j;
+
+	j = *i - 1;
+	while (j && dest[j] == ' ')
+		j--;
+	if (j >= 0 && (dest[j] == '<' || dest[j] == '>'))
+	{
+		dest[(*i)++] = '$';
+		return (1);
+	}
+	return (0);
+}
+
+void	env_is_incorrect(int *i, char *dest, const char **rl)
+{
+	if (!is_after_redir(dest, i))
+		while (**rl && (ft_isalnum(**rl) || **rl == '_'))
+			(*rl)++;
+	else
+		while (**rl && (ft_isalnum(**rl) || **rl == '_'))
+			dest[(*i)++] = *(*rl)++;
 }
 
 char	*dol_is_env(int *i, int *len, char *dest, const char **rl)
@@ -358,33 +348,46 @@ char	*dol_is_env(int *i, int *len, char *dest, const char **rl)
 	char	*envname;
 	char	*envdata;
 
-	envname = get_env_name(*rl);
+	envname = get_env_name((*rl + 1));
 	if (!envname)
 		return (NULL);
 	envdata = getenv(envname);
-	if (envdata)
+	free(envname);
+	(*rl)++;
+	if (envdata && *envdata != '\0')
 	{
 		*len = *len + ft_strlen(envdata);
 		dest = re_alloc(dest, *len, *i);
 		while (*envdata)
 			dest[(*i)++] = *envdata++;
+		while (**rl && (ft_isalnum(**rl) || **rl == '_'))
+			(*rl)++;
 	}
-	(*rl)++;
-	while (**rl && (ft_isalnum(**rl) || **rl == '_'))
-		(*rl)++;
-	free(envname);
+	else
+		env_is_incorrect(i, dest, rl);
 	return (dest);
 }
 
-char	*replace_dol(int *i, int *len, char *dest, const char **rl)//NEED TO ADD $$
-{// ADD : id < or > before $FAIL   --->   $FAIL persiste
-	(*rl)++;
-	if ((**rl >= '1' && **rl <= '9'))
-		(*rl)++;
-	else if (**rl == '0')
-		dest = dol_is_bash(i, len, dest, rl);
-	else
+int	is_special_dol(char c)
+{
+	if ((c >= '0' && c <= '9') || c == '-' || c == '#'
+		|| c == '$' || c == '@' || c == '*' || c == '!')
+		return (1);
+	return (0);
+}
+
+char	*replace_dol(int *i, int *len, char *dest, const char **rl)
+{
+	const char	*p;
+
+	p = *rl;
+	p++;
+	if (*p == '?')
+		dest = dol_is_interrog(i, len, dest, rl);
+	else if (!is_special_dol(*p))
 		dest = dol_is_env(i, len, dest, rl);
+	else
+		dest[(*i)++] = *(*rl)++;
 	return (dest);
 }
 
@@ -408,7 +411,7 @@ char	*replace_env(const char *rl)
 				dest[i++] = *rl++;
 			dest[i++] = *rl++;
 		}
-		else if (*rl && need_to_change(rl))
+		if (*rl && need_to_change(rl))
 		{
 			dest = replace_dol(&i, &len, dest, &rl);
 			if (!dest)
@@ -425,28 +428,17 @@ int	make_token(const char *rl, t_content **lst)
 {
 	char	*line;
 
-
 	if (check_open_quotes(rl))
 		return (-1);
+	//CAS special; <<
 	line = replace_env(rl);
 	if (!line)
 		return (-1);
-
-	//	printf("%s\n", line);
-
-	//	(void)lst;
-
 	if (split_all_content(line, lst))
 		return (-1);
 	give_token(*lst);
 	remove_quotes(*lst);
-
 	print_lst(*lst);
-
-	//	if (regroup_redir(*lst))// !!! fail si espace entre > > !!!
-	//		return (-1);
-	//	delete_empty_content(*lst); //doit conserver infos !
-
 	free(line);
 	return (0);
 }
@@ -454,8 +446,8 @@ int	make_token(const char *rl, t_content **lst)
 int	main(void)
 {
 	t_content	*lst;
-	int		exit;
-	char	*line;
+	int			exit;
+	char		*line;
 	const char	*prompt;
 
 	exit = 1;
@@ -464,7 +456,6 @@ int	main(void)
 	{
 		lst = NULL;
 		line = readline(prompt);
-
 		if (ft_strlen(line) != 0)
 			add_history (line);
 		if (make_token(line, &lst))
@@ -472,7 +463,6 @@ int	main(void)
 			printf("Error\n");
 			return (1);
 		}
-
 		free_content_lst(lst);
 	}
 	return (0);

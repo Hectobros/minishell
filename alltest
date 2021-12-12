@@ -1,7 +1,27 @@
 
-echo $""
+include une $ENV dans << : env transformé
+
+
+echo $""  # no needed
 echo bloblo > file > file1 > file2
+cat file1 < main.c
 echo $$
 echo $999
+echo $0
 echo $034
 cat f1 | grep b > new1 | cat < new1 #dinguerie !? *-*
+cat << test""
+echo $#
+echo $*
+echo $?
+echo $@
+echo $effeef#
+echo $fefe*
+echo $ffefe@
+echo $-
+export 156435="fail" TEST="ok"
+unset 1515connerie TEST
+echo $PATH"" | cat -e
+echo $PATH "" | cat -e
+
+cat | cat | ls !!come bash

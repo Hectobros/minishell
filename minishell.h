@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/10 21:21:27 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/12 17:15:19 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_mini
 {
 	int		pi[2];
 	int		po[2];
+//	int		piperedir[2];
 	char	**cmd;//cmd name + all flags + argus
 	int		fdin;// = -500
 	int		fdout;// = -500
@@ -33,6 +34,8 @@ typedef struct s_content
 {
 	int					token;// W:1  >:2  >>:3  <:4  <<:5  |:6
 	char				*content;//W = anything O=">"
+	int					pipe[2];
+	//create function close all pipe
 	struct s_content	*next;
 }				t_content;
 
