@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:17:57 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 11:53:41 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/13 16:48:15 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	remove_quotes(t_content *lst)
 	}
 }
 
-const char *quote_open(const char *str, char c, int *quote)
+char	*quote_open(char *str, char c, int *quote)
 {
 	*quote = 1;
 	while (*str && *str != c)
@@ -75,7 +75,7 @@ const char *quote_open(const char *str, char c, int *quote)
 	return (str);
 }
 
-int	check_open_quotes(const char *str)
+int	check_open_quotes(char *str)
 {
 	int	quote;
 

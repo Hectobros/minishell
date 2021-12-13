@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:22:38 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/09 16:19:17 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/13 17:08:14 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,18 +99,39 @@ void	remove_quotes(t_content *lst)
 	}
 }
 
+char	*re_alloc(char *buff, int hl, int limit)
+{
+	char	*new;
+	int		i;
+
+	i = 0;
+	new = malloc(sizeof(char) * hl);
+	if (!new)
+		return (NULL);
+	while (i < limit)
+	{
+		new[i] = buff[i];
+		i++;
+	}
+	free(buff);
+	return (new);
+}
+
 int main(void)
 {
 	char *test;
-	t_content	*lst;
+//	t_content	*lst;
 
-	lst = malloc(sizeof(t_content));
+//	lst = malloc(sizeof(t_content));
 	test = ft_strdup("''on' va remove de la' mem''");
-	lst->content = test;
+//	lst->content = test;
 
-	printf("%s\n", lst->content);
-	remove_quotes(lst);
-	printf("%s\n", lst->content);
+//	printf("%s\n", lst->content);
+//	remove_quotes(lst);
+//	printf("%s\n", test);
+	test = re_alloc(test, 50, ft_strlen(test) + 1);
+	free(test);
+
 
 	return (0);
 }

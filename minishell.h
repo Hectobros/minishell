@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 12:16:17 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/13 15:31:10 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int			ft_isalnum(int c);
 size_t		ft_strlen(const char *s);
 char		*ft_strdup(const char *src);
 void		remove_quotes(t_content *lst);
-int			check_open_quotes(const char *str);
-int			split_all_content(const char *line, t_content **lst);
+int			check_open_quotes(char *str);
+int			split_all_content(char *line, t_content **lst);
 
 #endif

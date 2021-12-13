@@ -35,3 +35,7 @@ echo | << t
 echo << m << | 
 echo << m < fefeeffe
 echo << yo |
+cat << yo |
+cat << h > file
+cat << "$?"
+cat << "$PATH"

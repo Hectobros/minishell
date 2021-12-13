@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 15:09:28 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/13 17:59:07 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	free_content_lst(t_content *lst)
 	while (lst)
 	{
 		tmp = lst;
-		free(lst->content);
 		lst = lst->next;
+		free(tmp->content);
 		free(tmp);
 	}
 	return (0);
@@ -157,25 +157,28 @@ void	pass_simple_quotes(char **cont, char *new, int *i)
 char	*change_content(char *cont)
 {
 	char	*new;
+	char	*tmp;
 	int		len;
 	int		i;
 
 	i = 0;
-	len = ft_strlen(cont) + 1;
+	tmp = cont;
+	len = ft_strlen(tmp) + 1;
 	new = malloc(sizeof(char) * len);
-	while (*cont)
+	while (*tmp)
 	{
-		if (*cont == '\'')
-			pass_simple_quotes(&cont, new, &i);
-		if (*cont == '$' && *(cont + 1) && *(cont + 1) == '?')
-			new = dol_is_interrog(new, &cont, &i, &len);
-		else if (*cont == '$' && *(cont + 1) && (ft_isalnum(*(cont + 1)) || *(cont + 1) == '_'))
-			new = dol_is_env(new, &cont, &i, &len);
+		if (*tmp == '\'')
+			pass_simple_quotes(&tmp, new, &i);
+		else if (*tmp == '$' && *(tmp + 1) && *(tmp + 1) == '?')
+			new = dol_is_interrog(new, &tmp, &i, &len);
+		else if (*tmp == '$' && *(tmp + 1) && (ft_isalnum(*(tmp + 1)) || *(tmp + 1) == '_'))
+			new = dol_is_env(new, &tmp, &i, &len);
 		else
-			new[i++] = *cont++;
+			new[i++] = *tmp++;
 		if (!new)
 			return (NULL);
 	}
+	free(cont);
 	new[i] = '\0';
 	return (new);
 }
@@ -262,8 +265,8 @@ void	test_inside_fd(int pfd[2])
 	{
 		close(pfd[1]);
 		dup2(pfd[0], 0);
-		printf("child:%d\n", execve("/usr/bin/cat", test, NULL));
 	}
+	free(test);
 	waitpid(0, NULL, 0);
 
 }
@@ -278,6 +281,10 @@ void	read_heredoc(t_content *lst)
 	}
 }
 
+
+
+
+
 void	close_heredoc_pipes(t_content *lst)
 {
 	while (lst)
@@ -290,31 +297,27 @@ void	close_heredoc_pipes(t_content *lst)
 	}
 }
 
-
-
-
-
-int	str_cmp(const char *line, const char *match)
+int	str_cmp(const char *rl, const char *match)
 {
-	while (*line && *match)
+	while (*rl && *match)
 	{
-		if (*line != *match)
+		if (*rl != *match)
 			return (1);
-		line++;
+		rl++;
 		match++;
 	}
-	if (*line != *match)
+	if (*rl != *match)
 		return (1);
 	return (0);
 }
 
-int	write_in_fd(const char *line, int fd)
+int	write_in_fd(const char *rl, int fd)
 {
 	char	*cont;
 	int		i;
 
 	i = 0;
-	cont = ft_strdup(line);
+	cont = ft_strdup(rl);
 	cont = change_content(cont);
 	if (!cont)
 		return (-1);
@@ -330,14 +333,14 @@ int	write_in_fd(const char *line, int fd)
 
 int	create_double(int pfd[2], const char *match)
 {
-	char	*line;
+	char	*rl;
 
-	line = readline(">");
-	while (str_cmp(line, match))
+	rl = readline(">");
+	while (str_cmp(rl, match))
 	{
-		if (write_in_fd(line, pfd[1]))
+		if (write_in_fd(rl, pfd[1]))
 			return (-1);
-		line = readline(">");
+		rl = readline(">");
 	}
 	return (0);
 }
@@ -367,9 +370,10 @@ int	create_heredoc(t_content *lst)
 }
 
 
-int	make_token(const char *rl, t_content **lst)
+int	make_token(char *rl, t_content **lst)
 {
 //	static int	interrog = 0;
+
 	if (check_open_quotes(rl))
 		return (-1);
 	if (split_all_content(rl, lst))
@@ -385,8 +389,7 @@ int	make_token(const char *rl, t_content **lst)
 
 	if (create_heredoc(*lst))
 		return (33);
-	//traduction when writting inside pipe;
-	read_heredoc(*lst);//temporaire
+//	read_heredoc(*lst);//temporaire
 	close_heredoc_pipes(*lst);// pour NIELS
 
 	print_lst(*lst);
@@ -397,7 +400,7 @@ int	main(void)
 {
 	t_content	*lst;
 	int			exit;
-	char		*line;
+	char		*rl;
 	const char	*prompt;
 
 	exit = 1;
@@ -405,14 +408,15 @@ int	main(void)
 	while (exit)
 	{
 		lst = NULL;
-		line = readline(prompt);
-		if (ft_strlen(line) != 0)
-			add_history (line);
-		if (make_token(line, &lst))
+		rl = readline(prompt);
+		if (ft_strlen(rl) != 0)
+			add_history(rl);
+		if (make_token(rl, &lst))
 		{
 			printf("Error\n");
 			return (1);
 		}
+		free(rl);
 		free_content_lst(lst);
 		exit = 0;
 	}
