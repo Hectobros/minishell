@@ -6,7 +6,7 @@
 #    By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/13 16:39:21 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/13 18:07:38 by jvermeer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SRCS = main.c \
 	   ft_strdup.c \
 	   check_quotes.c \
 	   split_content.c \
+	   create_heredoc.c \
 	   lst_content_utils.c \
 
 OBJS = ${SRCS:.c=.o}

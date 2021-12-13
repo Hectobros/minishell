@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:07:24 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/12 19:14:50 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/13 18:36:04 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*ft_strdup(const char *src)
 
 
 
-
+/*
 int		str_cmp(const char *line, const char *match)
 {
 	while (*line && *match)
@@ -113,18 +113,26 @@ void	create_double(int fdp[2], const char *match, int *psize)
 		line = readline(">");
 	}
 }
-
+*/
 int	main(int ac, char **av, char **envp)
 {
 	char	**test;
+	(void)ac;
+	(void)av;
+	(void)envp;
+//	printf("%d\n", access("$_", F_OK));
 
+
+	test = malloc(sizeof(char*) * 5);
+	test[0] = ft_strdup("cat"); 
+	test[1] = ft_strdup("$_"); 
+	test[2] = NULL;
+	execve("/usr/bin/cat", test, envp);
+	/*
 	int		fdp[2];
 	int		psize = 0;
 
 	int		pid;
-	(void)ac;
-	(void)av;
-	(void)envp;
 
 	pipe(fdp);
 	create_double(fdp, "yoo", &psize);
@@ -145,9 +153,6 @@ int	main(int ac, char **av, char **envp)
 	close(fdp[1]);
 //	test = malloc(sizeof(char*) * 5);
 
-
-
-	/*
 	char	**test;
 	char	*arg;
 
@@ -160,13 +165,6 @@ int	main(int ac, char **av, char **envp)
 	arg[5] = '"';
 	arg[6] = '\0';
 
-	test = malloc(sizeof(char*) * 5);
-	test[0] = ft_strdup("echo"); 
-	test[1] = ft_strdup(""); 
-	test[2] = ft_strdup(""); 
-	test[3] = arg; 
-	test[4] = NULL; 
-	execve("/usr/bin/echo", test, envp);
 	*/
 	return (0);
 }

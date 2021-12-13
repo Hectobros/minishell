@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 17:59:07 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/13 19:44:01 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,67 @@ void	print_lst(t_content *lst)
 	}
 }
 
+char	*re_alloc(char *buff, int hl, int limit)
+{
+	char	*new;
+	int		i;
+
+	i = 0;
+	new = malloc(sizeof(char) * hl);
+	if (!new)
+		return (NULL);
+	while (i < limit)
+	{
+		new[i] = buff[i];
+		i++;
+	}
+	free(buff);
+	return (new);
+}
+
+/*
+void	test_inside_fd(int pfd[2])
+{
+	char	**test;
+	int		pid;
+
+	test = malloc(sizeof(char*) * 2);
+
+	test[0] = ft_strdup("cat"); 
+	test[1] = NULL;
+	pid = fork();
+	if (pid == 0)
+	{
+		close(pfd[1]);
+		dup2(pfd[0], 0);
+	}
+	free(test);
+	waitpid(0, NULL, 0);
+
+}
+void	read_heredoc(t_content *lst)
+{
+	while (lst)
+	{
+		if (lst->token == 5)
+			test_inside_fd(lst->pfd);
+		lst = lst->next;
+	}
+}
+
+void	close_heredoc_pipes(t_content *lst)
+{
+	while (lst)
+	{
+		if (lst->token == 5)
+		{
+			close(lst->pfd[0]);
+		}
+		lst = lst->next;
+	}
+}
+*/
+
 void	give_token(t_content *lst)
 {
 	char	*tmp;
@@ -58,36 +119,7 @@ void	give_token(t_content *lst)
 		lst = lst->next;
 	}
 }
-
-char 	*dol_is_interrog(char *new, char **cont, int *i, int *len)
-{
-	(void)i;
-	(void)len;
-	(void)new;
-	(void)cont;
-
-	new[(*i)++] = *(*cont)++;
-	return (new);
-}
-
-char	*re_alloc(char *buff, int hl, int limit)
-{
-	char	*new;
-	int		i;
-
-	i = 0;
-	new = malloc(sizeof(char) * hl);
-	if (!new)
-		return (NULL);
-	while (i < limit)
-	{
-		new[i] = buff[i];
-		i++;
-	}
-	free(buff);
-	return (new);
-}
-
+//////////////////////////////////////////////////////////////
 char	*get_env_name(char *cont)
 {
 	const char	*tmp;
@@ -116,13 +148,13 @@ char	*get_env_name(char *cont)
 	return (dest);
 }
 
-
 void	cut_env_name(char **cont)
 {
 	(*cont)++;
 	while (**cont && (ft_isalnum(**cont) || **cont == '_'))
 		(*cont)++;
 }
+
 char	*dol_is_env(char *new, char **cont, int *i, int *len)
 {
 	char	*envname;
@@ -145,7 +177,17 @@ char	*dol_is_env(char *new, char **cont, int *i, int *len)
 	cut_env_name(cont);
 	return (new);
 }
+//////////////////////////////////////////////////////////////
 
+char	*dol_is_interrog(char *new, char **cont, int *i, int *len)
+{
+	(void)i;
+	(void)len;
+	(void)new;
+	(void)cont;
+	new[(*i)++] = *(*cont)++;
+	return (new);
+}
 
 void	pass_simple_quotes(char **cont, char *new, int *i)
 {
@@ -154,6 +196,7 @@ void	pass_simple_quotes(char **cont, char *new, int *i)
 		new[(*i)++] = *(*cont)++;
 	new[(*i)++] = *(*cont)++;
 }
+
 char	*change_content(char *cont)
 {
 	char	*new;
@@ -200,6 +243,23 @@ char	*check_if_redirection(char *cont)
 	return (cont);
 }
 
+void	del_useless_env(t_content *lst)
+{
+	t_content *tmp;
+
+	while (lst)
+	{
+		tmp = lst->next;
+		if (tmp && tmp->token == 999)
+		{
+			lst->next = tmp->next;
+			free(tmp->content);
+			free(tmp);
+		}
+		lst = lst->next;
+	}
+}
+
 int		replace_env(t_content *lst)
 {
 	t_content *before;
@@ -227,153 +287,26 @@ int		replace_env(t_content *lst)
 	return (0);
 }
 
-void	del_useless_env(t_content *lst)
+void	file_var_inquotes(t_content *lst)
 {
-	t_content *tmp;
+	t_content	*bef;
+	char		*tmp;
 
+	bef = lst;
+	lst = lst->next;
 	while (lst)
 	{
-		tmp = lst->next;
-		if (tmp && tmp->token == 999)
-		{
-			lst->next = tmp->next;
-			free(tmp->content);
-			free(tmp);
-		}
+		tmp = lst->content;
+		if ((bef->token == 2 || bef->token == 3 || bef->token == 4) && *tmp == '$'
+			&& *(tmp + 1) && (ft_isalnum(*(tmp + 1)) || *(tmp + 1) == '_'))
+			lst->token = 666;
+		bef = bef->next;
 		lst = lst->next;
 	}
 }
-
-
-
-
-
-
-
-
-void	test_inside_fd(int pfd[2])
-{
-	char	**test;
-	int		pid;
-
-	test = malloc(sizeof(char*) * 2);
-
-	test[0] = ft_strdup("cat"); 
-	test[1] = NULL;
-	pid = fork();
-	if (pid == 0)
-	{
-		close(pfd[1]);
-		dup2(pfd[0], 0);
-	}
-	free(test);
-	waitpid(0, NULL, 0);
-
-}
-
-void	read_heredoc(t_content *lst)
-{
-	while (lst)
-	{
-		if (lst->token == 5)
-			test_inside_fd(lst->pfd);
-		lst = lst->next;
-	}
-}
-
-
-
-
-
-void	close_heredoc_pipes(t_content *lst)
-{
-	while (lst)
-	{
-		if (lst->token == 5)
-		{
-			close(lst->pfd[0]);
-		}
-		lst = lst->next;
-	}
-}
-
-int	str_cmp(const char *rl, const char *match)
-{
-	while (*rl && *match)
-	{
-		if (*rl != *match)
-			return (1);
-		rl++;
-		match++;
-	}
-	if (*rl != *match)
-		return (1);
-	return (0);
-}
-
-int	write_in_fd(const char *rl, int fd)
-{
-	char	*cont;
-	int		i;
-
-	i = 0;
-	cont = ft_strdup(rl);
-	cont = change_content(cont);
-	if (!cont)
-		return (-1);
-	while (cont[i])
-	{
-		write(fd, (cont + i), 1);
-		i++;
-	}
-	write(fd, "\n", 1);
-	free(cont);
-	return (0);
-}
-
-int	create_double(int pfd[2], const char *match)
-{
-	char	*rl;
-
-	rl = readline(">");
-	while (str_cmp(rl, match))
-	{
-		if (write_in_fd(rl, pfd[1]))
-			return (-1);
-		rl = readline(">");
-	}
-	return (0);
-}
-
-int	create_heredoc(t_content *lst)
-{
-	t_content	*tmp;
-
-	while (lst)
-	{
-		if (lst->token == 5)
-		{
-			tmp = lst;
-			tmp = tmp->next;
-			if (!tmp)
-				return (-1);
-			if (tmp->token != 1)
-				return (-1);
-			pipe(lst->pfd);
-			if (create_double(lst->pfd, lst->next->content))
-				return (33);
-			close(lst->pfd[1]);
-		}
-		lst = lst->next;
-	}
-	return (0);
-}
-
 
 int	make_token(char *rl, t_content **lst)
 {
-//	static int	interrog = 0;
-
 	if (check_open_quotes(rl))
 		return (-1);
 	if (split_all_content(rl, lst))
@@ -383,16 +316,12 @@ int	make_token(char *rl, t_content **lst)
 		if (replace_env(*lst))
 			return (33);
 	del_useless_env(*lst);
+	file_var_inquotes(*lst);
 	remove_quotes(*lst);
-
-
-
 	if (create_heredoc(*lst))
 		return (33);
 //	read_heredoc(*lst);//temporaire
-	close_heredoc_pipes(*lst);// pour NIELS
-
-	print_lst(*lst);
+//	close_heredoc_pipes(*lst);// pour NIELS
 	return (0);
 }
 
@@ -416,9 +345,10 @@ int	main(void)
 			printf("Error\n");
 			return (1);
 		}
+		print_lst(lst);
 		free(rl);
 		free_content_lst(lst);
-		exit = 0;
+//		exit = 0;
 	}
 	return (0);
 }
