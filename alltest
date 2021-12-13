@@ -2,6 +2,8 @@
 include une $ENV dans << : env transformé
 
 
+probleme with prs: only one token : $fake      --> not deleted
+
 echo $""  # no needed
 echo bloblo > file > file1 > file2
 cat file1 < main.c

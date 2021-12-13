@@ -6,17 +6,18 @@
 #    By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/10 15:30:26 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/13 11:55:58 by jvermeer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRCS = main.c \
-	   check_open_quotes.c \
 	   ft_strlen.c \
 	   ft_isalnum.c \
 	   ft_strdup.c \
+	   check_quotes.c \
+	   split_content.c \
 	   lst_content_utils.c \
 
 OBJS = ${SRCS:.c=.o}
