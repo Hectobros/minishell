@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 12:29:45 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/13 13:05:59 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,26 +312,6 @@ void	close_heredoc_pipes(t_content *lst)
 	}
 }
 
-int	check_correct_heredoc(t_content *lst)
-{
-	t_content	*tmp;
-
-	while (lst)
-	{
-		if (lst->token == 5)
-		{
-			tmp = lst;
-			tmp = tmp->next;
-			if (!tmp)
-				return (-1);
-			if (tmp->token != 1)
-				return (-1);
-		}
-		lst = lst->next;
-	}
-	return (0);
-}
-
 
 
 
@@ -386,20 +366,27 @@ int	create_double(int pfd[2], const char *match)
 
 int	create_heredoc(t_content *lst)
 {
+	t_content	*tmp;
+
 	while (lst)
 	{
 		if (lst->token == 5)
 		{
+			tmp = lst;
+			tmp = tmp->next;
+			if (!tmp)
+				return (-1);
+			if (tmp->token != 1)
+				return (-1);
 			pipe(lst->pfd);
 			if (create_double(lst->pfd, lst->next->content))
-				return (-1);
+				return (33);
 			close(lst->pfd[1]);
 		}
 		lst = lst->next;
 	}
 	return (0);
 }
-
 
 
 int	make_token(const char *rl, t_content **lst)
@@ -422,8 +409,6 @@ int	make_token(const char *rl, t_content **lst)
 
 
 
-	if (check_correct_heredoc(*lst))//NEED to be mixed with create 
-		return (33);
 	if (create_heredoc(*lst))
 		return (33);
 	//traduction when writting inside pipe;
