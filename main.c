@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 13:05:59 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/13 15:09:28 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,26 +59,6 @@ void	give_token(t_content *lst)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 char 	*dol_is_interrog(char *new, char **cont, int *i, int *len)
 {
 	(void)i;
@@ -89,8 +69,6 @@ char 	*dol_is_interrog(char *new, char **cont, int *i, int *len)
 	new[(*i)++] = *(*cont)++;
 	return (new);
 }
-
-
 
 char	*re_alloc(char *buff, int hl, int limit)
 {
@@ -391,13 +369,9 @@ int	create_heredoc(t_content *lst)
 
 int	make_token(const char *rl, t_content **lst)
 {
-	//	char	*line;
-
+//	static int	interrog = 0;
 	if (check_open_quotes(rl))
 		return (-1);
-	//	line = replace_env(rl);
-	//	if (!line)
-	//		return (33);
 	if (split_all_content(rl, lst))
 		return (33);
 	give_token(*lst);
@@ -416,7 +390,6 @@ int	make_token(const char *rl, t_content **lst)
 	close_heredoc_pipes(*lst);// pour NIELS
 
 	print_lst(*lst);
-	//	free(line);
 	return (0);
 }
 
@@ -441,6 +414,7 @@ int	main(void)
 			return (1);
 		}
 		free_content_lst(lst);
+		exit = 0;
 	}
 	return (0);
 }

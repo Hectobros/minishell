@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 11:55:24 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 12:17:11 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/13 15:19:09 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,16 @@ int	dup_non_meta(const char *src, char **dest)
 	dest[0] = malloc(sizeof(char) * (size + 1));
 	if (!dest[0])
 		return (0);
-	while (src[i] && !is_metachar(src[i]))
+	while (*src && !is_metachar(*src))
 	{
-		if (src[i] == '\'' || src[i] == '"')
+		if (*src == '\'' || *src == '"')
 		{
-			c = src[i];
-			dest[0][i] = src[i];
-			i++;
-			while (src[i] != c)
-			{
-				dest[0][i] = src[i];
-				i++;
-			}
+			c = *src;
+			dest[0][i++] = *src++;
+			while (*src != c)
+				dest[0][i++] = *src++;
 		}
-		dest[0][i] = src[i];
-		i++;
+		dest[0][i++] = *src++;
 	}
 	dest[0][i] = '\0';
 	return (i);
