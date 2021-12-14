@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/14 16:52:05 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:14:18 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,10 +153,11 @@ int	main(int ac, char **av)
 		echo[0] = strdup("echo");
 		echo[1] = strdup("-n");
 		echo[2] = strdup("-n");
-		echo[3] = strdup("-n");
-		echo[4] = strdup("brat");
-		echo[6] = strdup("-n");
-		echo[7] = NULL;
+		echo[3] = strdup("brat");
+		echo[4] = strdup("-n");
+		echo[5] = NULL;
+		env[0] = strdup("env");
+		env[1] = NULL;
 
 		if (rl[0] == 'p' && rl[1] == 'w' && rl[2] == 'd')
 			pwd42(pwd);
@@ -168,7 +169,7 @@ int	main(int ac, char **av)
 			printf("\n");
 		}
 		else
-			echo42(echo);
+//			echo42(echo);
 			//cd42(cd);
 		
 

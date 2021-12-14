@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 19:23:14 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:36:00 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ typedef struct s_mini
 	char	*crashword;
 	struct s_mini	*next;
 }				t_mini;
-
 typedef struct s_content
 {
 	int					token;// W:1  >:2  >>:3  <:4  <<:5  |:6  if '$no':666
@@ -40,17 +39,22 @@ typedef struct s_content
 	int					pfd[2];//reading size: pfd[0]
 	struct s_content	*next;
 }				t_content;
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}				t_env;
 
 void			add_back(t_content **lst, t_content *lnew);
 t_content		*new_lst(char *content);
-
-int			ft_isalnum(int c);
-size_t		ft_strlen(const char *s);
-char		*ft_strdup(const char *src);
-int			create_heredoc(t_content *lst);
-void		remove_quotes(t_content *lst);
-int			check_open_quotes(char *str);
-int			split_all_content(char *line, t_content **lst);
-char		*change_content(char *cont);
+int				ft_isalnum(int c);
+size_t			ft_strlen(const char *s);
+char			*ft_strdup(const char *src);
+int				create_heredoc(t_content *lst);
+void			remove_quotes(t_content *lst);
+int				check_open_quotes(char *str);
+int				split_all_content(char *line, t_content **lst);
+char			*change_content(char *cont);
 
 #endif

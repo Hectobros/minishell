@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 19:44:01 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:34:58 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	test_inside_fd(int pfd[2])
 	waitpid(0, NULL, 0);
 
 }
-void	read_heredoc(t_content *lst)
+void	read_heredoc(t_content *lst)//			<----- test create_heredoc
 {
 	while (lst)
 	{
@@ -84,7 +84,7 @@ void	read_heredoc(t_content *lst)
 	}
 }
 
-void	close_heredoc_pipes(t_content *lst)
+void	close_heredoc_pipes(t_content *lst)//      <---- Before ending prog
 {
 	while (lst)
 	{
@@ -119,7 +119,7 @@ void	give_token(t_content *lst)
 		lst = lst->next;
 	}
 }
-//////////////////////////////////////////////////////////////
+
 char	*get_env_name(char *cont)
 {
 	const char	*tmp;
@@ -177,7 +177,6 @@ char	*dol_is_env(char *new, char **cont, int *i, int *len)
 	cut_env_name(cont);
 	return (new);
 }
-//////////////////////////////////////////////////////////////
 
 char	*dol_is_interrog(char *new, char **cont, int *i, int *len)
 {
@@ -325,12 +324,15 @@ int	make_token(char *rl, t_content **lst)
 	return (0);
 }
 
-int	main(void)
+int	main(int ac, char **av, char **env)
 {
 	t_content	*lst;
 	int			exit;
 	char		*rl;
 	const char	*prompt;
+	(void)ac;
+	(void)av;
+	(void)env;
 
 	exit = 1;
 	prompt = "minishell$ ";
