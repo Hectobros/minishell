@@ -3,49 +3,40 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
+#    By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/05/26 12:25:23 by nschmitt          #+#    #+#              #
-#    Updated: 2021/12/07 14:41:12 by nschmitt         ###   ########.fr        #
+#    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
+#    Updated: 2021/12/14 17:37:58 by jvermeer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-LIBFTDIR = ./src/libft 
-
 NAME = minishell
 
-SRC = ./src/minishell.c
+SRCS = main.c \
+	   ft_strlen.c \
+	   ft_isalnum.c \
+	   ft_strdup.c \
+	   check_quotes.c \
+	   split_content.c \
+	   create_heredoc.c \
+	   lst_content_utils.c \
+#	   lst_env_utils.c \
 
-OBJ = ./src/minishell.o
+OBJS = ${SRCS:.c=.o}
 
-CC = cc
+CFLAGS = -Wall -Wextra -Werror -pthread# -g -fsanitize=thread
 
-CFLAGS = -Wall -Wextra -Werror
+all: $(NAME)
 
-CSUPP = -lreadline
+$(NAME): $(OBJS)
+	gcc -o $(NAME) $(CFLAGS) $(OBJS) -lreadline
 
-RM = rm -f
+clean:
+	rm -rf $(OBJS)
 
-all: LIB CRR
-
-LIB : 
-	make -C ${LIBFTDIR}
-
-CRR : ${OBJ}
-	${CC} -o ${NAME} ${OBJ} ${CFLAGS} ./src/libft/libftprintf.a ${CSUPP}
-
-libftclean:
-	make clean -C ${LIBFTDIR}
-
-libftfclean:
-	make fclean -C ${LIBFTDIR}
-
-clean: libftclean
-	${RM} ${OBJ}
-
-fclean: clean libftfclean
-	${RM} ${NAME}
+fclean: clean
+	rm -rf $(NAME)
 
 re: fclean all
 
-.PHONY: clean fclean all libftclean libftfclean
+.PHONY: clean fclean all
