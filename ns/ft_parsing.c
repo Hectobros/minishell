@@ -10,7 +10,8 @@
 
 int	ft_spheredoc(t_content *l, int x)
 {
-	l->token = -123;
+	l->token++;
+	l->token--;
 	return (x);
 }
 
@@ -104,15 +105,14 @@ int	ft_isdir(t_content *l, t_mini *com)
 
 int	ft_ambigous(t_content *l, t_mini *com, int i)
 {
-	if (l->next == NULL)
-		return (0);
-	if (l->next->token == 666)
+	if (l->token == 666)
 	{
+		printf("HERE");
 		if (i == 0)
 			com->fdin = -2;
 		if (i == 1)
 			com->fdout = -2;
-		com->crashword = l->next->content;
+		com->crashword = l->content;
 		return (-1);
 	}
 	else
@@ -126,32 +126,40 @@ int ft_open(t_content *l, t_mini *com, int token) // sert a open les input et ou
 	fd = 0; // le compileur me casse les couilles useless en soit
 	if (token == 2 || token == 3)
 	{
-		if (com->fdout != -500)
+		if (com->fdout >= 0)
 			close(com->fdout);
 		if (ft_isdir(l, com) != 0)// gestion des directory, a faire crash pendant l'exec
 			return(-3);
-		if (ft_ambigous(l, com, 1) != 1)
+		if (ft_ambigous(l, com, 1) != 0)
 			return(-2);	
 		else if (token == 2)
+		{
 			com->fdout = open(l->content, O_WRONLY|O_CREAT|O_TRUNC);
+			if (com->fdout == -1)
+				com->crashword = ft_strdup(l->content);
+		}
 		else 
+		{
 			com->fdout = open(l->content, O_WRONLY|O_CREAT|O_APPEND);
+			if (com->fdout == -1)
+				com->crashword = ft_strdup(l->content);
+		}
 		fd = com->fdout;
 	}
 	else if (token == 4 || token == 5)
 	{
 		if (com->fdin != -500)
 			close(com->fdin);
-		if (ft_ambigous(l, com, 1) != 0)
+		if (ft_ambigous(l, com, 0) != 0)
 			return(-2);
 		if (token == 4)
 		{
 			com->fdin = open(l->content, O_RDONLY);
-			if (fd == -1)
+			if (com->fdin == -1)
 				com->crashword = ft_strdup(l->content);
 		}
 		else if (token == 5)
-			com->fdin = l->pfd[0];//----------------------------------------------------------------------------------->
+			com->fdin = printf("fd QUICRASH:%d\n",l->pfd[0]);//----------------------------------------------------------------------------------->
 		fd = com->fdin;
 	}
 	return (fd);
@@ -185,8 +193,6 @@ void	ft_createcom(t_mini *com, t_content *l)// fonction générale pour créer l
 			if (fd == -1 || fd == -2 || fd == -3)
 				fd = -766;// rentrer un pointeur sur fd pour gagner des lignes
 			lst = lst->next;
-			if (lst->token == 5)
-				lst = lst->next;
 		}
 		else if (lst->token == 1 && fd != -766)
 			ft_addcom(lst->content, lstcom);
@@ -327,14 +333,13 @@ t_mini	*ft_buildpipe(t_content *l) // main fonction
 		return NULL;
 	if (ft_errorsyntax(ft_lstok(l), l) != 0)
 	{
-		write (1, "KO", 2);
 		return NULL;// check pour les double redir et crash commun on devra surement rajouter vérifier les dir en output
 	}
 	create_heredoc(l);
 	lcom = ft_createliste(ft_nbpipe(l));// calcule combien de pipe et créer la liste en fonction
 	ft_createcom(lcom, l);//explose les token pour obtenir une liste chainée contenant toutes les commandes + fdin/fdout
-	if (ft_checkcom(lcom) == -1)
-		return NULL;
+	//if (ft_checkcom(lcom) == -1)
+	//	return NULL;
 	return (lcom);
 }
 
