@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 11:45:54 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/14 17:37:41 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/15 11:14:55 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,49 @@ void	add_back_env(t_env **lst, t_env *lnew)
 
 	if (*lst)
 	{
-		ltmp = last_ptr(*lst);
+		ltmp = last_env(*lst);
 		ltmp->next = lnew;
 	}
 	else
 		*lst = lnew;
 }
 
-int	create_env_lst(t_env **lst, char **env)
+char	*get_env_value(const char *env)
 {
+	char	*value;
+	int		i;
 
-
+	i = 0;
+	while (*env && *env != '=')
+		env++;
+	if (*env)
+		env++;
+	value = malloc(sizeof(char) * (1 + ft_strlen(env)));
+	if (!value)
+		return (NULL);
+	while (*env)
+		value[i++] = *env++;
+	value[i] = '\0';
+	return (value);
 }
 
-int	main(int ac, char **av, char **env)
+int	create_env_lst(t_env **lst, char **env)
 {
-	t_env	*env;
+	int	i;
+	char	*name;
+	char	*value;
 
-	create_env_lst(&lst, env);
-
-
+	(void)lst;
+	(void)name;
+	i = 0;
+	while (env[i])
+	{
+		name = get_env_name(env[i]);
+		value = get_env_value(env[i]);
+		if (!name || !value)
+			return (33);
+		add_back_env(lst, new_env(name, value));
+		i++;
+	}
 	return (0);
 }

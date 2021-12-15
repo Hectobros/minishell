@@ -6,11 +6,35 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/14 17:34:58 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/15 11:20:30 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_env(t_env *lenv)
+{
+	while (lenv)
+	{
+		printf("%s=%s\n", lenv->name, lenv->value);
+		lenv = lenv->next;
+	}
+}
+
+int	free_env(t_env *lst)
+{
+	t_env	*tmp;
+
+	while (lst)
+	{
+		tmp = lst;
+		lst = lst->next;
+		free(tmp->name);
+		free(tmp->value);
+		free(tmp);
+	}
+	return (0);
+}
 
 int	free_content_lst(t_content *lst)
 {
@@ -327,14 +351,17 @@ int	make_token(char *rl, t_content **lst)
 int	main(int ac, char **av, char **env)
 {
 	t_content	*lst;
+	t_env		*lenv;
 	int			exit;
 	char		*rl;
 	const char	*prompt;
 	(void)ac;
 	(void)av;
-	(void)env;
 
 	exit = 1;
+	lenv = NULL;
+	create_env_lst(&lenv, env);
+//	print_env(lenv);
 	prompt = "minishell$ ";
 	while (exit)
 	{
@@ -352,5 +379,6 @@ int	main(int ac, char **av, char **env)
 		free_content_lst(lst);
 //		exit = 0;
 	}
+	free_env(lenv);
 	return (0);
 }
