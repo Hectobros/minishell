@@ -3,23 +3,30 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/15 11:15:34 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/15 11:53:48 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/14 19:30:31 by nschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRCS = main.c \
-	   ft_strlen.c \
-	   ft_isalnum.c \
-	   ft_strdup.c \
-	   check_quotes.c \
-	   split_content.c \
+	   ./libftfiles/ft_strlen.c \
+	   ./libftfiles/ft_isalnum.c \
+	   ./libftfiles/ft_strdup.c \
+	   ./lexer/check_quotes.c \
+	   ./lexer/split_content.c \
+	   ./lexer/lst_content_utils.c \
+	   ./ns/ft_lstnewmini.c \
+	   ./ns/ft_memmoven.c \
+	   ./ns/ft_parsing.c \
+	   ./ns/ft_strdupn.c \
+	   ./ns/ft_lstlastm.c \
+	   ./ns/ft_lstadd_backmini.c \
 	   create_heredoc.c \
-	   lst_content_utils.c \
 	   lst_env_utils.c \
 
 OBJS = ${SRCS:.c=.o}

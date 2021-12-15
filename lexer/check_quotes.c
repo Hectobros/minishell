@@ -6,11 +6,11 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:17:57 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 16:48:15 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/15 11:54:02 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	remove_quote(char *str, char c)
 {

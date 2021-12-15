@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 11:20:30 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/15 11:27:06 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/14 19:57:41 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,8 +342,8 @@ int	make_token(char *rl, t_content **lst)
 	del_useless_env(*lst);
 	file_var_inquotes(*lst);
 	remove_quotes(*lst);
-	if (create_heredoc(*lst))
-		return (33);
+	//if (create_heredoc(*lst))
+	//	return (33);
 //	read_heredoc(*lst);//temporaire
 //	close_heredoc_pipes(*lst);// pour NIELS
 	return (0);
@@ -355,6 +356,7 @@ int	main(int ac, char **av, char **env)
 	int			exit;
 	char		*rl;
 	const char	*prompt;
+	t_mini		*com;
 	(void)ac;
 	(void)av;
 
@@ -375,6 +377,8 @@ int	main(int ac, char **av, char **env)
 			return (1);
 		}
 		print_lst(lst);
+		com = ft_buildpipe(lst);
+		ft_printcomm(com);
 		free(rl);
 		free_content_lst(lst);
 //		exit = 0;

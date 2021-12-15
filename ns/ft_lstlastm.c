@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/26 17:31:24 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/08 18:15:06 by jvermeer         ###   ########.fr       */
+/*   Created: 2019/12/01 12:16:18 by nschmitt          #+#    #+#             */
+/*   Updated: 2021/12/12 20:25:22 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include  "../minishell.h"
 
-size_t	ft_strlen(const char *s)
+t_mini	*ft_lstlastm(t_mini	*lst)
 {
-	size_t	i;
-
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	if (lst == NULL)
+		return (NULL);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
 }
