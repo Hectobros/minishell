@@ -128,21 +128,21 @@ int ft_open(t_content *l, t_mini *com, int token) // sert a open les input et ou
 	{
 		if (com->fdout >= 0)
 			close(com->fdout);
-		if (ft_isdir(l, com) != 0)// gestion des directory, a faire crash pendant l'exec
+		if (ft_isdir(l->next, com) != 0)// gestion des directory, a faire crash pendant l'exec
 			return(-3);
-		if (ft_ambigous(l, com, 1) != 0)
+		if (ft_ambigous(l->next, com, 1) != 0)
 			return(-2);	
 		else if (token == 2)
 		{
-			com->fdout = open(l->content, O_WRONLY|O_CREAT|O_TRUNC);
+			com->fdout = open(l->next->content, O_WRONLY|O_CREAT|O_TRUNC, 0644);
 			if (com->fdout == -1)
-				com->crashword = ft_strdup(l->content);
+				com->crashword = ft_strdup(l->next->content);
 		}
 		else 
 		{
-			com->fdout = open(l->content, O_WRONLY|O_CREAT|O_APPEND);
+			com->fdout = open(l->next->content, O_WRONLY|O_CREAT|O_APPEND, 0644);
 			if (com->fdout == -1)
-				com->crashword = ft_strdup(l->content);
+				com->crashword = ft_strdup(l->next->content);
 		}
 		fd = com->fdout;
 	}
@@ -150,13 +150,13 @@ int ft_open(t_content *l, t_mini *com, int token) // sert a open les input et ou
 	{
 		if (com->fdin != -500)
 			close(com->fdin);
-		if (ft_ambigous(l, com, 0) != 0)
+		if (ft_ambigous(l->next, com, 0) != 0)
 			return(-2);
 		if (token == 4)
 		{
-			com->fdin = open(l->content, O_RDONLY);
+			com->fdin = open(l->next->content, O_RDONLY);
 			if (com->fdin == -1)
-				com->crashword = ft_strdup(l->content);
+				com->crashword = ft_strdup(l->next->content);
 		}
 		else if (token == 5)
 			com->fdin = printf("fd QUICRASH:%d\n",l->pfd[0]);//----------------------------------------------------------------------------------->
@@ -189,7 +189,7 @@ void	ft_createcom(t_mini *com, t_content *l)// fonction générale pour créer l
 	{
 		if (lst->token >= 2 && lst->token <= 5 && fd != -766)// si un fd stdin a crash on arrete de lire jusqu'a la pipe
 		{
-			fd = ft_open(lst->next, lstcom, lst->token);
+			fd = ft_open(lst, lstcom, lst->token);
 			if (fd == -1 || fd == -2 || fd == -3)
 				fd = -766;// rentrer un pointeur sur fd pour gagner des lignes
 			lst = lst->next;
