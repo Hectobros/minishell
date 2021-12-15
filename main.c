@@ -6,10 +6,10 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 11:27:06 by jvermeer         ###   ########.fr       */
-/*   Updated: 2021/12/14 19:57:41 by nschmitt         ###   ########.fr       */
+/*   Updated: 2021/12/15 17:08:41 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -331,6 +331,8 @@ void	file_var_inquotes(t_content *lst)
 
 int	make_token(char *rl, t_content **lst)
 {
+	if (ft_strlen(rl) == 0)//-----------------------> code rajouter pour éviter le segfault en cas de ligne vide
+		return(0);//---------------------------------> La même
 	if (check_open_quotes(rl))
 		return (-1);
 	if (split_all_content(rl, lst))
@@ -363,6 +365,7 @@ int	main(int ac, char **av, char **env)
 	exit = 1;
 	lenv = NULL;
 	create_env_lst(&lenv, env);
+	com = NULL;
 //	print_env(lenv);
 	prompt = "minishell$ ";
 	while (exit)
@@ -378,10 +381,11 @@ int	main(int ac, char **av, char **env)
 		}
 		print_lst(lst);
 		com = ft_buildpipe(lst);
-		ft_printcomm(com);
+		if (com != NULL)
+			ft_printcomm(com);
 		free(rl);
 		free_content_lst(lst);
-//		exit = 0;
+		//exit = 0;
 	}
 	free_env(lenv);
 	return (0);
