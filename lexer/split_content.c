@@ -6,11 +6,11 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 11:55:24 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 17:53:30 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/15 11:54:18 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	is_metachar(char c)
 {

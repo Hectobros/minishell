@@ -6,11 +6,11 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 11:45:54 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 17:53:44 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/15 11:54:09 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_content	*new_lst(char *content)
 {

@@ -176,12 +176,12 @@ void	ft_finishcom(t_mini *com, int *fd)
 
 void	ft_createcom(t_mini *com, t_content *l)// fonction générale pour créer la commande
 {
-	int x;
+//	int x;
 	int fd;
 	t_content *lst;
 	t_mini *lstcom;
 
-	x = 0;
+//	x = 0;
 	fd = 0;
 	lst = l;
 	lstcom = com;
