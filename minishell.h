@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 11:27:39 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/15 17:57:05 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -60,6 +60,10 @@ int				check_open_quotes(char *str);
 int				split_all_content(char *line, t_content **lst);
 char			*change_content(char *cont);
 
+void			write_error(const char *err, char *s);
+void			putstr_and_s(const char *message, char *s);
+t_env			*new_env(char *name, char *value);
+void			add_back_env(t_env **lst, t_env *lnew);
 char			*get_env_name(char *cont);
 char			*get_env_value(const char *env);
 int				create_env_lst(t_env **lst, char **env);
