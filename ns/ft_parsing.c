@@ -299,16 +299,16 @@ int ft_execheredoc(t_content *l)
 	return (-1);
 }*/
 
-int	ft_errorsyntax(int x, t_content *l)
+int	ft_errorsyntax(int x, t_content *l, t_env *lenv)
 {
 	if (x == 0)
 		return 0;
 	if (x == 10)
 	{
-		create_heredoc(l);
+		create_heredoc(l, lenv);
 		return(write(1, "syntax error near unexpected token `newline'\n", 45));
 	}
-	create_heredoc(l);
+	create_heredoc(l, lenv);
 	if (x == 12)
 		return(write(1, "syntax error near unexpected token `>'\n", 39));
 	if (x == 13)
@@ -322,7 +322,7 @@ int	ft_errorsyntax(int x, t_content *l)
 	return (1);
 }
 
-t_mini	*ft_buildpipe(t_content *l) // main fonction
+t_mini	*ft_buildpipe(t_content *l, t_env *lenv) // main fonction
 {
 	//int nbcom;
 	t_mini *lcom;
@@ -331,11 +331,11 @@ t_mini	*ft_buildpipe(t_content *l) // main fonction
 	lcom = NULL;
 	if (l == NULL)// a voir si ça reste juste une protection contre entrer une ligne vide
 		return NULL;
-	if (ft_errorsyntax(ft_lstok(l), l) != 0)
+	if (ft_errorsyntax(ft_lstok(l), l, lenv) != 0)
 	{
 		return NULL;// check pour les double redir et crash commun on devra surement rajouter vérifier les dir en output
 	}
-	create_heredoc(l);
+	create_heredoc(l, lenv);
 	lcom = ft_createliste(ft_nbpipe(l));// calcule combien de pipe et créer la liste en fonction
 	ft_createcom(lcom, l);//explose les token pour obtenir une liste chainée contenant toutes les commandes + fdin/fdout
 	//if (ft_checkcom(lcom) == -1)

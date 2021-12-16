@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 18:20:58 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/16 11:24:22 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,35 @@ void	cut_env_name(char **cont)
 		(*cont)++;
 }
 
-char	*dol_is_env(char *new, char **cont, int *i, int *len)
+int	str_comp(char *name, char *unset)
+{
+	while(*unset && *name && *unset == *name)
+	{
+		unset++;
+		name++;
+	}
+	if (!*unset && !*name)
+		return (1);
+	return (0);
+}
+
+char	*get_env42(t_env *lenv, char *name)
+{
+	char *envdata;
+
+	while (lenv)
+	{
+		if (str_comp(lenv->name, name))
+		{
+			envdata = lenv->value;
+			return(envdata);
+		}
+		lenv = lenv->next;
+	}
+	return (NULL);
+}
+
+char	*dol_is_env(char *new, char **cont, int *i, int *len, t_env *lenv)
 {
 	char	*envname;
 	char	*envdata;
@@ -160,7 +188,8 @@ char	*dol_is_env(char *new, char **cont, int *i, int *len)
 	envname = get_env_name(*cont + 1);
 	if (!envname)
 		return (NULL);
-	envdata = getenv(envname);
+//	envdata = getenv(envname);
+	envdata = get_env42(lenv, envname);
 	free(envname);
 	if (envdata && *envdata != '\0')
 	{
@@ -193,7 +222,7 @@ void	pass_simple_quotes(char **cont, char *new, int *i)
 	new[(*i)++] = *(*cont)++;
 }
 
-char	*change_content(char *cont)
+char	*change_content(char *cont, t_env *lenv)
 {
 	char	*new;
 	char	*tmp;
@@ -211,7 +240,7 @@ char	*change_content(char *cont)
 		else if (*tmp == '$' && *(tmp + 1) && *(tmp + 1) == '?')
 			new = dol_is_interrog(new, &tmp, &i, &len);
 		else if (*tmp == '$' && *(tmp + 1) && (ft_isalnum(*(tmp + 1)) || *(tmp + 1) == '_'))
-			new = dol_is_env(new, &tmp, &i, &len);
+			new = dol_is_env(new, &tmp, &i, &len, lenv);
 		else
 			new[i++] = *tmp++;
 		if (!new)
@@ -222,18 +251,18 @@ char	*change_content(char *cont)
 	return (new);
 }
 
-char	*check_if_redirection(char *cont)
+char	*check_if_redirection(char *cont, t_env *lenv)
 {
 	char *tmp;
 
 	tmp = ft_strdup(cont);
-	tmp = change_content(tmp); 
+	tmp = change_content(tmp, lenv); 
 	if (!tmp)
 		return (NULL);
 	if (*tmp)
 	{
 		free(tmp);
-		return (change_content(cont));
+		return (change_content(cont, lenv));
 	}
 	free(tmp);
 	return (cont);
@@ -256,12 +285,12 @@ void	del_useless_env(t_content *lst)
 	}
 }
 
-int		replace_env(t_content *lst)
+int		replace_env(t_content *lst, t_env *lenv)
 {
 	t_content *before;
 
 	before = lst;
-	lst->content = change_content(lst->content);
+	lst->content = change_content(lst->content, lenv);
 	if (!lst->content)
 		return (-1);
 	lst = lst->next;
@@ -269,12 +298,12 @@ int		replace_env(t_content *lst)
 	{
 		if (before->token == 1 || before->token == 6)
 		{
-			lst->content = change_content(lst->content);
+			lst->content = change_content(lst->content, lenv);
 			if (!*lst->content)
 				lst->token = 999;
 		}
 		else if (before->token == 2 || before->token == 3 || before->token == 4)
-			lst->content = check_if_redirection(lst->content);
+			lst->content = check_if_redirection(lst->content, lenv);
 		if (!lst->content)
 			return (-1);
 		lst = lst->next;
@@ -301,7 +330,7 @@ void	file_var_inquotes(t_content *lst)
 	}
 }
 
-int	make_token(char *rl, t_content **lst)
+int	make_token(char *rl, t_content **lst, t_env *lenv)
 {
 	if (ft_strlen(rl) == 0)//-----------------------> code rajouter pour éviter le segfault en cas de ligne vide
 		return(0);//---------------------------------> La même
@@ -311,13 +340,11 @@ int	make_token(char *rl, t_content **lst)
 		return (33);
 	give_token(*lst);
 	if (*lst)
-		if (replace_env(*lst))
+		if (replace_env(*lst, lenv))
 			return (33);
 	del_useless_env(*lst);
 	file_var_inquotes(*lst);
 	remove_quotes(*lst);
-	//if (create_heredoc(*lst))
-	//	return (33);
 //	read_heredoc(*lst);//temporaire
 //	close_heredoc_pipes(*lst);// pour NIELS
 	return (0);
@@ -330,14 +357,14 @@ int	main(int ac, char **av, char **env)
 	int			exit;
 	char		*rl;
 	const char	*prompt;
-	t_mini		*com;
+//	t_mini		*com;
 	(void)ac;
 	(void)av;
 
 	exit = 1;
+//	com = NULL;
 	lenv = NULL;
 	create_env_lst(&lenv, env);
-	com = NULL;
 //	print_env(lenv);
 	prompt = "minishell$ ";
 	while (exit)
@@ -346,15 +373,15 @@ int	main(int ac, char **av, char **env)
 		rl = readline(prompt);
 		if (ft_strlen(rl) != 0)
 			add_history(rl);
-		if (make_token(rl, &lst))
+		if (make_token(rl, &lst, lenv))
 		{
 			printf("Error\n");
 			return (1);
 		}
 		print_lst(lst);
-		com = ft_buildpipe(lst);
-		if (com != NULL)
-			ft_printcomm(com);
+//		com = ft_buildpipe(lst, lenv);
+//		if (com != NULL)
+//			ft_printcomm(com);
 		free(rl);
 		free_content_lst(lst);
 		//exit = 0;

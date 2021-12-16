@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 11:27:39 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/16 11:18:52 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -54,11 +54,11 @@ t_content		*new_lst(char *content);
 int				ft_isalnum(int c);
 size_t			ft_strlen(const char *s);
 char			*ft_strdup(const char *src);
-int				create_heredoc(t_content *lst);
+int				create_heredoc(t_content *lst, t_env *lenv);
 void			remove_quotes(t_content *lst);
 int				check_open_quotes(char *str);
 int				split_all_content(char *line, t_content **lst);
-char			*change_content(char *cont);
+char			*change_content(char *cont, t_env *lenv);
 
 char			*get_env_name(char *cont);
 char			*get_env_value(const char *env);
@@ -76,7 +76,7 @@ t_mini	*ft_createliste(int x);
 int	ft_checkcom(t_mini *lcom);
 void	ft_freetab(char **content);
 int ft_destroy(t_mini *lcom);
-t_mini	*ft_buildpipe(t_content *l);
+t_mini	*ft_buildpipe(t_content *l, t_env *lenv);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 t_mini	*ft_lstnewm(int con);
 void	ft_lstadd_backm(t_mini **alst, t_mini *n);
@@ -87,7 +87,7 @@ int ft_printcomm(t_mini *com);
 int	ft_spheredoc(t_content *l, int x);
 int	ft_isdir(t_content *l, t_mini *com);
 int	ft_ambigous(t_content *l, t_mini *com, int i);
-int	ft_errorsyntax(int x, t_content *l);
+int	ft_errorsyntax(int x, t_content *l, t_env *lenv);
 int ft_printcomm(t_mini *com);
 void ft_printab(char **tab);
 

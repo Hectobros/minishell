@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 18:07:12 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/14 20:21:38 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/16 11:12:42 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ int	str_cmp(const char *rl, const char *match)
 	return (0);
 }
 
-int	write_in_fd(const char *rl, int fd)
+int	write_in_fd(const char *rl, int fd, t_env *lenv)
 {
 	char	*cont;
 	int		i;
 
 	i = 0;
 	cont = ft_strdup(rl);
-	cont = change_content(cont);
+	cont = change_content(cont, lenv);
 	if (!cont)
 		return (-1);
 	while (cont[i])
@@ -46,21 +46,21 @@ int	write_in_fd(const char *rl, int fd)
 	return (0);
 }
 
-int	create_double(int pfd[2], const char *match)
+int	create_double(int pfd[2], const char *match, t_env *lenv)
 {
 	char	*rl;
 
 	rl = readline(">");
 	while (str_cmp(rl, match))
 	{
-		if (write_in_fd(rl, pfd[1]))
+		if (write_in_fd(rl, pfd[1], lenv))
 			return (-1);
 		rl = readline(">");
 	}
 	return (0);
 }
 
-int	create_heredoc(t_content *lst)
+int	create_heredoc(t_content *lst, t_env *lenv)
 {
 	t_content	*tmp;
 
@@ -75,7 +75,7 @@ int	create_heredoc(t_content *lst)
 			if (tmp->token != 1)
 				return (-1);
 			pipe(lst->pfd);
-			if (create_double(lst->pfd, lst->next->content))
+			if (create_double(lst->pfd, lst->next->content, lenv))
 				return (33);
 			close(lst->pfd[1]);
 //			printf("fd:%d\n", lst->pfd[0]);
