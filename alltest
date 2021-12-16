@@ -39,3 +39,8 @@ cat << yo |
 cat << h > file
 cat << "$?"
 cat << "$PATH"
+
+
+echo  "'$PATH'"
+echo  '"$PATH"'
+< segflaut

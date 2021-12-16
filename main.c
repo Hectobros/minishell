@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 11:24:22 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/16 12:33:57 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,16 @@ int	free_env(t_env *lst)
 	return (0);
 }
 
+void	print_lst(t_content *lst)
+{
+	while (lst)
+	{
+		printf("token:%d  ", lst->token);
+		printf("%s\n", lst->content);
+		lst = lst->next;
+	}
+}
+
 int	free_content_lst(t_content *lst)
 {
 	t_content	*tmp;
@@ -49,16 +59,6 @@ int	free_content_lst(t_content *lst)
 		free(tmp);
 	}
 	return (0);
-}
-
-void	print_lst(t_content *lst)
-{
-	while (lst)
-	{
-		printf("token:%d  ", lst->token);
-		printf("%s\n", lst->content);
-		lst = lst->next;
-	}
 }
 
 char	*re_alloc(char *buff, int hl, int limit)
@@ -224,18 +224,22 @@ void	pass_simple_quotes(char **cont, char *new, int *i)
 
 char	*change_content(char *cont, t_env *lenv)
 {
+	int		dq;
 	char	*new;
 	char	*tmp;
 	int		len;
 	int		i;
 
 	i = 0;
+	dq = 1;
 	tmp = cont;
 	len = ft_strlen(tmp) + 1;
 	new = malloc(sizeof(char) * len);
 	while (*tmp)
 	{
-		if (*tmp == '\'')
+		if (*tmp == '"')
+			dq = -dq;
+		if (*tmp == '\'' && dq == 1)
 			pass_simple_quotes(&tmp, new, &i);
 		else if (*tmp == '$' && *(tmp + 1) && *(tmp + 1) == '?')
 			new = dol_is_interrog(new, &tmp, &i, &len);
@@ -384,7 +388,7 @@ int	main(int ac, char **av, char **env)
 //			ft_printcomm(com);
 		free(rl);
 		free_content_lst(lst);
-		//exit = 0;
+//		exit = 0;
 	}
 	free_env(lenv);
 	return (0);
