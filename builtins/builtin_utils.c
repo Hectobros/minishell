@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 17:55:28 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/16 16:14:02 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,5 @@ void	putstr_and_s(const char *message, char *s)
 void	write_error(const char *err, char *s)
 {
 	putstr_and_s(err, s);
-	exit (1);
+//	exit (1);
 }
