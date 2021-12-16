@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 18:20:17 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/16 20:03:13 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,25 +30,47 @@ void	print_lst(t_content *lst)
 	}
 }
 /*
-void	close_heredoc_pipes(t_content *lst)//      <---- If parsing failed
+   void	close_heredoc_pipes(t_content *lst)//      <---- If parsing failed
+   {
+   while (lst)
+   {
+   if (lst->token == 5)
+   {
+   close(lst->pfd[0]);
+   }
+   lst = lst->next;
+   }
+   }
+ */
+
+
+
+
+void	add_prev_mini(t_mini *com)
 {
-	while (lst)
+	t_mini	*tmp;
+
+	tmp = NULL;
+	while (com)
 	{
-		if (lst->token == 5)
-		{
-			close(lst->pfd[0]);
-		}
-		lst = lst->next;
+		com->prev = tmp;
+		tmp = com;
+		com = com->next;
 	}
 }
-*/
 
 
+void	execution(t_mini *l)
+{
+	while (l)
+	{
+		if (l->prev)
+			close(l->pin[1]);
+		if (l->next)
+			pipe(l->pout);
 
-
-
-
-
+	}
+}
 
 
 
@@ -58,14 +80,14 @@ int	main(int ac, char **av, char **env)
 	t_env		*lenv;
 	char		*rl;
 	const char	*prompt;
-//	t_mini		*com;
+	t_mini		*com;
 	(void)ac; (void)av;
 	int			exit = 1;
 
-//	com = NULL;
+	com = NULL;
 	lenv = NULL;
 	create_env_lst(&lenv, env);
-//	print_env(lenv);
+	//	print_env(lenv);
 	prompt = "minishell$ ";
 	while (exit)
 	{
@@ -79,12 +101,16 @@ int	main(int ac, char **av, char **env)
 			return (1);
 		}
 		print_lst(lst);
-//		com = ft_buildpipe(lst, lenv);
-//		if (com != NULL)
-//			ft_printcomm(com);
+		com = ft_buildpipe(lst, lenv);
+		add_prev_mini(com);
+		if (com != NULL)
+			ft_printcomm(com);
+
+		execution(com);
+
 		free(rl);
 		free_content_lst(lst);
-//		exit = 0;
+		//		exit = 0;
 	}
 	free_env(lenv);
 	return (0);
