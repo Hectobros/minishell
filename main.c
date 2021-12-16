@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 17:08:41 by nschmitt         ###   ########.fr       */
+/*   Updated: 2021/12/15 18:20:58 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,34 +80,6 @@ char	*re_alloc(char *buff, int hl, int limit)
 }
 
 /*
-void	test_inside_fd(int pfd[2])
-{
-	char	**test;
-	int		pid;
-
-	test = malloc(sizeof(char*) * 2);
-
-	test[0] = ft_strdup("cat"); 
-	test[1] = NULL;
-	pid = fork();
-	if (pid == 0)
-	{
-		close(pfd[1]);
-		dup2(pfd[0], 0);
-	}
-	free(test);
-	waitpid(0, NULL, 0);
-
-}
-void	read_heredoc(t_content *lst)//			<----- test create_heredoc
-{
-	while (lst)
-	{
-		if (lst->token == 5)
-			test_inside_fd(lst->pfd);
-		lst = lst->next;
-	}
-}
 
 void	close_heredoc_pipes(t_content *lst)//      <---- Before ending prog
 {

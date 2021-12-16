@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:07:24 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/13 18:36:04 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/15 18:58:27 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/wait.h>
+#include <sys/types.h>
 
 size_t	ft_strlen(const char *s)
 {
@@ -50,26 +52,20 @@ char	*ft_strdup(const char *src)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
+void	read_heredoc(t_content *lst)
+{
+	while (lst)
+	{
+		if (lst->token == 5)
+			test_inside_fd(lst->pfd);
+		lst = lst->next;
+	}
+}
+*/
+
+
+
 int		str_cmp(const char *line, const char *match)
 {
 	while (*line && *match)
@@ -113,31 +109,65 @@ void	create_double(int fdp[2], const char *match, int *psize)
 		line = readline(">");
 	}
 }
-*/
-int	main(int ac, char **av, char **envp)
+
+
+
+
+
+
+
+
+void	test_inside_fd(int pfd[2])
 {
 	char	**test;
+	int		pid;
+
+	test = malloc(sizeof(char*) * 2);
+
+	test[0] = ft_strdup("cat"); 
+	test[1] = NULL;
+	pid = fork();
+	if (pid == 0)
+	{
+		close(pfd[1]);
+		dup2(pfd[0], 0);
+		execve("/usr/bin/cat", test, NULL);
+	}
+	free(test);
+	waitpid(0, NULL, 0);
+}
+
+void	test_pipe(int fdp[2])
+{
+	write(fdp[1], "e", 1);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+//	char	**test;
+	int		fdp[2];
 	(void)ac;
 	(void)av;
 	(void)envp;
 //	printf("%d\n", access("$_", F_OK));
 
 
+	pipe(fdp);
+	test_pipe(fdp);
+	printf("HERE\n");
+	test_inside_fd(fdp);
+	printf("HERE\n");
+	/*
+	int		psize = 0;
+	create_double(fdp, "end", &psize);
+
 	test = malloc(sizeof(char*) * 5);
 	test[0] = ft_strdup("cat"); 
 	test[1] = ft_strdup("$_"); 
 	test[2] = NULL;
 	execve("/usr/bin/cat", test, envp);
-	/*
-	int		fdp[2];
-	int		psize = 0;
 
 	int		pid;
-
-	pipe(fdp);
-	create_double(fdp, "yoo", &psize);
-	create_double(fdp, "end", &psize);
-
 	test = malloc(sizeof(char*) * 5);
 	test[0] = ft_strdup("cat"); 
 	test[2] = NULL;
@@ -151,7 +181,6 @@ int	main(int ac, char **av, char **envp)
 
 	close(fdp[0]);
 	close(fdp[1]);
-//	test = malloc(sizeof(char*) * 5);
 
 	char	**test;
 	char	*arg;
