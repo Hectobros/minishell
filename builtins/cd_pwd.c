@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 18:05:14 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/16 10:49:37 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,25 @@ void	pwd42(char **cmd)
 //	exit(0);
 }
 
-void	cd42(char **cmd)
+void	chdir_to_home(t_env *lst)
+{
+	while (lst)
+	{
+		if (str_comp(lst->name, "HOME"))
+		{
+			chdir(lst->value);
+//			exit(0);
+		}
+		lst = lst->next;
+	}
+}
+void	cd42(char **cmd, t_env *lst)
 {
 	if (!cmd[1])
-		exit(0);
-	if (strlen(cmd[1]) > 255)
+		chdir_to_home(lst);
+	else if (strlen(cmd[1]) > 255)
 		write_error("cd: %s: File name too long\n", cmd[1]);
-	if (cmd[2])
+	else if (cmd[2])
 		write_error("cd: too many arguments\n", NULL);
 	else if (access(cmd[1], F_OK))
 		write_error("cd: %s: No such file or directory\n", cmd[1]);
@@ -59,7 +71,6 @@ void	cd42(char **cmd)
 //	exit(0);
 }
 
-
 int	main(int ac, char **av, char **env)
 {
 	DIR *d;
@@ -69,9 +80,14 @@ int	main(int ac, char **av, char **env)
 	int			exit = 1;
 	char		**cd;
 	char		**pwd;
+	t_env		*lenv;
 	(void)av;
 	(void)env;
 	(void)ac;
+	
+
+	lenv = NULL;
+	create_env_lst(&lenv, env);
 
 	cd = malloc(sizeof(char*) * 5);
 	pwd = malloc(sizeof(char*) * 5);
@@ -80,8 +96,8 @@ int	main(int ac, char **av, char **env)
 	{
 		rl = readline(prompt);
 		cd[0] = strdup("cd");
-		cd[1] = rl;
-		cd[2] = NULL;
+		cd[1] = NULL;
+//		cd[1] = rl;
 		pwd[0] = strdup("pwd");
 		pwd[1] = strdup("-fefe");
 		pwd[2] = NULL;
@@ -95,8 +111,9 @@ int	main(int ac, char **av, char **env)
 			printf("\n");
 		}
 		else
-			cd42(cd);
+			cd42(cd, lenv);
 		//exit = 0;
 	}
+	free_env(lenv);
 	return (0);
 }

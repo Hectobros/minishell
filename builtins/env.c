@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 17:58:25 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/16 10:46:17 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,6 @@ void	env42(char **cmd, t_env *lst)
 }
 
 
-int	str_comp(char *name, char *unset)
-{
-	while (*unset && *name && *unset == *name)
-	{
-		unset++;
-		name++;
-	}
-	if (!*unset && !*name)
-		return (1);
-	return (0);
-}
 void	delete_first(t_env **lst)
 {
 	t_env *tmp;
