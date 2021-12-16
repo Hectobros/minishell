@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 11:18:52 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/16 18:16:20 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -49,20 +49,37 @@ typedef struct s_env
 	struct s_env	*next;
 }				t_env;
 
+char			*re_alloc(char *buff, int hl, int limit);
+int				str_comp(char *name, char *unset);
+char			*get_env42(t_env *lenv, char *name);
+
 void			add_back(t_content **lst, t_content *lnew);
 t_content		*new_lst(char *content);
+
 int				ft_isalnum(int c);
 size_t			ft_strlen(const char *s);
 char			*ft_strdup(const char *src);
+
 int				create_heredoc(t_content *lst, t_env *lenv);
+
 void			remove_quotes(t_content *lst);
 int				check_open_quotes(char *str);
+
 int				split_all_content(char *line, t_content **lst);
 char			*change_content(char *cont, t_env *lenv);
 
-char			*get_env_name(char *cont);
+int				free_content_lst(t_content *lst);
+int				free_env(t_env *lst);
+
 char			*get_env_value(const char *env);
 int				create_env_lst(t_env **lst, char **env);
+
+char			*get_env_name(char *cont);
+char			*dol_is_interrog(char *new, char **cont, int *i, int *len);
+char			*dol_is_env(char *new, char **cont, int *i, int *len, t_env *lenv);
+
+int				replace_env(t_content *lst, t_env *lenv);
+int				make_token(char *rl, t_content **lst, t_env *lenv);
 //fonctions Niels
 char	*ft_strdupn(const char *s1);
 int	ft_lstok(t_content *l);

@@ -6,7 +6,7 @@
 #    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/15 11:53:48 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/16 18:14:25 by jvermeer         ###   ########.fr        #
 #    Updated: 2021/12/14 19:30:31 by nschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -28,6 +28,11 @@ SRCS = main.c \
 	   ./ns/ft_lstadd_backmini.c \
 	   create_heredoc.c \
 	   lst_env_utils.c \
+	   free_func.c \
+	   utils_lex.c \
+	   dol_is.c \
+	   replace_env.c \
+	   make_token.c \
 
 OBJS = ${SRCS:.c=.o}
 
