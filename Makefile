@@ -6,7 +6,7 @@
 #    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/16 18:14:25 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/17 10:34:15 by jvermeer         ###   ########.fr        #
 #    Updated: 2021/12/14 19:30:31 by nschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -33,6 +33,7 @@ SRCS = main.c \
 	   dol_is.c \
 	   replace_env.c \
 	   make_token.c \
+	   ft_split.c \
 
 OBJS = ${SRCS:.c=.o}
 

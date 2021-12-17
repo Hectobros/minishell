@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 20:04:51 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 10:40:36 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -23,6 +23,9 @@
 # include <readline/history.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+
+//stdin:0
+//stdout:1
 
 typedef struct s_mini
 {
@@ -57,6 +60,7 @@ char			*get_env42(t_env *lenv, char *name);
 void			add_back(t_content **lst, t_content *lnew);
 t_content		*new_lst(char *content);
 int				ft_isalnum(int c);
+char			**ft_split(const char *str, char c);
 size_t			ft_strlen(const char *s);
 char			*ft_strdup(const char *src);
 int				create_heredoc(t_content *lst, t_env *lenv);
