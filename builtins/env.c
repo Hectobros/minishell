@@ -6,46 +6,25 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 10:46:17 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 20:34:25 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <dirent.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "../minishell.h"
-
-int	free_env(t_env *lst)
-{
-	t_env	*tmp;
-
-	while (lst)
-	{
-		tmp = lst;
-		lst = lst->next;
-		free(tmp->name);
-		free(tmp->value);
-		free(tmp);
-	}
-	return (0);
-}
 
 void	env42(char **cmd, t_env *lst)
 {
 	(void)cmd;
+	printf("here:%s\n", lst->name);
+	printf("HEEEY");
 	while (lst)
 	{
 		putstr_and_s("%s=", lst->name);
 		putstr_and_s("%s\n", lst->value);
 		lst = lst->next;
 	}
-	//	exit (0);
+	exit(0);
 }
-
 
 void	delete_first(t_env **lst)
 {
@@ -57,6 +36,7 @@ void	delete_first(t_env **lst)
 	free(tmp->value);
 	free(tmp);
 }
+ 
 void	delete_env(t_env *lp, char **cmd, int i)
 {
 	t_env *tmp;
@@ -74,6 +54,7 @@ void	delete_env(t_env *lp, char **cmd, int i)
 		lp = lp->next;
 	}
 }
+
 void	unset42(char **cmd, t_env **lst)
 {
 	int	i;
@@ -97,7 +78,7 @@ int		export_is_valid(char *str)
 	while (str[i] && (isalnum(str[i]) || str[i] == '_'))
 		i++;
 	if (str[i] && str[i] == '=')
-		return (1);
+		exit(1);
 	return (0);
 }
 
@@ -137,8 +118,9 @@ void	export42(char **cmd, t_env **lst)
 		}
 		i++;
 	}
+	exit(0);
 }
-
+/*
 int	main(int ac, char **av, char **env)
 {
 	t_env		*lenv;
@@ -182,3 +164,4 @@ int	main(int ac, char **av, char **env)
 	free(unset);
 	return (0);
 }
+*/

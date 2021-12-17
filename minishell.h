@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 15:15:21 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 20:20:00 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -54,6 +54,15 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }				t_env;
+void	env42(char **cmd, t_env *lst);
+void	unset42(char **cmd, t_env **lst);
+void	export42(char **cmd, t_env **lst);
+void	echo42(char **cmd);
+void	pwd42(char **cmd);
+void	cd42(char **cmd, t_env *lst);
+void	put_s(char *s);
+void	putstr_and_s(const char *message, char *s);
+void	write_error(const char *err, char *s);
 char			*re_alloc(char *buff, int hl, int limit);
 int				str_comp(char *name, char *unset);
 char			*get_env42(t_env *lenv, char *name);
@@ -69,6 +78,8 @@ int				check_open_quotes(char *str);
 int				split_all_content(char *line, t_content **lst);
 char			*change_content(char *cont, t_env *lenv);
 int				free_content_lst(t_content *lst);
+t_env	*new_env(char *name, char *value);
+void	add_back_env(t_env **lst, t_env *lnew);
 int				free_env(t_env *lst);
 char			*get_env_value(const char *env);
 int				create_env_lst(t_env **lst, char **env);
@@ -95,7 +106,6 @@ void			*ft_memmove(void *dst, const void *src, size_t len);
 t_mini			*ft_lstnewm(int con);
 void			ft_lstadd_backm(t_mini **alst, t_mini *n);
 t_mini			*ft_lstlastm(t_mini	*lst);
-void			ft_freetab(char **content);
 void			ft_printab(char **tab);
 int				ft_printcomm(t_mini *com);
 int				ft_spheredoc(t_content *l, int x);

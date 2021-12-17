@@ -6,17 +6,10 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 16:59:14 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 19:26:27 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <dirent.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "../minishell.h"
 
 int	is_n_option(char *str)
@@ -46,9 +39,9 @@ void	echo42(char **cmd)
 	}
 	if (n)
 		printf("\n");
-	//	exit(0);
+	exit(0);
 }
-
+/*
 int	main(int ac, char **av, char **env)
 {
 	int			i;
@@ -68,3 +61,4 @@ int	main(int ac, char **av, char **env)
 	echo42(echo);
 	return (0);
 }
+*/

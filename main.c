@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 18:50:14 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 20:32:14 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,18 @@ void	print_lst(t_content *lst)
    }
  */
 
+int	len_mini(t_mini *com)
+{
+	int	len;
+
+	len = 0;
+	while (com)
+	{
+		len++;
+		com = com->next;
+	}
+	return(len);
+}
 void	add_prev_mini(t_mini *com)
 {
 	t_mini	*tmp;
@@ -120,6 +132,25 @@ char	*make_path(const char *cmd, const char *path)
 	return (buff);
 }
 
+void	is_builtin(t_mini *l, t_env *lenv)
+{
+	if (str_comp(l->cmd[0], "echo"))
+		echo42(l->cmd);
+	if (str_comp(l->cmd[0], "cd"))
+		cd42(l->cmd, lenv);
+	if (str_comp(l->cmd[0], "pwd"))
+		pwd42(l->cmd);
+	if (str_comp(l->cmd[0], "env"))
+	{
+	printf("%s\n", l->cmd[0]);
+		env42(l->cmd, lenv);
+	}
+	if (str_comp(l->cmd[0], "export"))
+		export42(l->cmd, &lenv);
+	if (str_comp(l->cmd[0], "unset"))
+		unset42(l->cmd, &lenv);
+}
+
 void	run_command(t_mini *l, t_env *lenv, char **env)
 {
 	char	**path;
@@ -136,6 +167,7 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 		}
 		lenv = lenv->next;
 	}
+	is_builtin(l, lenv);
 	while (path && *path)
 	{
 		buff = make_path(l->cmd[0], *path);
@@ -228,7 +260,10 @@ int	main(int ac, char **av, char **env)
 		add_prev_mini(com);
 		if (com != NULL)
 //			ft_printcomm(com);
-
+		
+//		if (len_mini(com) == 1)
+//			run_command(l, lenv, env);
+//		else
 		mini_exec(com, lenv, env);
 		wait_all(com);
 
