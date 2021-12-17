@@ -159,7 +159,7 @@ int ft_open(t_content *l, t_mini *com, int token) // sert a open les input et ou
 				com->crashword = ft_strdup(l->next->content);
 		}
 		else if (token == 5)
-			com->fdin = printf("fd QUICRASH:%d\n",l->pfd[0]);//----------------------------------------------------------------------------------->
+			com->fdin = l->pfd[0];//----------------------------------------------------------------------------------->
 		fd = com->fdin;
 	}
 	return (fd);
@@ -361,7 +361,8 @@ int ft_printcomm(t_mini *com)
 	while (com)
 	{
 		printf("-----COMMANDE N°%d-------\n", com->content);
-		ft_printab(com->cmd);
+		if (com->cmd)
+			ft_printab(com->cmd);
 		printf("FDIN:%d\n", com->fdin);
 		printf("FDOUT:%d\n", com->fdout);
 		if (com->crashword != NULL)
