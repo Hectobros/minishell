@@ -156,7 +156,14 @@ int ft_open(t_content *l, t_mini *com, int token) // sert a open les input et ou
 		{
 			com->fdin = open(l->next->content, O_RDONLY);
 			if (com->fdin == -1)
+			{
+				fd = access(l->next->content, F_OK);
+				if (!fd)
+					com->fdin = -1;
+				else
+					com->fdin = -4;
 				com->crashword = ft_strdup(l->next->content);
+			}
 		}
 		else if (token == 5)
 			com->fdin = l->pfd[0];//----------------------------------------------------------------------------------->
