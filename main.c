@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 13:47:34 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 14:23:14 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,8 +188,10 @@ int	main(int ac, char **av, char **env)
 
 		free(rl);
 		free_content_lst(lst);
-//		exit = 0;
+		exit = 0;
 	}
+	rl_clear_history();
 	free_env(lenv);
+	ft_destroy(com);
 	return (0);
 }
