@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 11:06:29 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 13:47:34 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,14 +177,14 @@ int	main(int ac, char **av, char **env)
 			printf("Error\n");
 			return (1);
 		}
-//		print_lst(lst);
+		print_lst(lst);
 		com = ft_buildpipe(lst, lenv);
 		add_prev_mini(com);
 		if (com != NULL)
 			ft_printcomm(com);
 
-		mini_exec(com, lenv, env);
-		wait_all(com);
+//		mini_exec(com, lenv, env);
+//		wait_all(com);
 
 		free(rl);
 		free_content_lst(lst);

@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 18:07:12 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 11:12:42 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 14:05:31 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	create_heredoc(t_content *lst, t_env *lenv)
 			if (create_double(lst->pfd, lst->next->content, lenv))
 				return (33);
 			close(lst->pfd[1]);
-//			printf("fd:%d\n", lst->pfd[0]);
+			printf("fd:%d\n", lst->pfd[0]);
 		}
 		lst = lst->next;
 	}

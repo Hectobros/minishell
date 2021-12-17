@@ -361,7 +361,8 @@ int ft_printcomm(t_mini *com)
 	while (com)
 	{
 		printf("-----COMMANDE N°%d-------\n", com->content);
-		ft_printab(com->cmd);
+		if (com->cmd)
+			ft_printab(com->cmd);
 		printf("FDIN:%d\n", com->fdin);
 		printf("FDOUT:%d\n", com->fdout);
 		if (com->crashword != NULL)
