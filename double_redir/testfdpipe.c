@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 13:59:26 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 14:15:46 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 15:33:14 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(void)
 	printf("2:%d\n", fdp[0]);
 
 	close(fdp[1]);
-	close(fdp[0]);
+//	close(fdp[0]);
 //	close(test);
 	
 

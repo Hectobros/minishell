@@ -6,11 +6,13 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 14:23:14 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/17 18:50:14 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
 
 void	print_env(t_env *lenv)
 {
@@ -20,6 +22,7 @@ void	print_env(t_env *lenv)
 		lenv = lenv->next;
 	}
 }
+
 void	print_lst(t_content *lst)
 {
 	while (lst)
@@ -57,6 +60,46 @@ void	add_prev_mini(t_mini *com)
 }
 
 
+void	put_s(char *s)
+{
+	while (*s)
+	{
+		write(1, s, 1);
+		s++;
+	}
+}
+
+void	putstr_and_s(const char *message, char *s)
+{
+	while (*message)
+	{
+		while (*message != '%' && *message)
+			write(1, message++, 1);
+		if (*message == '%' && *(message + 1) && *(message + 1) == 's')
+		{
+			message = message + 2;
+			put_s(s);
+		}
+	}
+}
+
+void	write_error(const char *err, char *s)
+{
+	putstr_and_s(err, s);
+	exit (1);
+}
+
+void	all_errors(int fdin, int fdout, t_mini *l)
+{
+	if (fdout == -3)
+		write_error("bash: %s: Is a directory\n", l->crashword);
+	else if (fdout == -2 || fdin == -2)
+		write_error("bash: %s: ambigous redirect\n", l->crashword);
+	else if (fdout == -1 || fdin == -1)
+		write_error("bash: %s: Permission denied\n", l->crashword);
+	else if (fdin == -4)
+		write_error("bash: %s: No such file or directory\n", l->crashword);
+}
 
 
 char	*make_path(const char *cmd, const char *path)
@@ -102,40 +145,43 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 		free(buff);
 		path++;
 	}
-	printf("%s: command not found\n", l->cmd[0]);
-	exit(1);
+
+	buff = make_path(l->cmd[0], "");
+	if (!buff)
+		exit(33);
+	execve(buff, l->cmd, env);//ENV ?
+	free(buff);
+	write_error("%s: command not found\n", l->cmd[0]);
 }
 
 void	mini_exec(t_mini *l, t_env *lenv, char **env)
 {
 	while (l)
 	{
-		if (l->prev)
-			close(l->pin[1]);
 		if (l->next)
-			pipe(l->pout);
+			pipe(l->pipe);
 		l->pid = fork();
-
+//		if (l->pid  < 0) ->Error
 		if (l->pid == 0)
 		{
+			if (!l->prev)
+				all_errors(l->fdin, l->fdout, l);
+			if (l->next)
+				close(l->pipe[0]);
 			if (l->fdin >= 0)
-			{
 				dup2(l->fdin, 0);
-				if (l->prev)
-					close(l->pin[0]);
-			}
 			else if (l->prev)
-				dup2(l->pin[0], 0);
+				dup2(l->prev->pipe[0], 0);
 			if (l->fdout >= 0)
-			{
 				dup2(l->fdout, 1);
-				close(l->pout[1]);
-			}
 			else if (l->next)
-				dup2(l->pout[1], 1);
-
+				dup2(l->pipe[1], 1);
 			run_command(l, lenv, env);
 		}
+		if (l->prev)
+			close(l->prev->pipe[0]);
+		if (l->next)
+			close(l->pipe[1]);
 		l = l->next;
 	}
 }
@@ -146,7 +192,7 @@ void	wait_all(t_mini *l)
 
 	while (l)
 	{
-		waitpid(l->pid, &status, 0);
+		waitpid(0, &status, 0);
 		l = l->next;
 	}
 }
@@ -177,18 +223,18 @@ int	main(int ac, char **av, char **env)
 			printf("Error\n");
 			return (1);
 		}
-		print_lst(lst);
+//		print_lst(lst);
 		com = ft_buildpipe(lst, lenv);
 		add_prev_mini(com);
 		if (com != NULL)
-			ft_printcomm(com);
+//			ft_printcomm(com);
 
-//		mini_exec(com, lenv, env);
-//		wait_all(com);
+		mini_exec(com, lenv, env);
+		wait_all(com);
 
 		free(rl);
 		free_content_lst(lst);
-		exit = 0;
+//		exit = 0;
 	}
 	rl_clear_history();
 	free_env(lenv);
