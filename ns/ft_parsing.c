@@ -159,7 +159,7 @@ int ft_open(t_content *l, t_mini *com, int token) // sert a open les input et ou
 				com->crashword = ft_strdup(l->next->content);
 		}
 		else if (token == 5)
-			com->fdin = printf("fd QUICRASH:%d\n",l->pfd[0]);//----------------------------------------------------------------------------------->
+			com->fdin = l->pfd[0];//----------------------------------------------------------------------------------->
 		fd = com->fdin;
 	}
 	return (fd);
