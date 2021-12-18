@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 10:52:55 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 12:44:04 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -30,7 +30,6 @@
 typedef struct s_mini
 {
 	int		pipe[2];
-//	int		pout[2];
 	//add pfd ? 
 	char	**cmd;//cmd name + all flags + argus
 	int		fdin;// = -500

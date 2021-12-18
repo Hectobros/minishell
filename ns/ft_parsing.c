@@ -171,16 +171,15 @@ int ft_open(t_content *l, t_mini *com, int token) // sert a open les input et ou
 	}
 	return (fd);
 }
-
+/*
 void	ft_finishcom(t_mini *com, int *fd)
 {
 	int x;
-	*fd = 0;
 	x = com->content + 1;
 	x++;
 	//fonction qui sert a r met qui devra surement être utiliser plus tard 
 }
-
+*/
 void	ft_createcom(t_mini *com, t_content *l)// fonction générale pour créer la commande
 {
 //	int x;
@@ -205,7 +204,8 @@ void	ft_createcom(t_mini *com, t_content *l)// fonction générale pour créer l
 			ft_addcom(lst->content, lstcom);
 		else if (lst->token == 6)
 		{
-			ft_finishcom(lstcom, &fd);
+//			ft_finishcom(lstcom, &fd);
+			fd = 0;
 			lstcom = lstcom->next;
 		}
 		lst = lst->next;
@@ -227,7 +227,7 @@ t_mini	*ft_createliste(int x) // permet de créer la liste de commande
 	}
 	return (start);
 }
-
+/*
 int	ft_checkcom(t_mini *lcom) //vérifie la valider des commandes 
 {
 	t_mini *copy;
@@ -246,7 +246,7 @@ int	ft_checkcom(t_mini *lcom) //vérifie la valider des commandes
 	}
 	return (r);
 }
-
+*/
 void	ft_freetab(char **content)
 {
 	int x;
@@ -313,19 +313,19 @@ int	ft_errorsyntax(int x, t_content *l, t_env *lenv)
 	if (x == 10)
 	{
 		create_heredoc(l, lenv);
-		return(write(1, "syntax error near unexpected token `newline'\n", 45));
+		return(write(1, "minishell: syntax error near unexpected token `newline'\n", 56));
 	}
 	create_heredoc(l, lenv);
 	if (x == 12)
-		return(write(1, "syntax error near unexpected token `>'\n", 39));
+		return(write(1, "minishell: syntax error near unexpected token `>'\n", 50));
 	if (x == 13)
-		return(write(1, "syntax error near unexpected token `>>'\n", 40));
+		return(write(1, "minishell: syntax error near unexpected token `>>'\n", 51));
 	if (x == 14)
-		return(write(1, "syntax error near unexpected token `<'\n", 39));
+		return(write(1, "minishell: syntax error near unexpected token `<'\n", 50));
 	if (x == 15)
-		return(write(1, "syntax error near unexpected token `<<'\n", 40));
+		return(write(1, "minishell: syntax error near unexpected token `<<'\n", 51));
 	if (x == 16)
-		return(write(1, "syntax error near unexpected token `|'\n", 39));
+		return(write(1, "minishell: syntax error near unexpected token `|'\n", 50));
 	return (1);
 }
 

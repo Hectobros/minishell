@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 10:53:34 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 12:44:17 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,10 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 	if (is_builtin(l))
 		run_builtin(l, lenv, 1);
 	path = get_path(lenv);
+	buff = make_path(l->cmd[0], "");
+	if (!buff)
+		exit(33);
+	execve(buff, l->cmd, env);//ENV ?
 	while (path && *path)
 	{
 		buff = make_path(l->cmd[0], *path);
@@ -218,10 +222,6 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 		free(buff);
 		path++;
 	}
-	buff = make_path(l->cmd[0], "");
-	if (!buff)
-		exit(33);
-	execve(buff, l->cmd, env);//ENV ?
 	free(buff);
 	write_error("%s: command not found\n", l->cmd[0]);
 }
@@ -269,7 +269,6 @@ void	wait_all(t_mini *l)
 	}
 }
 
-
 int	main(int ac, char **av, char **env)
 {
 	t_content	*lst;
@@ -279,7 +278,9 @@ int	main(int ac, char **av, char **env)
 	t_mini		*com;
 	(void)ac; (void)av;
 	int			exit = 1;
+	int	dol_inter;
 
+	dol_inter = 0;
 	com = NULL;
 	lenv = NULL;
 	create_env_lst(&lenv, env);
@@ -289,6 +290,7 @@ int	main(int ac, char **av, char **env)
 	{
 		lst = NULL;
 		rl = readline(prompt);
+		//HERE add end |
 		if (ft_strlen(rl) != 0)
 			add_history(rl);
 		if (make_token(rl, &lst, lenv))
