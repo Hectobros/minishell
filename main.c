@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 20:03:55 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 20:20:25 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,9 +248,15 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 
 void	all_errors(int fdin, int fdout, t_mini *l)
 {
+//	char *test;
+
+//	test = strerror(errno);
 	if (fdout == -3)
 	{
+
 		printf("bash: %s: Is a directory\n", l->crashword);
+	//	ft_putstr_fd(strerror(errno), STDERR_FILENO);
+	//	exit(errno);
 		exit(1);
 	}
 	else if (fdout == -2 || fdin == -2)
@@ -279,8 +285,8 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 //		if (l->pid  < 0) ->Error
 		if (l->pid == 0)
 		{
-//			if (!l->prev)
-			all_errors(l->fdin, l->fdout, l);
+			if (!l->prev)
+				all_errors(l->fdin, l->fdout, l);
 			if (l->next)
 				close(l->pipe[0]);
 			if (l->fdin >= 0)
