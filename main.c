@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 20:32:14 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 10:53:34 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,11 @@ void	putstr_and_s(const char *message, char *s)
 	}
 }
 
-void	write_error(const char *err, char *s)
+int	write_error(const char *err, char *s)
 {
 	putstr_and_s(err, s);
-	exit (1);
+	//exit(1);
+	return (1);
 }
 
 void	all_errors(int fdin, int fdout, t_mini *l)
@@ -132,29 +133,49 @@ char	*make_path(const char *cmd, const char *path)
 	return (buff);
 }
 
-void	is_builtin(t_mini *l, t_env *lenv)
+int	run_builtin(t_mini *l, t_env *lenv, int ex)
 {
+	int	ret;
+
 	if (str_comp(l->cmd[0], "echo"))
-		echo42(l->cmd);
-	if (str_comp(l->cmd[0], "cd"))
-		cd42(l->cmd, lenv);
-	if (str_comp(l->cmd[0], "pwd"))
-		pwd42(l->cmd);
-	if (str_comp(l->cmd[0], "env"))
-	{
-	printf("%s\n", l->cmd[0]);
-		env42(l->cmd, lenv);
-	}
-	if (str_comp(l->cmd[0], "export"))
-		export42(l->cmd, &lenv);
-	if (str_comp(l->cmd[0], "unset"))
-		unset42(l->cmd, &lenv);
+		ret = echo42(l->cmd);
+	else if (str_comp(l->cmd[0], "cd"))
+		ret = cd42(l->cmd, lenv);
+	else if (str_comp(l->cmd[0], "pwd"))
+		ret = pwd42(l->cmd);
+	else if (str_comp(l->cmd[0], "env"))
+		ret = env42(l->cmd, lenv);
+	else if (str_comp(l->cmd[0], "export"))
+		ret = export42(l->cmd, &lenv);
+	else if (str_comp(l->cmd[0], "unset"))
+		ret = unset42(l->cmd, &lenv);
+	if (ex)
+		exit(ret);
+	return (ret);
 }
 
-void	run_command(t_mini *l, t_env *lenv, char **env)
+int	is_builtin(t_mini *l)
 {
-	char	**path;
-	char	*buff;
+	if (str_comp(l->cmd[0], "echo"))
+		return(1);
+	else if (str_comp(l->cmd[0], "cd"))
+		return(1);
+	else if (str_comp(l->cmd[0], "pwd"))
+		return(1);
+	else if (str_comp(l->cmd[0], "env"))
+		return(1);
+	else if (str_comp(l->cmd[0], "export"))
+		return(1);
+	else if (str_comp(l->cmd[0], "unset"))
+		return(1);
+	else if (str_comp(l->cmd[0], "exit"))
+		return(1);
+	return(0);
+}
+
+char 	**get_path(t_env *lenv)
+{
+	char **path;
 
 	path = NULL;
 	while (lenv)
@@ -167,7 +188,27 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 		}
 		lenv = lenv->next;
 	}
-	is_builtin(l, lenv);
+	if (!path)
+	{
+		path = malloc(sizeof(char*) * 2);
+		if (!path)
+			exit(33);
+		path[0] = ft_strdup("\0");
+		path[1] = NULL;
+		if (!path[0])
+			exit(33);
+	}
+	return(path);
+}
+
+void	run_command(t_mini *l, t_env *lenv, char **env)
+{
+	char	**path;
+	char	*buff;
+
+	if (is_builtin(l))
+		run_builtin(l, lenv, 1);
+	path = get_path(lenv);
 	while (path && *path)
 	{
 		buff = make_path(l->cmd[0], *path);
@@ -177,7 +218,6 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 		free(buff);
 		path++;
 	}
-
 	buff = make_path(l->cmd[0], "");
 	if (!buff)
 		exit(33);
@@ -229,6 +269,7 @@ void	wait_all(t_mini *l)
 	}
 }
 
+
 int	main(int ac, char **av, char **env)
 {
 	t_content	*lst;
@@ -242,7 +283,7 @@ int	main(int ac, char **av, char **env)
 	com = NULL;
 	lenv = NULL;
 	create_env_lst(&lenv, env);
-	//	print_env(lenv);
+//	print_env(lenv);
 	prompt = "minishell$ ";
 	while (exit)
 	{
@@ -258,13 +299,13 @@ int	main(int ac, char **av, char **env)
 //		print_lst(lst);
 		com = ft_buildpipe(lst, lenv);
 		add_prev_mini(com);
-		if (com != NULL)
+//		if (com != NULL)
 //			ft_printcomm(com);
 		
-//		if (len_mini(com) == 1)
-//			run_command(l, lenv, env);
-//		else
-		mini_exec(com, lenv, env);
+		if (len_mini(com) == 1 && is_builtin(com))
+			run_builtin(com, lenv, 0);
+		else
+			mini_exec(com, lenv, env);
 		wait_all(com);
 
 		free(rl);

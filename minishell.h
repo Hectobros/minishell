@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 20:20:00 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 10:52:55 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -54,15 +54,15 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }				t_env;
-void	env42(char **cmd, t_env *lst);
-void	unset42(char **cmd, t_env **lst);
-void	export42(char **cmd, t_env **lst);
-void	echo42(char **cmd);
-void	pwd42(char **cmd);
-void	cd42(char **cmd, t_env *lst);
+int	env42(char **cmd, t_env *lst);
+int	unset42(char **cmd, t_env **lst);
+int	export42(char **cmd, t_env **lst);
+int	echo42(char **cmd);
+int	pwd42(char **cmd);
+int	cd42(char **cmd, t_env *lst);
 void	put_s(char *s);
 void	putstr_and_s(const char *message, char *s);
-void	write_error(const char *err, char *s);
+int	write_error(const char *err, char *s);
 char			*re_alloc(char *buff, int hl, int limit);
 int				str_comp(char *name, char *unset);
 char			*get_env42(t_env *lenv, char *name);

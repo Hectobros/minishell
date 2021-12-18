@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 19:26:27 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 10:49:29 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	is_n_option(char *str)
 		return (1);
 	return (0);
 }
-void	echo42(char **cmd)
+int	echo42(char **cmd)
 {
 	int i;
 	int	n;
@@ -39,7 +39,7 @@ void	echo42(char **cmd)
 	}
 	if (n)
 		printf("\n");
-	exit(0);
+	return(0);
 }
 /*
 int	main(int ac, char **av, char **env)

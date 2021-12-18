@@ -6,24 +6,22 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 20:34:25 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 10:51:53 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	env42(char **cmd, t_env *lst)
+int	env42(char **cmd, t_env *lst)
 {
 	(void)cmd;
-	printf("here:%s\n", lst->name);
-	printf("HEEEY");
 	while (lst)
 	{
 		putstr_and_s("%s=", lst->name);
 		putstr_and_s("%s\n", lst->value);
 		lst = lst->next;
 	}
-	exit(0);
+	return(0);
 }
 
 void	delete_first(t_env **lst)
@@ -55,7 +53,7 @@ void	delete_env(t_env *lp, char **cmd, int i)
 	}
 }
 
-void	unset42(char **cmd, t_env **lst)
+int	unset42(char **cmd, t_env **lst)
 {
 	int	i;
 
@@ -68,6 +66,7 @@ void	unset42(char **cmd, t_env **lst)
 			delete_env(*lst, cmd, i);
 		i++;
 	}
+	return (0);
 }
 
 int		export_is_valid(char *str)
@@ -78,8 +77,8 @@ int		export_is_valid(char *str)
 	while (str[i] && (isalnum(str[i]) || str[i] == '_'))
 		i++;
 	if (str[i] && str[i] == '=')
-		exit(1);
-	return (0);
+		return (0);
+	return (write_error("export: '%s': not a valid identifier\n", str));
 }
 
 int		change_existing_value(char *name, char *value, t_env *lst)
@@ -98,7 +97,7 @@ int		change_existing_value(char *name, char *value, t_env *lst)
 	return (0);
 }
 
-void	export42(char **cmd, t_env **lst)
+int	export42(char **cmd, t_env **lst)
 {
 	int		i;
 	char	*name;
@@ -108,8 +107,8 @@ void	export42(char **cmd, t_env **lst)
 	while (cmd[i])
 	{
 		if (cmd[i][0] == '=')
-			write_error("export: '%s': not a valid identifier\n", cmd[i]);
-		if (export_is_valid(cmd[i]))
+			return (write_error("export: '%s': not a valid identifier\n", cmd[i]));
+		else if (!export_is_valid(cmd[i]))
 		{
 			name = get_env_name(cmd[i]);
 			value = get_env_value(cmd[i]);
@@ -118,7 +117,7 @@ void	export42(char **cmd, t_env **lst)
 		}
 		i++;
 	}
-	exit(0);
+	return (0);
 }
 /*
 int	main(int ac, char **av, char **env)
