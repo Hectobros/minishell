@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 13:40:42 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 13:42:42 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ int	run_builtin(t_mini *l, t_env *lenv, int ex)
 		ret = unset42(l->cmd, &lenv);
 	if (ex)
 	{
-	//	rl_clear_history(); //215 blocks
+		rl_clear_history();
 		free_env(lenv);
 		ft_destroy(l);
 		exit(ret);
@@ -338,7 +338,7 @@ int	main(int ac, char **av, char **env)
 			wait_all(com);
 		}
 		ft_destroy(com);
-		exit = 0;
+//		exit = 0;
 	}
 	rl_clear_history();
 	free_env(lenv);
