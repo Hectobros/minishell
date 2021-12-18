@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int glob;
+t_global globa;
 
 int	is_builtin(t_mini *l)
 {
@@ -285,6 +285,7 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 //		if (l->pid  < 0) ->Error
 		if (l->pid == 0)
 		{
+			ft_delsignal();
 			if (!l->prev)
 				all_errors(l->fdin, l->fdout, l);
 			if (l->next)
@@ -299,6 +300,8 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 				dup2(l->pipe[1], 1);
 			run_command(l, lenv, env);
 		}
+		else
+			globa.pid = l->pid;
 		if (l->prev)
 			close(l->prev->pipe[0]);
 		if (l->next)
@@ -344,6 +347,7 @@ int	main(int ac, char **av, char **env)
 	int			exit = 1;
 	int	dol_inter;
 
+	globa.herve = 0;
 	dol_inter = 0;
 	com = NULL;
 	lenv = NULL;
@@ -352,9 +356,13 @@ int	main(int ac, char **av, char **env)
 	prompt = "minishell$ ";
 	while (exit)
 	{
+		globa.pid = -1;
 		lst = NULL;
+		ft_setsignal();
 		rl = readline(prompt);
 		//HERE add end |
+		if (rl == NULL)
+			return(0);
 		if (ft_strlen(rl) != 0)
 			add_history(rl);
 		if (make_token(rl, &lst, lenv))

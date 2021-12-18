@@ -37,10 +37,11 @@ SRCS = main.c \
 	   builtins/cd_pwd.c \
 	   builtins/echo.c \
 	   builtins/env.c \
+	   signals/ft_signal.c\
 
 OBJS = ${SRCS:.c=.o}
 
-CFLAGS = -Wall -Wextra -Werror -pthread# -g -fsanitize=thread
+CFLAGS = -fPIE -Wall -Wextra -Werror -pthread# -g -fsanitize=thread
 
 all: $(NAME)
 

@@ -23,6 +23,13 @@
 # include <readline/history.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <signal.h>
+
+typedef struct s_global
+{
+	pid_t	pid;
+	int		herve;
+}		t_global;
 
 typedef struct s_mini
 {
@@ -50,6 +57,9 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }				t_env;
+
+extern t_global globa;
+
 int	env42(char **cmd, t_env *lst);
 int	unset42(char **cmd, t_env **lst);
 int	export42(char **cmd, t_env **lst);
@@ -110,5 +120,9 @@ int				ft_ambigous(t_content *l, t_mini *com, int i);
 int				ft_errorsyntax(int x, t_content *l, t_env *lenv);
 int				ft_printcomm(t_mini *com);
 void			ft_printab(char **tab);
+void    routine(int sig);
+void    rout(int sig);
+void    ft_setsignal();
+void    ft_delsignal();
 
 #endif
