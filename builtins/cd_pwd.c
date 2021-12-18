@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 10:54:42 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 19:25:14 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int		pwd42(char **cmd)//Diff in pwd if going in symbolic link: ln -s dir linknam
 
 	if (cmd[1] && cmd[1][0] == '-' && cmd[1][1])
 	{
-		putstr_and_s("pwd: %s: invalid option\n", cmd[1]);
+	//	putstr_and_s("pwd: %s: invalid option\n", cmd[1]);
+		printf("pwd: %s: invalid option\n", cmd[1]);
 		return(2);
 	}
 	buf = malloc(sizeof(char) * 4096);//valeur arbitraire
@@ -26,10 +27,12 @@ int		pwd42(char **cmd)//Diff in pwd if going in symbolic link: ln -s dir linknam
 		return(33);
 	if (!getcwd(buf, 4097))
 	{
-		putstr_and_s("getcwd: path too long", NULL);
+//		putstr_and_s("getcwd: path too long", NULL);
+		printf("getcwd: path too long\n");
 		return(3);
 	}
-	putstr_and_s("%s\n", buf);
+	printf("%s\n", buf);
+//	putstr_and_s("%s\n", buf);
 	free(buf);
 	return(0);
 }
@@ -56,16 +59,18 @@ int		cd42(char **cmd, t_env *lst)
 		chdir_to_home(lst);
 	stat(cmd[1], &st);
 	if (strlen(cmd[1]) > 255)
-		return (write_error("cd: %s: File name too long\n", cmd[1]));
+		printf("cd: %s: File name too long\n", cmd[1]);
 	else if (cmd[2])
-		return (write_error("cd: too many arguments\n", NULL));
+		printf("cd: too many arguments\n");
 	else if (access(cmd[1], F_OK))
-		return (write_error("cd: %s: No such file or directory\n", cmd[1]));
+		printf("cd: %s: No such file or directory\n", cmd[1]);
 	else if (!S_ISDIR(st.st_mode))
-		return (write_error("cd: %s: Not a directory\n", cmd[1]));
+		printf("cd: %s: Not a directory\n", cmd[1]);
 	else if (chdir(cmd[1]))
-		return (write_error("cd: %s: Permission denied\n", cmd[1]));
-	return(0);
+		printf("cd: %s: Permission denied\n", cmd[1]);
+	else
+		return(0);
+	return(1);
 }
 /*
 int	main(int ac, char **av, char **env)

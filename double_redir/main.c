@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 14:07:24 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/15 18:58:27 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 17:56:55 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <readline/history.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+
 
 size_t	ft_strlen(const char *s)
 {
@@ -142,21 +143,23 @@ void	test_pipe(int fdp[2])
 	write(fdp[1], "e", 1);
 }
 
+
+
+
 int	main(int ac, char **av, char **envp)
 {
-//	char	**test;
-	int		fdp[2];
+	char	**test;
 	(void)ac;
 	(void)av;
 	(void)envp;
 //	printf("%d\n", access("$_", F_OK));
 
+	test = malloc(sizeof(char*) * 5);
+	test[0] = ft_strdup("cat"); 
+	test[1] = ft_strdup("boooy"); 
+	test[2] = NULL;
+	execve("/usr/bin/cat", test, envp);
 
-	pipe(fdp);
-	test_pipe(fdp);
-	printf("HERE\n");
-	test_inside_fd(fdp);
-	printf("HERE\n");
 	/*
 	int		psize = 0;
 	create_double(fdp, "end", &psize);

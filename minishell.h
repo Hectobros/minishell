@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 12:44:04 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 18:54:49 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -23,9 +23,6 @@
 # include <readline/history.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-
-//stdin:0
-//stdout:1
 
 typedef struct s_mini
 {

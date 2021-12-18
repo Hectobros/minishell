@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 10:51:53 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 19:29:47 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ int	env42(char **cmd, t_env *lst)
 	(void)cmd;
 	while (lst)
 	{
-		putstr_and_s("%s=", lst->name);
-		putstr_and_s("%s\n", lst->value);
+		printf("%s=%s\n", lst->name, lst->value);
+//		putstr_and_s("%s=", lst->name);
+//		putstr_and_s("%s\n", lst->value);
 		lst = lst->next;
 	}
 	return(0);
@@ -76,9 +77,10 @@ int		export_is_valid(char *str)
 	i = 0;
 	while (str[i] && (isalnum(str[i]) || str[i] == '_'))
 		i++;
-	if (str[i] && str[i] == '=')
+	if (str[i] && str[i] == '=' && i > 0)
 		return (0);
-	return (write_error("export: '%s': not a valid identifier\n", str));
+	printf("export: '%s': not a valid identifier\n", str);
+	return (1);
 }
 
 int		change_existing_value(char *name, char *value, t_env *lst)
@@ -106,9 +108,7 @@ int	export42(char **cmd, t_env **lst)
 	i = 1;
 	while (cmd[i])
 	{
-		if (cmd[i][0] == '=')
-			return (write_error("export: '%s': not a valid identifier\n", cmd[i]));
-		else if (!export_is_valid(cmd[i]))
+		if (!export_is_valid(cmd[i]))
 		{
 			name = get_env_name(cmd[i]);
 			value = get_env_value(cmd[i]);

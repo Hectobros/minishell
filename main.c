@@ -6,12 +6,13 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 13:42:42 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 20:03:55 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int glob;
 
 int	is_builtin(t_mini *l)
 {
@@ -22,6 +23,19 @@ int	is_builtin(t_mini *l)
 	else if (str_comp(l->cmd[0], "pwd"))
 		return(1);
 	else if (str_comp(l->cmd[0], "env"))
+		return(1);
+	else if (str_comp(l->cmd[0], "export"))
+		return(1);
+	else if (str_comp(l->cmd[0], "unset"))
+		return(1);
+	else if (str_comp(l->cmd[0], "exit"))
+		return(1);
+	return(0);
+}
+
+int	is_parent(t_mini *l)
+{
+	if (str_comp(l->cmd[0], "cd"))
 		return(1);
 	else if (str_comp(l->cmd[0], "export"))
 		return(1);
@@ -89,12 +103,12 @@ void	add_prev_mini(t_mini *com)
 	}
 }
 
-
+/*
 void	put_s(char *s)
 {
 	while (*s)
 	{
-		write(1, s, 1);
+		write(2, s, 1);
 		s++;
 	}
 }
@@ -112,25 +126,8 @@ void	putstr_and_s(const char *message, char *s)
 		}
 	}
 }
+*/
 
-int	write_error(const char *err, char *s)
-{
-	putstr_and_s(err, s);
-	//exit(1);
-	return (1);
-}
-
-void	all_errors(int fdin, int fdout, t_mini *l)
-{
-	if (fdout == -3)
-		write_error("bash: %s: Is a directory\n", l->crashword);
-	else if (fdout == -2 || fdin == -2)
-		write_error("bash: %s: ambigous redirect\n", l->crashword);
-	else if (fdout == -1 || fdin == -1)
-		write_error("bash: %s: Permission denied\n", l->crashword);
-	else if (fdin == -4)
-		write_error("bash: %s: No such file or directory\n", l->crashword);
-}
 
 
 char	*make_path(const char *cmd, const char *path)
@@ -245,9 +242,33 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 		i++;
 	}
 	free_path(path);
-	write_error("%s: command not found\n", l->cmd[0]);
+	printf("%s: command not found\n", l->cmd[0]);
+	exit(1);
 }
 
+void	all_errors(int fdin, int fdout, t_mini *l)
+{
+	if (fdout == -3)
+	{
+		printf("bash: %s: Is a directory\n", l->crashword);
+		exit(1);
+	}
+	else if (fdout == -2 || fdin == -2)
+	{
+		printf("bash: %s: ambigous redirect\n", l->crashword);
+		exit(1);
+	}
+	else if (fdout == -1 || fdin == -1)
+	{
+		printf("bash: %s: Permission denied\n", l->crashword);
+		exit(1);
+	}
+	else if (fdin == -4)
+	{
+		printf("bash: %s: No such file or directory\n", l->crashword);
+		exit(1);
+	}
+}
 void	mini_exec(t_mini *l, t_env *lenv, char **env)
 {
 	while (l)
@@ -258,8 +279,8 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 //		if (l->pid  < 0) ->Error
 		if (l->pid == 0)
 		{
-			if (!l->prev)
-				all_errors(l->fdin, l->fdout, l);
+//			if (!l->prev)
+			all_errors(l->fdin, l->fdout, l);
 			if (l->next)
 				close(l->pipe[0]);
 			if (l->fdin >= 0)
@@ -279,16 +300,31 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 		l = l->next;
 	}
 }
-
 void	wait_all(t_mini *l)
 {
 	int	status;
 
 	while (l)
 	{
-		waitpid(0, &status, 0);
+		wait(&status);
 		l = l->next;
 	}
+}
+
+int	dad_is_running(t_mini *l, t_env *lenv)
+{
+	int	ret;
+
+	ret = 0;
+	if (str_comp(l->cmd[0], "cd"))
+		ret = cd42(l->cmd, lenv);
+	else if (str_comp(l->cmd[0], "export"))
+		ret = export42(l->cmd, &lenv);
+	else if (str_comp(l->cmd[0], "unset"))
+		ret = unset42(l->cmd, &lenv);
+//	else if (str_comp(l->cmd[0], "exit"))
+//		ret = exit42(l->cmd, &lenv);
+	return (ret);
 }
 
 int	main(int ac, char **av, char **env)
@@ -330,8 +366,10 @@ int	main(int ac, char **av, char **env)
 //		if (com != NULL)
 //			ft_printcomm(com);
 		
-		if (len_mini(com) == 1 && is_builtin(com))
-			run_builtin(com, lenv, 0);
+		if (len_mini(com) == 1 && is_parent(com))
+		{
+			dad_is_running(com, lenv);
+		}
 		else
 		{
 			mini_exec(com, lenv, env);
