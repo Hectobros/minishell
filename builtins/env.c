@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 19:29:47 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 23:02:43 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,17 @@ void	delete_env(t_env *lp, char **cmd, int i)
 	}
 }
 
+int	check_unset(char *str)
+{
+	if (*str > '0' && *str < '9')
+		return (1);
+	while (*str && ft_isalnum(*str))
+		str++;
+	if(*str)
+		return (1);
+	return (0);
+}
+
 int	unset42(char **cmd, t_env **lst)
 {
 	int	i;
@@ -61,10 +72,15 @@ int	unset42(char **cmd, t_env **lst)
 	i = 1;
 	while (cmd[i])
 	{
+		if (check_unset(cmd[i]))
+			printf("minishell: unset: `%s': not a valid identifier\n", cmd[i]);
+		else
+		{
 		if (str_comp((*lst)->name, cmd[i]))
 			delete_first(lst);
 		else
 			delete_env(*lst, cmd, i);
+		}
 		i++;
 	}
 	return (0);
@@ -75,11 +91,11 @@ int		export_is_valid(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] && (isalnum(str[i]) || str[i] == '_'))
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	if (str[i] && str[i] == '=' && i > 0)
 		return (0);
-	printf("export: '%s': not a valid identifier\n", str);
+	printf("minishell: export: `%s': not a valid identifier\n", str);
 	return (1);
 }
 
