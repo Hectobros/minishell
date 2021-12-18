@@ -6,13 +6,31 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 12:44:17 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 13:40:42 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
+int	is_builtin(t_mini *l)
+{
+	if (str_comp(l->cmd[0], "echo"))
+		return(1);
+	else if (str_comp(l->cmd[0], "cd"))
+		return(1);
+	else if (str_comp(l->cmd[0], "pwd"))
+		return(1);
+	else if (str_comp(l->cmd[0], "env"))
+		return(1);
+	else if (str_comp(l->cmd[0], "export"))
+		return(1);
+	else if (str_comp(l->cmd[0], "unset"))
+		return(1);
+	else if (str_comp(l->cmd[0], "exit"))
+		return(1);
+	return(0);
+}
 
 void	print_env(t_env *lenv)
 {
@@ -121,7 +139,7 @@ char	*make_path(const char *cmd, const char *path)
 	int	i;
 
 	i = 0;
-	buff = malloc(sizeof(char) * (1 + ft_strlen(cmd) + ft_strlen(path)));
+	buff = malloc(sizeof(char) * (2 + ft_strlen(cmd) + ft_strlen(path)));
 	if (!buff)
 		return (NULL);
 	while (*path)
@@ -150,27 +168,13 @@ int	run_builtin(t_mini *l, t_env *lenv, int ex)
 	else if (str_comp(l->cmd[0], "unset"))
 		ret = unset42(l->cmd, &lenv);
 	if (ex)
+	{
+	//	rl_clear_history(); //215 blocks
+		free_env(lenv);
+		ft_destroy(l);
 		exit(ret);
+	}
 	return (ret);
-}
-
-int	is_builtin(t_mini *l)
-{
-	if (str_comp(l->cmd[0], "echo"))
-		return(1);
-	else if (str_comp(l->cmd[0], "cd"))
-		return(1);
-	else if (str_comp(l->cmd[0], "pwd"))
-		return(1);
-	else if (str_comp(l->cmd[0], "env"))
-		return(1);
-	else if (str_comp(l->cmd[0], "export"))
-		return(1);
-	else if (str_comp(l->cmd[0], "unset"))
-		return(1);
-	else if (str_comp(l->cmd[0], "exit"))
-		return(1);
-	return(0);
 }
 
 char 	**get_path(t_env *lenv)
@@ -201,28 +205,46 @@ char 	**get_path(t_env *lenv)
 	return(path);
 }
 
+void	free_path(char **path)
+{
+	int	i;
+
+	i = 0;
+	while (path[i])
+	{
+		free(path[i]);
+		i++;
+	}
+	free(path);
+}
+
 void	run_command(t_mini *l, t_env *lenv, char **env)
 {
 	char	**path;
 	char	*buff;
+	int		i;
 
+	i = 0;
 	if (is_builtin(l))
 		run_builtin(l, lenv, 1);
 	path = get_path(lenv);
+
 	buff = make_path(l->cmd[0], "");
 	if (!buff)
 		exit(33);
-	execve(buff, l->cmd, env);//ENV ?
-	while (path && *path)
+	execve(buff, l->cmd, env);
+	free(buff);
+
+	while (path && path[i])
 	{
-		buff = make_path(l->cmd[0], *path);
+		buff = make_path(l->cmd[0], path[i]);
 		if (!buff)
 			exit(33);
 		execve(buff, l->cmd, env);//ENV ?
 		free(buff);
-		path++;
+		i++;
 	}
-	free(buff);
+	free_path(path);
 	write_error("%s: command not found\n", l->cmd[0]);
 }
 
@@ -301,21 +323,24 @@ int	main(int ac, char **av, char **env)
 //		print_lst(lst);
 		com = ft_buildpipe(lst, lenv);
 		add_prev_mini(com);
+
+		free_content_lst(lst);
+		free(rl);
+
 //		if (com != NULL)
 //			ft_printcomm(com);
 		
 		if (len_mini(com) == 1 && is_builtin(com))
 			run_builtin(com, lenv, 0);
 		else
+		{
 			mini_exec(com, lenv, env);
-		wait_all(com);
-
-		free(rl);
-		free_content_lst(lst);
-//		exit = 0;
+			wait_all(com);
+		}
+		ft_destroy(com);
+		exit = 0;
 	}
 	rl_clear_history();
 	free_env(lenv);
-	ft_destroy(com);
 	return (0);
 }
