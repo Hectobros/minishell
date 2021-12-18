@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 20:20:25 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 23:29:16 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,12 +226,7 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 		run_builtin(l, lenv, 1);
 	path = get_path(lenv);
 
-	buff = make_path(l->cmd[0], "");
-	if (!buff)
-		exit(33);
-	execve(buff, l->cmd, env);
-	free(buff);
-
+	execve(l->cmd[0], l->cmd, env);
 	while (path && path[i])
 	{
 		buff = make_path(l->cmd[0], path[i]);

@@ -8,7 +8,7 @@ void    routine(int sig)
         globa.pid = -1;
         printf("\n");
     }
-    else if (globa.pid )
+    else if (globa.pid)
     {
         printf("\n");
         rl_on_new_line();
