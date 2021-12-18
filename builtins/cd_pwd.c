@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 19:25:14 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/18 22:36:40 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ int		cd42(char **cmd, t_env *lst)
 	struct stat st;
 
 	if (!cmd[1])
+	{
 		chdir_to_home(lst);
+		return (0);
+	}
 	stat(cmd[1], &st);
 	if (strlen(cmd[1]) > 255)
 		printf("cd: %s: File name too long\n", cmd[1]);
