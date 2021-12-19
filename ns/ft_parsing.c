@@ -26,7 +26,7 @@ int	ft_lstok(t_content *l) // vérifie les erreur obvious dans la liste
 	{
 		if (previous == 0 && lst->token == 6)
 			return (ft_spheredoc(l, 16));//syntax error near unexpected token
-		if ((previous != 0 && previous != 1) && (!(lst->token == 1 || lst->token == 666)) && (!(previous == 6 && lst->token > 2 && lst->token < 6)))
+		if ((previous != 0 && previous != 1 && previous != 666) && (!(lst->token == 1 || lst->token == 666)) && (!(previous == 6 && lst->token > 2 && lst->token < 6)))
 			return (ft_spheredoc(l, 10 + lst->token));//syntax error near unexpected token
 		previous = lst->token;
 		lst = lst->next;
@@ -90,6 +90,8 @@ int	ft_isdir(t_content *l, t_mini *com)
 {
 	int x;
 	struct stat path_stat;
+
+	x = 0;
 	stat(l->content, &path_stat);
 	x = S_ISDIR(path_stat.st_mode);
 	if (x == 0)
@@ -107,12 +109,13 @@ int	ft_ambigous(t_content *l, t_mini *com, int i)
 {
 	if (l->token == 666)
 	{
-		printf("HERE");
 		if (i == 0)
 			com->fdin = -2;
 		if (i == 1)
 			com->fdout = -2;
-		com->crashword = l->content;
+		if (com->crashword)
+			free(com->crashword);
+		com->crashword = ft_strdupn(l->content);
 		return (-1);
 	}
 	else

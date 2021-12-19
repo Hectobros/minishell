@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 23:11:35 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 00:00:49 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,17 +244,17 @@ void	run_command(t_mini *l, t_env *lenv, char **env, int saveout)
 	printf("%s: command not found\n", l->cmd[0]);
 }
 
-void	all_errors(int fdin, int fdout, t_mini *l, t_env *lenv)
+void	all_errors(t_mini *l, t_mini *tmp, t_env *lenv)
 {
-	if (fdout == -3)
+	if (l->fdout == -3)
 		printf("minishell: %s: Is a directory\n", l->crashword);
-	else if (fdout == -2 || fdin == -2)
+	else if (l->fdout == -2 || l->fdin == -2)
 		printf("minishell: %s: ambigous redirect\n", l->crashword);
-	else if (fdout == -1 || fdin == -1)
+	else if (l->fdout == -1 || l->fdin == -1)
 		printf("minishell: %s: Permission denied\n", l->crashword);
-	else if (fdin == -4)
+	else if (l->fdin == -4)
 		printf("minishell: %s: No such file or directory\n", l->crashword);
-	ft_destroy(l);
+	ft_destroy(tmp);
 	free_env(lenv);
 	exit(1);
 }
@@ -277,7 +277,7 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 			//			if (!l->prev       ---> why added ? fail ? are u dump ?)
 			if (l->fdout == -3 || l->fdout == -2 || l->fdout == -1 
 					|| l->fdin == -2 || l->fdin == -1 || l->fdin == -4)
-				all_errors(l->fdin, l->fdout, tmp, lenv);
+				all_errors(l, tmp, lenv);
 			saveout = dup(1);
 			if (l->next)
 				close(l->pipe[0]);
@@ -424,7 +424,7 @@ int	main(int ac, char **av, char **env)
 			free(rl);
 
 			//		if (com != NULL)
-			//			ft_printcomm(com);
+//						ft_printcomm(com);
 
 			if (len_mini(com) == 1 && is_parent(com))
 			{
