@@ -26,7 +26,7 @@ int	ft_lstok(t_content *l) // vérifie les erreur obvious dans la liste
 	{
 		if (previous == 0 && lst->token == 6)
 			return (ft_spheredoc(l, 16));//syntax error near unexpected token
-		if ((previous != 0 && previous != 1) && (!(lst->token == 1 || lst->token == 666)))
+		if ((previous != 0 && previous != 1) && (!(lst->token == 1 || lst->token == 666)) && (!(previous == 6 && lst->token > 2 && lst->token < 6)))
 			return (ft_spheredoc(l, 10 + lst->token));//syntax error near unexpected token
 		previous = lst->token;
 		lst = lst->next;

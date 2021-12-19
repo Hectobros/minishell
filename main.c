@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 12:16:28 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 12:29:59 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ t_global globa;
 
 int	is_builtin(t_mini *l)
 {
-	if (str_comp(l->cmd[0], "echo"))
+	if (!l->cmd)
+		return (0);
+	else if (str_comp(l->cmd[0], "echo"))
 		return(1);
 	else if (str_comp(l->cmd[0], "cd"))
 		return(1);
@@ -35,7 +37,9 @@ int	is_builtin(t_mini *l)
 
 int	is_parent(t_mini *l)
 {
-	if (str_comp(l->cmd[0], "cd"))
+	if (!l->cmd)
+		return (0);
+	else if (str_comp(l->cmd[0], "cd"))
 		return(1);
 	else if (str_comp(l->cmd[0], "export"))
 		return(1);
@@ -148,11 +152,14 @@ char	*make_path(const char *cmd, const char *path)
 	return (buff);
 }
 
-int	run_builtin(t_mini *l, t_env *lenv, int ex)
+void	run_builtin(t_mini *l, t_env *lenv)
 {
 	int	ret;
 
-	if (str_comp(l->cmd[0], "echo"))
+	ret = 0;
+	if (!l->cmd)
+		ret = 0;
+	else if (str_comp(l->cmd[0], "echo"))
 		ret = echo42(l->cmd);
 	else if (str_comp(l->cmd[0], "cd"))
 		ret = cd42(l->cmd, lenv);
@@ -164,14 +171,10 @@ int	run_builtin(t_mini *l, t_env *lenv, int ex)
 		ret = export42(l->cmd, &lenv);
 	else if (str_comp(l->cmd[0], "unset"))
 		ret = unset42(l->cmd, &lenv);
-	if (ex)
-	{
-		rl_clear_history();
-		free_env(lenv);
-		ft_destroy(l);
-		exit(ret);
-	}
-	return (ret);
+	rl_clear_history();
+	free_env(lenv);
+	ft_destroy(l);
+	exit(ret);
 }
 
 char 	**get_path(t_env *lenv)
@@ -223,7 +226,7 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 
 	i = 0;
 	if (is_builtin(l))
-		run_builtin(l, lenv, 1);
+		run_builtin(l, lenv);
 	path = get_path(lenv);
 
 	execve(l->cmd[0], l->cmd, env);
@@ -321,7 +324,9 @@ int	dad_is_running(t_mini *l, t_env *lenv)
 	int	ret;
 
 	ret = 0;
-	if (str_comp(l->cmd[0], "cd"))
+	if (!l->cmd)
+		ret = 0;
+	else if (str_comp(l->cmd[0], "cd"))
 		ret = cd42(l->cmd, lenv);
 	else if (str_comp(l->cmd[0], "export"))
 		ret = export42(l->cmd, &lenv);
