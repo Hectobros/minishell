@@ -6,11 +6,11 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:11:17 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 18:14:00 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 16:20:17 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*check_if_redirection(char *cont, t_env *lenv)
 {

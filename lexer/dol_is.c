@@ -6,11 +6,11 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:05:23 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 18:07:11 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 16:20:34 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*get_env_name(char *cont)
 {

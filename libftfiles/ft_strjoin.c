@@ -6,11 +6,11 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 17:31:14 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 10:50:02 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 16:25:54 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static char	*help_join(char const *s1, char const *s2, char **dst)
 {
@@ -21,7 +21,8 @@ static char	*help_join(char const *s1, char const *s2, char **dst)
 	i = 0;
 	j = 0;
 	size = ft_strlen((char*)s1) + ft_strlen((char*)s2) + 1;
-	if ((dst[0] = malloc(sizeof(char) * size)) == NULL)
+	dst[0] = malloc(sizeof(char) * size);
+	if (dst[0] == NULL)
 		return (NULL);
 	while (s1[j])
 		dst[0][i++] = s1[j++];

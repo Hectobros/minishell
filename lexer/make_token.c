@@ -6,11 +6,11 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:14:29 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 11:36:40 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 16:21:53 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	del_useless_env(t_content *lst)
 {

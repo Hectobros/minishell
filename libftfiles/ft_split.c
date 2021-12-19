@@ -6,11 +6,11 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 15:29:08 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 10:34:31 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 16:20:51 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	how_many_str(const char *s, char c, int *hm)
 {
