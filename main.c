@@ -361,6 +361,8 @@ char	*pipe_at_end(char *rl)
 	if (!is_pipe(rl))
 		return (rl);
 	rl2 = readline(">");
+	if (rl2 == NULL)
+		return (rl);
 	while(is_pipe(rl2))
 	{
 		tmp = rl;
@@ -370,6 +372,8 @@ char	*pipe_at_end(char *rl)
 		free(tmp);
 		free(rl2);
 		rl2 = readline(">");
+		if (rl2 == NULL)
+			return (rl);
 	}
 	tmp = rl;
 	rl = ft_strjoin(rl, rl2);
@@ -405,9 +409,13 @@ int	main(int ac, char **av, char **env)
 		lst = NULL;
 		ft_setsignal();
 		rl = readline(prompt);
-
 		if (rl == NULL)
+		{
+			rl_clear_history();
+			free_env(lenv);
+			printf("exit\n");
 			return(0);
+		}
 		rl = pipe_at_end(rl);
 		//HERE add end |
 		if (ft_strlen(rl) != 0)
