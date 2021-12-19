@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 18:26:48 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 19:00:44 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,12 @@ int	echo42(char **cmd)
 	while (cmd[i])
 	{
 		printf("%s", cmd[i]);
-//		putstr_and_s("%s", cmd[i]);
 		if (cmd[i + 1])
 			printf(" ");
-//			write(1, " ", 1);
 		i++;
 	}
 	if (n)
 		printf("\n");
-//		write(1, "\n", 1);
 	return(0);
 }
 /*

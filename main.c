@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 18:15:11 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 19:36:18 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,29 +108,29 @@ void	add_prev_mini(t_mini *com)
 }
 
 /*
-void	put_s(char *s)
-{
-	while (*s)
-	{
-		write(2, s, 1);
-		s++;
-	}
-}
+   void	put_s(char *s)
+   {
+   while (*s)
+   {
+   write(2, s, 1);
+   s++;
+   }
+   }
 
-void	putstr_and_s(const char *message, char *s)
-{
-	while (*message)
-	{
-		while (*message != '%' && *message)
-			write(1, message++, 1);
-		if (*message == '%' && *(message + 1) && *(message + 1) == 's')
-		{
-			message = message + 2;
-			put_s(s);
-		}
-	}
-}
-*/
+   void	putstr_and_s(const char *message, char *s)
+   {
+   while (*message)
+   {
+   while (*message != '%' && *message)
+   write(1, message++, 1);
+   if (*message == '%' && *(message + 1) && *(message + 1) == 's')
+   {
+   message = message + 2;
+   put_s(s);
+   }
+   }
+   }
+ */
 
 
 
@@ -242,14 +242,14 @@ void	run_command(t_mini *l, t_env *lenv, char **env, int saveout)
 	free_path(path);
 	printf("%s: command not found\n", l->cmd[0]);
 	dup2(saveout, 1);
-	exit(1);
+	exit(127);
 }
 
 void	all_errors(int fdin, int fdout, t_mini *l)
 {
-//	char *test;
+	//	char *test;
 
-//	test = strerror(errno);
+	//	test = strerror(errno);
 	if (fdout == -3)
 	{
 		printf("minishell: %s: Is a directory\n", l->crashword);
@@ -281,11 +281,11 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 		if (l->next)
 			pipe(l->pipe);
 		l->pid = fork();
-//		if (l->pid  < 0) ->Error
+		//		if (l->pid  < 0) ->Error
 		if (l->pid == 0)
 		{
 			ft_delsignal();
-//			if (!l->prev       ---> why added ? fail ? are u dump ?)
+			//			if (!l->prev       ---> why added ? fail ? are u dump ?)
 			all_errors(l->fdin, l->fdout, l);
 			if (l->next)
 				close(l->pipe[0]);
@@ -345,7 +345,7 @@ int	is_pipe(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i + 1])
+	while (str[i] && str[i + 1])
 		i++;
 	while (i > 0 && str[i] == ' ')
 		i--;
@@ -400,7 +400,7 @@ int	main(int ac, char **av, char **env)
 	com = NULL;
 	lenv = NULL;
 	create_env_lst(&lenv, env);
-//	print_env(lenv);
+	//	print_env(lenv);
 	prompt = "minishell$ ";
 	while (exit)
 	{
@@ -420,33 +420,33 @@ int	main(int ac, char **av, char **env)
 			add_history(rl);
 		if (!make_token(rl, &lst, lenv))
 		{
-//		print_lst(lst);
-		com = ft_buildpipe(lst, lenv);
-		add_prev_mini(com);
+			//		print_lst(lst);
+			com = ft_buildpipe(lst, lenv);
+			add_prev_mini(com);
 
+
+			//		if (com != NULL)
+			//			ft_printcomm(com);
+
+			if (len_mini(com) == 1 && is_parent(com))
+			{
+				ret = dad_is_running(com, lenv);
+				if (ret == 888)
+					exit = 0;
+				else
+					globa.herve = ret;
+			}
+			else
+			{
+				mini_exec(com, lenv, env);
+				wait_all(com);
+			}
+			ft_destroy(com);
+		}
 		free_content_lst(lst);
 		free(rl);
-
-//		if (com != NULL)
-//			ft_printcomm(com);
-		
-		if (len_mini(com) == 1 && is_parent(com))
-		{
-			ret = dad_is_running(com, lenv);
-			if (ret == 888)
-				exit = 0;
-			else
-				globa.herve = ret % 256;
-		}
-		else
-		{
-			mini_exec(com, lenv, env);
-			wait_all(com);
-		}
-		ft_destroy(com);
-		}
-//		exit = 0;
-//		printf("glo:%d\n", globa.herve);
+		exit = 0;
+		//		printf("glo:%d\n", globa.herve);
 	}
 	rl_clear_history();
 	free_env(lenv);

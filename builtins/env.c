@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 11:53:04 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 19:12:47 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 int	env42(char **cmd, t_env *lst)
 {
-	(void)cmd;
+	if (cmd[1])
+	{
+		printf("env: %s: No such file or directory\n", cmd[1]);
+		return (127);
+	}
 	while (lst)
 	{
 		printf("%s=%s\n", lst->name, lst->value);
-//		putstr_and_s("%s=", lst->name);
-//		putstr_and_s("%s\n", lst->value);
 		lst = lst->next;
 	}
 	return(0);
@@ -67,13 +69,18 @@ int	unset_is_valid(char *str)
 
 int	unset42(char **cmd, t_env **lst)
 {
+	int	ret;
 	int	i;
 
 	i = 1;
+	ret = 0;
 	while (cmd[i])
 	{
 		if (unset_is_valid(cmd[i]))
+		{
 			printf("minishell: unset: `%s': not a valid identifier\n", cmd[i]);
+			ret = 1;
+		}
 		else
 		{
 		if (str_comp((*lst)->name, cmd[i]))
@@ -83,7 +90,7 @@ int	unset42(char **cmd, t_env **lst)
 		}
 		i++;
 	}
-	return (0);
+	return (ret);
 }
 
 int		export_is_valid(char *str)
@@ -127,11 +134,13 @@ int		change_existing_value(char *name, char *value, t_env *lst)
 
 int	export42(char **cmd, t_env **lst)
 {
-	int		i;
+	int	i;
+	int	ret;
 	char	*name;
 	char	*value;
 
 	i = 1;
+	ret = 0;
 	while (cmd[i])
 	{
 		if (!export_is_valid(cmd[i]))
@@ -141,9 +150,11 @@ int	export42(char **cmd, t_env **lst)
 			if (!change_existing_value(name, value, *lst))
 				add_back_env(lst, new_env(name, value));
 		}
+		else
+			ret = 1;
 		i++;
 	}
-	return (0);
+	return (ret);
 }
 /*
 int	main(int ac, char **av, char **env)

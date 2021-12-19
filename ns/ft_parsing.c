@@ -80,6 +80,7 @@ void	ft_addcom(char *content, t_mini *commande) // permet d'ajouter un mot dans 
 	{
 		commande->cmd = malloc(sizeof(char *) * 2);
 		commande->cmd[0] = ft_strdup(content);
+//		printf("1:%p\n", commande->cmd[0]);
 		commande->cmd[1] = NULL;
 	}
 	else
@@ -257,6 +258,7 @@ void	ft_freetab(char **content)
 		return;
 	while(content[x])
 	{
+//		printf("2:%p\n", content[x]);
 		free(content[x]);
 		x++;
 	}
