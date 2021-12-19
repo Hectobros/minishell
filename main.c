@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 17:10:01 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 18:15:11 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -395,10 +395,8 @@ int	main(int ac, char **av, char **env)
 	int			ret;
 	(void)ac; (void)av;
 	int			exit = 1;
-	int	dol_inter;
 
-	globa.herve = 11;
-	dol_inter = 0;
+	globa.herve = 0;
 	com = NULL;
 	lenv = NULL;
 	create_env_lst(&lenv, env);
