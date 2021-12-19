@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 23:48:48 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 10:30:06 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	unset_is_valid(char *str)
 {
 	if (*str > '0' && *str < '9')
 		return (1);
-	while (*str && ft_isalnum(*str))
+	while (*str && (ft_isalnum(*str) || *str == '_'))
 		str++;
 	if(*str)
 		return (1);
