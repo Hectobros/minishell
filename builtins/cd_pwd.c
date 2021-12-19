@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 18:39:07 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 18:45:58 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,15 @@ int		cd42(char **cmd, t_env *lst)
 	}
 	stat(cmd[1], &st);
 	if (strlen(cmd[1]) > 255)
-		printf("cd: %s: File name too long\n", cmd[1]);
+		printf("minishell: cd: %s: File name too long\n", cmd[1]);
 	else if (cmd[2])
-		printf("cd: too many arguments\n");
+		printf("minishell: cd: too many arguments\n");
 	else if (access(cmd[1], F_OK))
-		printf("cd: %s: No such file or directory\n", cmd[1]);
+		printf("minishell: cd: %s: No such file or directory\n", cmd[1]);
 	else if (!S_ISDIR(st.st_mode))
-		printf("cd: %s: Not a directory\n", cmd[1]);
+		printf("minishell: cd: %s: Not a directory\n", cmd[1]);
 	else if (chdir(cmd[1]))
-		printf("cd: %s: Permission denied\n", cmd[1]);
+		printf("minishell: cd: %s: Permission denied\n", cmd[1]);
 	else
 		return(0);
 	return(1);
