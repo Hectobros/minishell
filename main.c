@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 19:36:18 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 20:58:42 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,6 @@ void	run_builtin(t_mini *l, t_env *lenv)
 		ret = export42(l->cmd, &lenv);
 	else if (str_comp(l->cmd[0], "unset"))
 		ret = unset42(l->cmd, &lenv);
-	rl_clear_history();
 	free_env(lenv);
 	ft_destroy(l);
 	exit(ret);
@@ -240,42 +239,31 @@ void	run_command(t_mini *l, t_env *lenv, char **env, int saveout)
 		i++;
 	}
 	free_path(path);
-	printf("%s: command not found\n", l->cmd[0]);
 	dup2(saveout, 1);
-	exit(127);
+	close(saveout);
+	printf("%s: command not found\n", l->cmd[0]);
 }
 
-void	all_errors(int fdin, int fdout, t_mini *l)
+void	all_errors(int fdin, int fdout, t_mini *l, t_env *lenv)
 {
-	//	char *test;
-
-	//	test = strerror(errno);
 	if (fdout == -3)
-	{
 		printf("minishell: %s: Is a directory\n", l->crashword);
-		exit(1);
-	}
 	else if (fdout == -2 || fdin == -2)
-	{
 		printf("minishell: %s: ambigous redirect\n", l->crashword);
-		exit(1);
-	}
 	else if (fdout == -1 || fdin == -1)
-	{
 		printf("minishell: %s: Permission denied\n", l->crashword);
-		exit(1);
-	}
 	else if (fdin == -4)
-	{
 		printf("minishell: %s: No such file or directory\n", l->crashword);
-		exit(1);
-	}
+	ft_destroy(l);
+	free_env(lenv);
+	exit(1);
 }
 void	mini_exec(t_mini *l, t_env *lenv, char **env)
 {
+	t_mini	*tmp;
 	int	saveout;
 
-	saveout = dup(1);
+	tmp = l;
 	while (l)
 	{
 		if (l->next)
@@ -284,9 +272,13 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 		//		if (l->pid  < 0) ->Error
 		if (l->pid == 0)
 		{
+			rl_clear_history();
 			ft_delsignal();
 			//			if (!l->prev       ---> why added ? fail ? are u dump ?)
-			all_errors(l->fdin, l->fdout, l);
+			if (l->fdout == -3 || l->fdout == -2 || l->fdout == -1 
+					|| l->fdin == -2 || l->fdin == -1 || l->fdin == -4)
+				all_errors(l->fdin, l->fdout, l, lenv);
+			saveout = dup(1);
 			if (l->next)
 				close(l->pipe[0]);
 			if (l->fdin >= 0)
@@ -298,13 +290,17 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 			else if (l->next)
 				dup2(l->pipe[1], 1);
 			run_command(l, lenv, env, saveout);
+			close(saveout);
+			ft_destroy(tmp);
+			free_env(lenv);
+			exit(127);
 		}
 		else
 			globa.pid = l->pid;
-		if (l->prev)
-			close(l->prev->pipe[0]);
 		if (l->next)
 			close(l->pipe[1]);
+		if (l->prev)
+			close(l->prev->pipe[0]);
 		l = l->next;
 	}
 }
@@ -424,6 +420,8 @@ int	main(int ac, char **av, char **env)
 			com = ft_buildpipe(lst, lenv);
 			add_prev_mini(com);
 
+			free_content_lst(lst);
+			free(rl);
 
 			//		if (com != NULL)
 			//			ft_printcomm(com);
@@ -443,9 +441,7 @@ int	main(int ac, char **av, char **env)
 			}
 			ft_destroy(com);
 		}
-		free_content_lst(lst);
-		free(rl);
-		exit = 0;
+//		exit = 0;
 		//		printf("glo:%d\n", globa.herve);
 	}
 	rl_clear_history();

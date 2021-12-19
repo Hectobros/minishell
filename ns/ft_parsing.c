@@ -80,7 +80,6 @@ void	ft_addcom(char *content, t_mini *commande) // permet d'ajouter un mot dans 
 	{
 		commande->cmd = malloc(sizeof(char *) * 2);
 		commande->cmd[0] = ft_strdup(content);
-//		printf("1:%p\n", commande->cmd[0]);
 		commande->cmd[1] = NULL;
 	}
 	else
@@ -137,13 +136,21 @@ int ft_open(t_content *l, t_mini *com, int token) // sert a open les input et ou
 		{
 			com->fdout = open(l->next->content, O_WRONLY|O_CREAT|O_TRUNC, 0644);
 			if (com->fdout == -1)
+			{
+				if(com->crashword)
+					free(com->crashword);
 				com->crashword = ft_strdup(l->next->content);
+			}
 		}
 		else 
 		{
 			com->fdout = open(l->next->content, O_WRONLY|O_CREAT|O_APPEND, 0644);
 			if (com->fdout == -1)
+			{
+				if (com->crashword)
+					free(com->crashword);
 				com->crashword = ft_strdup(l->next->content);
+			}
 		}
 		fd = com->fdout;
 	}
@@ -163,6 +170,8 @@ int ft_open(t_content *l, t_mini *com, int token) // sert a open les input et ou
 					com->fdin = -1;
 				else
 					com->fdin = -4;
+				if (com->crashword)
+					free(com->crashword);
 				com->crashword = ft_strdup(l->next->content);
 			}
 		}
@@ -197,7 +206,7 @@ void	ft_createcom(t_mini *com, t_content *l)// fonction générale pour créer l
 		if (lst->token >= 2 && lst->token <= 5 && fd != -766)// si un fd stdin a crash on arrete de lire jusqu'a la pipe
 		{
 			fd = ft_open(lst, lstcom, lst->token);
-			if (fd == -1 || fd == -2 || fd == -3)
+			if (fd == -1 || fd == -2 || fd == -3 || fd == -4)
 				fd = -766;// rentrer un pointeur sur fd pour gagner des lignes
 			lst = lst->next;
 		}
@@ -258,7 +267,6 @@ void	ft_freetab(char **content)
 		return;
 	while(content[x])
 	{
-//		printf("2:%p\n", content[x]);
 		free(content[x]);
 		x++;
 	}

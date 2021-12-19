@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:11:17 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 16:20:17 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 19:47:06 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,12 @@ char	*change_content(char *cont, t_env *lenv)
 	return (new);
 }
 
-int		replace_env(t_content *lst, t_env *lenv)
+int		replace_env(t_content *l, t_env *lenv)
 {
 	t_content *before;
+	t_content *lst;//
 
+	lst = l;//
 	before = lst;
 	lst->content = change_content(lst->content, lenv);
 	if (!lst->content)
