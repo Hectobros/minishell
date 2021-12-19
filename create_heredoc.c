@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 18:07:12 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 22:38:03 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 14:26:09 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,14 @@ int	create_double(int pfd[2], const char *match, t_env *lenv)
 	char	*rl;
 
 	rl = readline(">");
-	while (str_cmp(rl, match))
+	while (rl != NULL && str_cmp(rl, match))
 	{
 		if (write_in_fd(rl, pfd[1], lenv))
 			return (-1);
 		rl = readline(">");
 	}
+	if (rl == NULL)
+		printf("minishell: warning: here-document wanted `%s'\n", match);
 	return (0);
 }
 

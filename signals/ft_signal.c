@@ -4,6 +4,7 @@ void    routine(int sig)
 {
     if (globa.pid != -1)
     {
+		globa.herve = 130;
         kill(globa.pid, sig);
         globa.pid = -1;
         printf("\n");
@@ -21,6 +22,7 @@ void    rout(int sig)
 {
     if (globa.pid != -1)
     {
+		globa.herve = 131;
         kill(globa.pid, sig);
         printf("Quit (core dumped)\n");
         globa.pid = -1;

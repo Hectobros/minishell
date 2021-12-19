@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 12:29:59 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 14:52:00 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,6 @@ void	all_errors(int fdin, int fdout, t_mini *l)
 //	test = strerror(errno);
 	if (fdout == -3)
 	{
-
 		printf("bash: %s: Is a directory\n", l->crashword);
 		exit(1);
 	}
@@ -283,8 +282,8 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 		if (l->pid == 0)
 		{
 			ft_delsignal();
-			if (!l->prev)
-				all_errors(l->fdin, l->fdout, l);
+//			if (!l->prev       ---> why added ? fail ? are u dump ?)
+			all_errors(l->fdin, l->fdout, l);
 			if (l->next)
 				close(l->pipe[0]);
 			if (l->fdin >= 0)
@@ -314,7 +313,10 @@ void	wait_all(t_mini *l)
 
 	while (l)
 	{
-		wait(&status);
+		//wait(&status);
+		waitpid(l->pid, &status, 0);
+		if (WIFEXITED(status))
+			globa.herve = (WEXITSTATUS(status) % 256);
 		l = l->next;
 	}
 }
@@ -390,7 +392,7 @@ int	main(int ac, char **av, char **env)
 	int			exit = 1;
 	int	dol_inter;
 
-	globa.herve = 0;
+	globa.herve = 11;
 	dol_inter = 0;
 	com = NULL;
 	lenv = NULL;
@@ -430,6 +432,8 @@ int	main(int ac, char **av, char **env)
 			ret = dad_is_running(com, lenv);
 			if (ret == 888)
 				exit = 0;
+			else
+				globa.herve = ret % 256;
 		}
 		else
 		{
@@ -438,8 +442,9 @@ int	main(int ac, char **av, char **env)
 		}
 		ft_destroy(com);
 //		exit = 0;
+//		printf("glo:%d\n", globa.herve);
 	}
 	rl_clear_history();
 	free_env(lenv);
-	return (0);
+	return (globa.herve);
 }
