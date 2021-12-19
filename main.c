@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 16:55:17 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 17:03:17 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,7 +364,7 @@ char	*pipe_at_end(char *rl)
 	rl2 = readline(">");
 	if (rl2 == NULL)
 		return (rl);
-	while(is_pipe(rl2))
+	while(*rl2 == '\0' || is_pipe(rl2))
 	{
 		tmp = rl;
 		rl = ft_strjoin(rl, rl2);
