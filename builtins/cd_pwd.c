@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 22:36:40 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 18:39:07 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,21 @@ int		pwd42(char **cmd)//Diff in pwd if going in symbolic link: ln -s dir linknam
 {
 	char	*buf;
 
-	if (cmd[1] && cmd[1][0] == '-' && cmd[1][1])
+	buf= NULL;
+	if (cmd[1] && cmd[1][0] == '-' && cmd[1][1] && (cmd[1][1] != '-' || cmd[1][2]))
 	{
-	//	putstr_and_s("pwd: %s: invalid option\n", cmd[1]);
 		printf("pwd: %s: invalid option\n", cmd[1]);
 		return(2);
 	}
-	buf = malloc(sizeof(char) * 4096);//valeur arbitraire
+	buf = malloc(sizeof(char) * 4097);//valeur arbitraire
 	if (!buf)
 		return(33);
-	if (!getcwd(buf, 4097))
+	if (!getcwd(buf, 2096))
 	{
-//		putstr_and_s("getcwd: path too long", NULL);
 		printf("getcwd: path too long\n");
 		return(3);
 	}
 	printf("%s\n", buf);
-//	putstr_and_s("%s\n", buf);
 	free(buf);
 	return(0);
 }
