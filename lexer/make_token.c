@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:14:29 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 16:21:53 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 17:09:52 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,16 @@ int	make_token(char *rl, t_content **lst, t_env *lenv)
 	if (ft_strlen(rl) == 0 || only_whitespace(rl))
 		return(0);
 	if (check_open_quotes(rl))
-		return (-1);
+	{
+		printf("minishell: quotes not closed\n");
+		return (0);
+	}
 	if (split_all_content(rl, lst))
-		return (33);
+		exit(33);
 	give_token(*lst);
 	if (*lst)
 		if (replace_env(*lst, lenv))
-			return (33);
+			exit(33);
 	del_useless_env(*lst);
 	file_var_inquotes(*lst);
 	remove_quotes(*lst);

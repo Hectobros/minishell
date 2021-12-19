@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 17:03:17 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 17:10:01 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -418,14 +418,10 @@ int	main(int ac, char **av, char **env)
 			return(0);
 		}
 		rl = pipe_at_end(rl);
-		//HERE add end |
 		if (ft_strlen(rl) != 0)
 			add_history(rl);
-		if (make_token(rl, &lst, lenv))
+		if (!make_token(rl, &lst, lenv))
 		{
-			printf("Error\n");
-			return (1);
-		}
 //		print_lst(lst);
 		com = ft_buildpipe(lst, lenv);
 		add_prev_mini(com);
@@ -450,6 +446,7 @@ int	main(int ac, char **av, char **env)
 			wait_all(com);
 		}
 		ft_destroy(com);
+		}
 //		exit = 0;
 //		printf("glo:%d\n", globa.herve);
 	}

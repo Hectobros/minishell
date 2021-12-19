@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:05:23 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 16:20:34 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 17:25:13 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,20 @@ char	*dol_is_env(char *new, char **cont, int *i, int *len, t_env *lenv)
 
 char	*dol_is_interrog(char *new, char **cont, int *i, int *len)
 {
-	(void)i;
-	(void)len;
-	(void)new;
+	char *herve;
+	int	j;
+
+	j = 0;
 	(void)cont;
-	new[(*i)++] = *(*cont)++;
+	herve = ft_itoa(globa.herve);
+	*len = *len + ft_strlen(herve);
+	new = re_alloc(new, *len, *i);
+	if (!new)
+		return (NULL);
+	while (herve[j])
+		new[(*i)++] = herve[j++];
+	free(herve);
+	(*cont)++;
+	(*cont)++;
 	return (new);
 }

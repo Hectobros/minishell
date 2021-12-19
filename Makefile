@@ -6,7 +6,7 @@
 #    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/19 16:24:53 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/19 17:20:21 by jvermeer         ###   ########.fr        #
 #    Updated: 2021/12/14 19:30:31 by nschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -18,6 +18,7 @@ SRCS = main.c \
 	   ./libftfiles/ft_isalnum.c \
 	   ./libftfiles/ft_strdup.c \
 	   ./libftfiles/ft_split.c \
+	   ./libftfiles/ft_itoa.c \
 	   ./libftfiles/ft_strjoin.c \
 	   ./lexer/check_quotes.c \
 	   ./lexer/split_content.c \

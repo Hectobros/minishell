@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 13:51:20 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 17:18:43 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -78,6 +78,7 @@ char			*get_env42(t_env *lenv, char *name);
 void			add_back(t_content **lst, t_content *lnew);
 t_content		*new_lst(char *content);
 int				ft_isalnum(int c);
+char			*ft_itoa(int n);
 char			**ft_split(const char *str, char c);
 size_t			ft_strlen(const char *s);
 char			*ft_strdup(const char *src);
