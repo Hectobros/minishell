@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 11:52:29 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 12:16:28 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,8 +237,6 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 		i++;
 	}
 	free_path(path);
-	printf("%s: command not found\n", l->cmd[0]);
-	exit(1);
 }
 
 void	all_errors(int fdin, int fdout, t_mini *l)
@@ -250,8 +248,6 @@ void	all_errors(int fdin, int fdout, t_mini *l)
 	{
 
 		printf("bash: %s: Is a directory\n", l->crashword);
-	//	ft_putstr_fd(strerror(errno), STDERR_FILENO);
-	//	exit(errno);
 		exit(1);
 	}
 	else if (fdout == -2 || fdin == -2)
@@ -272,6 +268,9 @@ void	all_errors(int fdin, int fdout, t_mini *l)
 }
 void	mini_exec(t_mini *l, t_env *lenv, char **env)
 {
+	int	saveout;
+
+	saveout = dup(1);
 	while (l)
 	{
 		if (l->next)
@@ -294,6 +293,8 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 			else if (l->next)
 				dup2(l->pipe[1], 1);
 			run_command(l, lenv, env);
+			dup2(saveout, 1);
+			exit(1);
 		}
 		else
 			globa.pid = l->pid;
