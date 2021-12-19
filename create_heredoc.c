@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 18:07:12 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 14:26:09 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 22:54:54 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ int	create_double(int pfd[2], const char *match, t_env *lenv)
 	{
 		if (write_in_fd(rl, pfd[1], lenv))
 			return (-1);
+		free(rl);
 		rl = readline(">");
 	}
+	free(rl);
 	if (rl == NULL)
 		printf("minishell: warning: here-document wanted `%s'\n", match);
 	return (0);
@@ -80,7 +82,6 @@ int	create_heredoc(t_content *lst, t_env *lenv)
 			if (create_double(lst->pfd, lst->next->content, lenv))
 				return (33);
 			close(lst->pfd[1]);
-//			printf("fd:%d\n", lst->pfd[0]);
 		}
 		lst = lst->next;
 	}

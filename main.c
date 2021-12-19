@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 20:58:42 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 23:11:35 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,7 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 	int	saveout;
 
 	tmp = l;
-	while (l)
+	while (l && l->cmd)
 	{
 		if (l->next)
 			pipe(l->pipe);
@@ -277,7 +277,7 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 			//			if (!l->prev       ---> why added ? fail ? are u dump ?)
 			if (l->fdout == -3 || l->fdout == -2 || l->fdout == -1 
 					|| l->fdin == -2 || l->fdin == -1 || l->fdin == -4)
-				all_errors(l->fdin, l->fdout, l, lenv);
+				all_errors(l->fdin, l->fdout, tmp, lenv);
 			saveout = dup(1);
 			if (l->next)
 				close(l->pipe[0]);
@@ -297,10 +297,10 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 		}
 		else
 			globa.pid = l->pid;
-		if (l->next)
-			close(l->pipe[1]);
 		if (l->prev)
 			close(l->prev->pipe[0]);
+		if (l->next)
+			close(l->pipe[1]);
 		l = l->next;
 	}
 }
@@ -308,7 +308,7 @@ void	wait_all(t_mini *l)
 {
 	int	status;
 
-	while (l)
+	while (l && l->cmd)
 	{
 		//wait(&status);
 		waitpid(l->pid, &status, 0);
