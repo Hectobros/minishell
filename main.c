@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 23:29:16 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 11:52:29 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,9 +326,50 @@ int	dad_is_running(t_mini *l, t_env *lenv)
 		ret = export42(l->cmd, &lenv);
 	else if (str_comp(l->cmd[0], "unset"))
 		ret = unset42(l->cmd, &lenv);
-//	else if (str_comp(l->cmd[0], "exit"))
-//		ret = exit42(l->cmd, &lenv);
+	else if (str_comp(l->cmd[0], "exit"))
+		ret = exit42(l->cmd);
 	return (ret);
+}
+
+int	is_pipe(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i + 1])
+		i++;
+	while (i > 0 && str[i] == ' ')
+		i--;
+	if(i > 0 && str[i] == '|')
+		return (1);
+	return (0);
+}
+
+char	*pipe_at_end(char *rl)
+{
+	char	*rl2;
+	char	*tmp;
+
+	if (!is_pipe(rl))
+		return (rl);
+	rl2 = readline(">");
+	while(is_pipe(rl2))
+	{
+		tmp = rl;
+		rl = ft_strjoin(rl, rl2);
+		if (!rl)
+			return(NULL);
+		free(tmp);
+		free(rl2);
+		rl2 = readline(">");
+	}
+	tmp = rl;
+	rl = ft_strjoin(rl, rl2);
+	if (!rl)
+		return(NULL);
+	free(tmp);
+	free(rl2);
+	return (rl);
 }
 
 int	main(int ac, char **av, char **env)
@@ -338,6 +379,7 @@ int	main(int ac, char **av, char **env)
 	char		*rl;
 	const char	*prompt;
 	t_mini		*com;
+	int			ret;
 	(void)ac; (void)av;
 	int			exit = 1;
 	int	dol_inter;
@@ -355,9 +397,11 @@ int	main(int ac, char **av, char **env)
 		lst = NULL;
 		ft_setsignal();
 		rl = readline(prompt);
-		//HERE add end |
+
 		if (rl == NULL)
 			return(0);
+		rl = pipe_at_end(rl);
+		//HERE add end |
 		if (ft_strlen(rl) != 0)
 			add_history(rl);
 		if (make_token(rl, &lst, lenv))
@@ -377,7 +421,9 @@ int	main(int ac, char **av, char **env)
 		
 		if (len_mini(com) == 1 && is_parent(com))
 		{
-			dad_is_running(com, lenv);
+			ret = dad_is_running(com, lenv);
+			if (ret == 888)
+				exit = 0;
 		}
 		else
 		{

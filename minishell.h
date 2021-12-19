@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/18 18:54:49 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 11:39:04 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -24,6 +24,7 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <limits.h>
 
 typedef struct s_global
 {
@@ -61,6 +62,7 @@ typedef struct s_env
 extern t_global globa;
 
 int	env42(char **cmd, t_env *lst);
+int	exit42(char **cmd);
 int	unset42(char **cmd, t_env **lst);
 int	export42(char **cmd, t_env **lst);
 int	echo42(char **cmd);
@@ -68,6 +70,7 @@ int	pwd42(char **cmd);
 int	cd42(char **cmd, t_env *lst);
 void	put_s(char *s);
 void	putstr_and_s(const char *message, char *s);
+char		*ft_strjoin(char const *s1, char const *s2);
 int	write_error(const char *err, char *s);
 char			*re_alloc(char *buff, int hl, int limit);
 int				str_comp(char *name, char *unset);

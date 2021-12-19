@@ -6,7 +6,7 @@
 #    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/17 19:28:36 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/19 11:38:18 by jvermeer         ###   ########.fr        #
 #    Updated: 2021/12/14 19:30:31 by nschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -34,9 +34,11 @@ SRCS = main.c \
 	   replace_env.c \
 	   make_token.c \
 	   ft_split.c \
+	   ft_strjoin.c \
 	   builtins/cd_pwd.c \
 	   builtins/echo.c \
 	   builtins/env.c \
+	   builtins/exit.c \
 	   signals/ft_signal.c\
 
 OBJS = ${SRCS:.c=.o}

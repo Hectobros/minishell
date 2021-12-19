@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:14:29 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 18:16:10 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 11:36:40 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,18 @@ void	give_token(t_content *lst)
 	}
 }
 
+int		only_whitespace(char *rl)
+{
+	while(*rl && ((*rl > 8 && *rl < 14) || *rl == ' '))
+		rl++;
+	if (*rl)
+		return (0);
+	return (1);
+}
+
 int	make_token(char *rl, t_content **lst, t_env *lenv)
 {
-	if (ft_strlen(rl) == 0)
+	if (ft_strlen(rl) == 0 || only_whitespace(rl))
 		return(0);
 	if (check_open_quotes(rl))
 		return (-1);
