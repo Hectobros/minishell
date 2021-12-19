@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 14:52:00 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/19 16:55:17 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ void	free_path(char **path)
 	free(path);
 }
 
-void	run_command(t_mini *l, t_env *lenv, char **env)
+void	run_command(t_mini *l, t_env *lenv, char **env, int saveout)
 {
 	char	**path;
 	char	*buff;
@@ -240,6 +240,9 @@ void	run_command(t_mini *l, t_env *lenv, char **env)
 		i++;
 	}
 	free_path(path);
+	printf("%s: command not found\n", l->cmd[0]);
+	dup2(saveout, 1);
+	exit(1);
 }
 
 void	all_errors(int fdin, int fdout, t_mini *l)
@@ -249,22 +252,22 @@ void	all_errors(int fdin, int fdout, t_mini *l)
 //	test = strerror(errno);
 	if (fdout == -3)
 	{
-		printf("bash: %s: Is a directory\n", l->crashword);
+		printf("minishell: %s: Is a directory\n", l->crashword);
 		exit(1);
 	}
 	else if (fdout == -2 || fdin == -2)
 	{
-		printf("bash: %s: ambigous redirect\n", l->crashword);
+		printf("minishell: %s: ambigous redirect\n", l->crashword);
 		exit(1);
 	}
 	else if (fdout == -1 || fdin == -1)
 	{
-		printf("bash: %s: Permission denied\n", l->crashword);
+		printf("minishell: %s: Permission denied\n", l->crashword);
 		exit(1);
 	}
 	else if (fdin == -4)
 	{
-		printf("bash: %s: No such file or directory\n", l->crashword);
+		printf("minishell: %s: No such file or directory\n", l->crashword);
 		exit(1);
 	}
 }
@@ -294,9 +297,7 @@ void	mini_exec(t_mini *l, t_env *lenv, char **env)
 				dup2(l->fdout, 1);
 			else if (l->next)
 				dup2(l->pipe[1], 1);
-			run_command(l, lenv, env);
-			dup2(saveout, 1);
-			exit(1);
+			run_command(l, lenv, env, saveout);
 		}
 		else
 			globa.pid = l->pid;
