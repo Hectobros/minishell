@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
+/* DOUBLONS AVEC LES BUILDS IN
 char	*get_env_name(char *cont)
 {
 	const char	*tmp;
@@ -39,7 +39,7 @@ char	*get_env_name(char *cont)
 	dest[i] = '\0';
 	return (dest);
 }
-
+*/
 void	cut_env_name(char **cont)
 {
 	(*cont)++;

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/* DEJA DEF DANS LES BUILTS IN
 int	free_env(t_env *lst)
 {
 	t_env	*tmp;
@@ -26,7 +26,7 @@ int	free_env(t_env *lst)
 	}
 	return (0);
 }
-
+*/
 int	free_content_lst(t_content *lst)
 {
 	t_content	*tmp;

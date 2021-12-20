@@ -6,21 +6,22 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 19:00:44 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 01:59:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_n_option(char *str)
+int	is_n_option(char *str)// ATENTION AU MAIN DANS LE FILE
 {
 	if (str[0] == '-' && str[1] == 'n' && !str[2])
 		return (1);
 	return (0);
 }
+
 int	echo42(char **cmd)
 {
-	int i;
+	int	i;
 	int	n;
 
 	i = 1;
@@ -39,7 +40,7 @@ int	echo42(char **cmd)
 	}
 	if (n)
 		printf("\n");
-	return(0);
+	return (0);
 }
 /*
 int	main(int ac, char **av, char **env)

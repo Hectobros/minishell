@@ -38,5 +38,4 @@ void	putstr_and_s(const char *message, char *s)
 void	write_error(const char *err, char *s)
 {
 	putstr_and_s(err, s);
-//	exit (1);
 }

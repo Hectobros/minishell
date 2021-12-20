@@ -40,6 +40,8 @@ SRCS = main.c \
 	   ./builtins/echo.c \
 	   ./builtins/env.c \
 	   ./builtins/exit.c \
+	   ./builtins/envdeux.c \
+	   ./builtins/envutilstest.c \
 	   ./signals/ft_signal.c\
 	   create_heredoc.c \
 	   lst_env_utils.c \

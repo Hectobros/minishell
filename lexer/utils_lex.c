@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
+/* DEFINI DANS LES BUILT IN
 int	str_comp(char *name, char *unset)
 {
 	while(*unset && *name && *unset == *name)
@@ -23,7 +23,7 @@ int	str_comp(char *name, char *unset)
 		return (1);
 	return (0);
 }
-
+*/
 char	*get_env42(t_env *lenv, char *name)
 {
 	char *envdata;
