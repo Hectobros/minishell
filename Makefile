@@ -6,7 +6,7 @@
 #    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/20 09:49:58 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/20 10:08:06 by jvermeer         ###   ########.fr        #
 #    Updated: 2021/12/14 19:30:31 by nschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -47,6 +47,7 @@ SRCS = main.c \
 	   ./utils/create_heredoc.c \
 	   ./utils/free_func.c \
 	   ./exec/run_cmd.c\
+	   ./exec/exec.c\
 	   ./exec/exec_utils.c\
 	   ./exec/main_utils.c\
 
