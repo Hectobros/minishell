@@ -6,13 +6,13 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 01:59:14 by nschmitt         ###   ########.fr       */
+/*   Updated: 2021/12/20 08:31:58 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_n_option(char *str)// ATENTION AU MAIN DANS LE FILE
+int	is_n_option(char *str)
 {
 	if (str[0] == '-' && str[1] == 'n' && !str[2])
 		return (1);
@@ -42,24 +42,3 @@ int	echo42(char **cmd)
 		printf("\n");
 	return (0);
 }
-/*
-int	main(int ac, char **av, char **env)
-{
-	int			i;
-	char		**echo;
-	(void)env;
-
-	i = 1;
-	echo = malloc(sizeof(char*) * 8);
-	echo[0] = strdup("echo");
-	while (i < ac)
-	{
-		echo[i] = strdup(av[i]);
-		i++;
-	}
-	echo[i] = NULL;
-
-	echo42(echo);
-	return (0);
-}
-*/

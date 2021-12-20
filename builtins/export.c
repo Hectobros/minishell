@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envdeux.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/20 08:32:42 by jvermeer          #+#    #+#             */
+/*   Updated: 2021/12/20 08:32:50 by jvermeer         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	export_is_valid(char *str)
@@ -12,8 +24,6 @@ int	export_is_valid(char *str)
 	}
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
-//	if (str[i] && str[i] == '+' && str[i + 1] == '=' && i > 0)
-//		return (0);
 	if (str[i] && str[i] == '=' && i > 0)
 		return (0);
 	if (str[i] && (str[i] > 'a' && *str < 'z')

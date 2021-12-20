@@ -6,13 +6,13 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 01:57:57 by nschmitt         ###   ########.fr       */
+/*   Updated: 2021/12/20 08:31:38 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	pwd42(char **cmd)//Diff in pwd if going in symbolic link: ln -s dir linkname
+int	pwd42(char **cmd)
 {
 	char	*buf;
 
@@ -23,7 +23,7 @@ int	pwd42(char **cmd)//Diff in pwd if going in symbolic link: ln -s dir linkname
 		printf("pwd: %s: invalid option\n", cmd[1]);
 		return (2);
 	}
-	buf = malloc(sizeof(char) * 4097);//valeur arbitraire
+	buf = malloc(sizeof(char) * 4097);
 	if (!buf)
 		return (33);
 	if (!getcwd(buf, 2096))
@@ -36,7 +36,7 @@ int	pwd42(char **cmd)//Diff in pwd if going in symbolic link: ln -s dir linkname
 	return (0);
 }
 
-int	chdir_to_home(t_env *lst)//ATENTION AU MAIN EN DESSOUS DU FILE
+int	chdir_to_home(t_env *lst)
 {
 	while (lst)
 	{
@@ -74,51 +74,3 @@ int	cd42(char **cmd, t_env *lst)
 		return (0);
 	return (1);
 }
-/*
-int	main(int ac, char **av, char **env)
-{
-	DIR *d;
-	struct dirent *sd;
-	char		*rl;
-	const char	*prompt;
-	int			exit = 1;
-	char		**cd;
-	char		**pwd;
-	t_env		*lenv;
-	(void)av;
-	(void)env;
-	(void)ac;
-	
-
-	lenv = NULL;
-	create_env_lst(&lenv, env);
-
-	cd = malloc(sizeof(char*) * 5);
-	pwd = malloc(sizeof(char*) * 5);
-	prompt = "builtin: ";
-	while (exit)
-	{
-		rl = readline(prompt);
-		cd[0] = strdup("cd");
-		cd[1] = rl;
-		cd[2] = NULL;
-		pwd[0] = strdup("pwd");
-		pwd[1] = strdup("-fefe");
-		pwd[2] = NULL;
-		if (rl[0] == 'p' && rl[1] == 'w' && rl[2] == 'd')
-			pwd42(pwd);
-		else if (rl[0] == 'l' && rl[1] == 's')
-		{
-			d = opendir(".");
-			while ((sd = readdir(d)))
-				printf("%s  ", sd->d_name);
-			printf("\n");
-		}
-		else
-			cd42(cd, lenv);
-		//exit = 0;
-	}
-	free_env(lenv);
-	return (0);
-}
-*/

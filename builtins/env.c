@@ -6,13 +6,13 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 02:03:29 by nschmitt         ###   ########.fr       */
+/*   Updated: 2021/12/20 08:32:25 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	env42(char **cmd, t_env *lst)//ATENTION AU MAIN EN BAS DU FILE
+int	env42(char **cmd, t_env *lst)
 {
 	if (cmd[1])
 	{
@@ -92,48 +92,3 @@ int	unset42(char **cmd, t_env **lst)
 	}
 	return (ret);
 }
-/*
-int	main(int ac, char **av, char **env)
-{
-	t_env		*lenv;
-	char		**envcmd;
-	char		**unset;
-	char		**export;
-	(void)av;
-	(void)ac;
-	(void)unset;
-	(void)envcmd;
-
-	lenv = NULL;
-	create_env_lst(&lenv, env);
-	envcmd = malloc(sizeof(char*) * 8);
-	unset = malloc(sizeof(char*) * 8);
-	export = malloc(sizeof(char*) * 8);
-	envcmd[0] = strdup("env");
-	envcmd[1] = NULL;
-
-	unset[0] = strdup("unset");
-	unset[1] = strdup("GJS_DEBUG_TOPICS");
-	unset[2] = NULL;
-
-	export[0] = strdup("export");
-	export[1] = strdup("LSC=");
-	export[3] = strdup("NN=159");
-	export[2] = strdup("LSC=hey");
-	export[4] = NULL;
-
-//	unset42(unset, &lenv);
-	env42(env, lenv);
-	printf("\n");
-	export42(export, &lenv);
-	env42(env, lenv);
-
-	free_env(lenv);
-	free(envcmd[0]);
-	free(envcmd);
-	free(unset[0]);
-	free(unset[1]);
-	free(unset);
-	return (0);
-}
-*/

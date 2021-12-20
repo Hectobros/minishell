@@ -6,7 +6,7 @@
 #    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/19 17:20:21 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/20 08:41:09 by jvermeer         ###   ########.fr        #
 #    Updated: 2021/12/14 19:30:31 by nschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -14,12 +14,13 @@
 NAME = minishell
 
 SRCS = main.c \
-	   ./libftfiles/ft_strlen.c \
-	   ./libftfiles/ft_isalnum.c \
-	   ./libftfiles/ft_strdup.c \
-	   ./libftfiles/ft_split.c \
-	   ./libftfiles/ft_itoa.c \
-	   ./libftfiles/ft_strjoin.c \
+	   ./utils/lst_env_utils.c \
+	   ./utils/ft_strlen.c \
+	   ./utils/ft_isalnum.c \
+	   ./utils/ft_strdup.c \
+	   ./utils/ft_split.c \
+	   ./utils/ft_itoa.c \
+	   ./utils/ft_strjoin.c \
 	   ./lexer/check_quotes.c \
 	   ./lexer/split_content.c \
 	   ./lexer/lst_content_utils.c \
@@ -39,13 +40,12 @@ SRCS = main.c \
 	   ./builtins/cd_pwd.c \
 	   ./builtins/echo.c \
 	   ./builtins/env.c \
+	   ./builtins/env2.c \
 	   ./builtins/exit.c \
-	   ./builtins/envdeux.c \
-	   ./builtins/envutilstest.c \
+	   ./builtins/export.c \
 	   ./signals/ft_signal.c\
-	   create_heredoc.c \
-	   lst_env_utils.c \
-	   free_func.c \
+	   ./utils/create_heredoc.c \
+	   ./utils/free_func.c \
 
 OBJS = ${SRCS:.c=.o}
 

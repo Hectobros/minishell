@@ -1,41 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_utils.c                                    :+:      :+:    :+:   */
+/*   free_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/14 10:14:02 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/16 16:14:02 by jvermeer         ###   ########.fr       */
+/*   Created: 2021/12/16 17:42:19 by jvermeer          #+#    #+#             */
+/*   Updated: 2021/12/20 08:40:40 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	put_s(char *s)
+int	free_env(t_env *lst)
 {
-	while (*s)
+	t_env	*tmp;
+
+	while (lst)
 	{
-		write(1, s, 1);
-		s++;
+		tmp = lst;
+		lst = lst->next;
+		free(tmp->name);
+		free(tmp->value);
+		free(tmp);
 	}
+	return (0);
 }
 
-void	putstr_and_s(const char *message, char *s)
+int	free_content_lst(t_content *lst)
 {
-	while (*message)
-	{
-		while (*message != '%' && *message)
-			write(1, message++, 1);
-		if (*message == '%' && *(message + 1) && *(message + 1) == 's')
-		{
-			message = message + 2;
-			put_s(s);
-		}
-	}
-}
+	t_content	*tmp;
 
-void	write_error(const char *err, char *s)
-{
-	putstr_and_s(err, s);
+	while (lst)
+	{
+		tmp = lst;
+		lst = lst->next;
+		free(tmp->content);
+		free(tmp);
+	}
+	return (0);
 }

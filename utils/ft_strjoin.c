@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 17:31:14 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 16:25:54 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 08:43:30 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*help_join(char const *s1, char const *s2, char **dst)
 
 	i = 0;
 	j = 0;
-	size = ft_strlen((char*)s1) + ft_strlen((char*)s2) + 1;
+	size = ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1;
 	dst[0] = malloc(sizeof(char) * size);
 	if (dst[0] == NULL)
 		return (NULL);
@@ -33,7 +33,7 @@ static char	*help_join(char const *s1, char const *s2, char **dst)
 	return (*dst);
 }
 
-char		*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*new;
 

@@ -6,11 +6,11 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 11:45:54 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/17 19:31:21 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 08:42:08 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_env	*new_env(char *name, char *value)
 {
@@ -72,7 +72,7 @@ char	*get_env_value(const char *env)
 
 int	create_env_lst(t_env **lst, char **env)
 {
-	int	i;
+	int		i;
 	char	*name;
 	char	*value;
 
