@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:14:29 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 17:09:52 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 09:19:36 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	del_useless_env(t_content *lst)
 {
-	t_content *tmp;
+	t_content	*tmp;
 
 	while (lst)
 	{
@@ -39,8 +39,9 @@ void	file_var_inquotes(t_content *lst)
 	while (lst)
 	{
 		tmp = lst->content;
-		if ((bef->token == 2 || bef->token == 3 || bef->token == 4) && *tmp == '$'
-			&& *(tmp + 1) && (ft_isalnum(*(tmp + 1)) || *(tmp + 1) == '_'))
+		if ((bef->token == 2 || bef->token == 3 || bef->token == 4)
+			&& *tmp == '$' && *(tmp + 1)
+			&& (ft_isalnum(*(tmp + 1)) || *(tmp + 1) == '_'))
 			lst->token = 666;
 		bef = bef->next;
 		lst = lst->next;
@@ -70,9 +71,9 @@ void	give_token(t_content *lst)
 	}
 }
 
-int		only_whitespace(char *rl)
+int	only_whitespace(char *rl)
 {
-	while(*rl && ((*rl > 8 && *rl < 14) || *rl == ' '))
+	while (*rl && ((*rl > 8 && *rl < 14) || *rl == ' '))
 		rl++;
 	if (*rl)
 		return (0);
@@ -82,7 +83,7 @@ int		only_whitespace(char *rl)
 int	make_token(char *rl, t_content **lst, t_env *lenv)
 {
 	if (ft_strlen(rl) == 0 || only_whitespace(rl))
-		return(0);
+		return (0);
 	if (check_open_quotes(rl))
 	{
 		printf("minishell: quotes not closed\n");
@@ -97,7 +98,5 @@ int	make_token(char *rl, t_content **lst, t_env *lenv)
 	del_useless_env(*lst);
 	file_var_inquotes(*lst);
 	remove_quotes(*lst);
-//	read_heredoc(*lst);//temporaire
-//	close_heredoc_pipes(*lst);// pour NIELS
 	return (0);
 }

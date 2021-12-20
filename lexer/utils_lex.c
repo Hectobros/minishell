@@ -6,15 +6,15 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:00:24 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 16:20:01 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 09:18:21 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-/* DEFINI DANS LES BUILT IN
+
 int	str_comp(char *name, char *unset)
 {
-	while(*unset && *name && *unset == *name)
+	while (*unset && *name && *unset == *name)
 	{
 		unset++;
 		name++;
@@ -23,17 +23,17 @@ int	str_comp(char *name, char *unset)
 		return (1);
 	return (0);
 }
-*/
+
 char	*get_env42(t_env *lenv, char *name)
 {
-	char *envdata;
+	char	*envdata;
 
 	while (lenv)
 	{
 		if (str_comp(lenv->name, name))
 		{
 			envdata = lenv->value;
-			return(envdata);
+			return (envdata);
 		}
 		lenv = lenv->next;
 	}

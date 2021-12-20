@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 17:18:43 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 09:15:49 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -58,6 +58,13 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }				t_env;
+typedef struct s_utils
+{
+	int		len;
+	int		i;
+	int		dq;
+	char	*dest;
+}				t_utils;
 
 extern t_global globa;
 
@@ -94,8 +101,8 @@ int				free_env(t_env *lst);
 char			*get_env_value(const char *env);
 int				create_env_lst(t_env **lst, char **env);
 char			*get_env_name(char *cont);
-char			*dol_is_interrog(char *new, char **cont, int *i, int *len);
-char			*dol_is_env(char *new, char **cont, int *i, int *len, t_env *lenv);
+char			*dol_is_interrog(t_utils *u, char **cont);
+char			*dol_is_env(t_utils *u, char **cont, t_env *lenv);
 int				replace_env(t_content *lst, t_env *lenv);
 int				make_token(char *rl, t_content **lst, t_env *lenv);
 //fonctions Niels

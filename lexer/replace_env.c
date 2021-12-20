@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:11:17 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 19:47:06 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 09:15:26 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 char	*check_if_redirection(char *cont, t_env *lenv)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = ft_strdup(cont);
-	tmp = change_content(tmp, lenv); 
+	tmp = change_content(tmp, lenv);
 	if (!tmp)
 		return (NULL);
 	if (*tmp)
@@ -29,53 +29,47 @@ char	*check_if_redirection(char *cont, t_env *lenv)
 	return (cont);
 }
 
-void	pass_simple_quotes(char **cont, char *new, int *i)
+void	pass_simple_quotes(t_utils *u, char **cont)
 {
-	new[(*i)++] = *(*cont)++;
+	u->dest[u->i++] = *(*cont)++;
 	while (**cont && **cont != '\'')
-		new[(*i)++] = *(*cont)++;
-	new[(*i)++] = *(*cont)++;
+		u->dest[u->i++] = *(*cont)++;
+	u->dest[u->i++] = *(*cont)++;
 }
 
 char	*change_content(char *cont, t_env *lenv)
 {
-	int		dq;
-	char	*new;
+	t_utils	u;
 	char	*tmp;
-	int		len;
-	int		i;
 
-	i = 0;
-	dq = 1;
+	u.i = 0;
+	u.dq = 1;
 	tmp = cont;
-	len = ft_strlen(tmp) + 1;
-	new = malloc(sizeof(char) * len);
+	u.len = ft_strlen(tmp) + 1;
+	u.dest = malloc(sizeof(char) * u.len);
 	while (*tmp)
 	{
 		if (*tmp == '"')
-			dq = -dq;
-		if (*tmp == '\'' && dq == 1)
-			pass_simple_quotes(&tmp, new, &i);
+			u.dq = -u.dq;
+		if (*tmp == '\'' && u.dq == 1)
+			pass_simple_quotes(&u, &tmp);
 		else if (*tmp == '$' && *(tmp + 1) && *(tmp + 1) == '?')
-			new = dol_is_interrog(new, &tmp, &i, &len);
-		else if (*tmp == '$' && *(tmp + 1) && (ft_isalnum(*(tmp + 1)) || *(tmp + 1) == '_'))
-			new = dol_is_env(new, &tmp, &i, &len, lenv);
+			u.dest = dol_is_interrog(&u, &tmp);
+		else if (*tmp == '$' && *(tmp + 1)
+			&& (ft_isalnum(*(tmp + 1)) || *(tmp + 1) == '_'))
+			u.dest = dol_is_env(&u, &tmp, lenv);
 		else
-			new[i++] = *tmp++;
-		if (!new)
-			return (NULL);
+			u.dest[u.i++] = *tmp++;
 	}
+	u.dest[u.i] = '\0';
 	free(cont);
-	new[i] = '\0';
-	return (new);
+	return (u.dest);
 }
 
-int		replace_env(t_content *l, t_env *lenv)
+int	replace_env(t_content *lst, t_env *lenv)
 {
-	t_content *before;
-	t_content *lst;//
+	t_content	*before;
 
-	lst = l;//
 	before = lst;
 	lst->content = change_content(lst->content, lenv);
 	if (!lst->content)

@@ -1,28 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envutilstest.c                                     :+:      :+:    :+:   */
+/*   env2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 11:45:54 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 08:37:59 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 09:17:25 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	str_comp(char *name, char *unset)
-{
-	while (*unset && *name && *unset == *name)
-	{
-		unset++;
-		name++;
-	}
-	if (!*unset && !*name)
-		return (1);
-	return (0);
-}
 
 char	*get_env_name(char *cont)
 {

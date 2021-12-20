@@ -6,40 +6,12 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:05:23 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/19 17:25:13 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 09:08:53 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-/* DOUBLONS AVEC LES BUILDS IN
-char	*get_env_name(char *cont)
-{
-	const char	*tmp;
-	char		*dest;
-	int			size;
-	int			i;
 
-	i = 0;
-	size = 0;
-	tmp = cont;
-	while (*tmp && (ft_isalnum(*tmp) || *tmp == '_'))
-	{
-		size++;
-		tmp++;
-	}
-	dest = malloc(sizeof(char) * (size + 1));
-	if (!dest)
-		return (NULL);
-	while (*cont && (ft_isalnum(*cont) || *cont == '_'))
-	{
-		dest[i] = *cont;
-		cont++;
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-*/
 void	cut_env_name(char **cont)
 {
 	(*cont)++;
@@ -47,7 +19,7 @@ void	cut_env_name(char **cont)
 		(*cont)++;
 }
 
-char	*dol_is_env(char *new, char **cont, int *i, int *len, t_env *lenv)
+char	*dol_is_env(t_utils *u, char **cont, t_env *lenv)
 {
 	char	*envname;
 	char	*envdata;
@@ -59,33 +31,32 @@ char	*dol_is_env(char *new, char **cont, int *i, int *len, t_env *lenv)
 	free(envname);
 	if (envdata && *envdata != '\0')
 	{
-		*len = *len + ft_strlen(envdata);
-		new = re_alloc(new, *len, *i);
-		if (!new)
+		u->len = u->len + ft_strlen(envdata);
+		u->dest = re_alloc(u->dest, u->len, u->i);
+		if (!u->dest)
 			return (NULL);
 		while (*envdata)
-			new[(*i)++] = *envdata++;
+			u->dest[u->i++] = *envdata++;
 	}
 	cut_env_name(cont);
-	return (new);
+	return (u->dest);
 }
 
-char	*dol_is_interrog(char *new, char **cont, int *i, int *len)
+char	*dol_is_interrog(t_utils *u, char **cont)
 {
-	char *herve;
-	int	j;
+	char	*herve;
+	int		j;
 
 	j = 0;
-	(void)cont;
 	herve = ft_itoa(globa.herve);
-	*len = *len + ft_strlen(herve);
-	new = re_alloc(new, *len, *i);
-	if (!new)
+	u->len = u->len + ft_strlen(herve);
+	u->dest = re_alloc(u->dest, u->len, u->i);
+	if (!u->dest)
 		return (NULL);
 	while (herve[j])
-		new[(*i)++] = herve[j++];
+		u->dest[u->i++] = herve[j++];
 	free(herve);
 	(*cont)++;
 	(*cont)++;
-	return (new);
+	return (u->dest);
 }
