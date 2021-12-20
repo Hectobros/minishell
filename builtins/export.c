@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:32:42 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 12:03:16 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 12:17:39 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	export_is_valid(char *str, int *plus)
 	if (str[i] && str[i] == '=' && i > 0)
 		return (0);
 	if (str[i] && (str[i] > 'a' && *str < 'z')
-			&& (str[i] > 'A' && str[i] < 'Z'))
+		&& (str[i] > 'A' && str[i] < 'Z'))
 		return (1);
 	if (str[i])
 		printf("minishell: export: `%s': not a valid identifier\n", str);
