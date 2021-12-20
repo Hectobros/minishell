@@ -127,8 +127,9 @@ int				ft_printcomm(t_mini *com);
 void			ft_printab(char **tab);
 void    routine(int sig);
 void    rout(int sig);
-void    ft_setsignal();
-void    ft_delsignal();
+void    ft_setsignal(void);
+void    ft_delsignal(void);
 int		ft_errord(int x);
+int		exit2(char **cmd);
 
 #endif
