@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 09:39:18 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 09:51:20 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -101,6 +101,12 @@ char			*dol_is_interrog(t_utils *u, char **cont);
 char			*dol_is_env(t_utils *u, char **cont, t_env *lenv);
 int				replace_env(t_content *lst, t_env *lenv);
 int				make_token(char *rl, t_content **lst, t_env *lenv);
+void			add_prev_mini(t_mini *com);
+int				len_mini(t_mini *com);
+char			*pipe_at_end(char *rl);
+int				is_parent(t_mini *l);
+int				dad_is_running(t_mini *l, t_env *lenv);
+void			wait_all(t_mini *l);
 int				is_builtin(t_mini *l);
 void			run_command(t_mini *l, t_env *lenv, char **env, int saveout);
 char			*ft_strdupn(const char *s1);
