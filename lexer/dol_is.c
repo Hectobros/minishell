@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:05:23 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 09:08:53 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 10:25:54 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*dol_is_interrog(t_utils *u, char **cont)
 	int		j;
 
 	j = 0;
-	herve = ft_itoa(globa.herve);
+	herve = ft_itoa(g_globa.herve);
 	u->len = u->len + ft_strlen(herve);
 	u->dest = re_alloc(u->dest, u->len, u->i);
 	if (!u->dest)

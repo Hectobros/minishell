@@ -6,13 +6,13 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 10:08:22 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 10:25:34 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_global globa;
+t_global g_globa;
 
 void	print_env(t_env *lenv)//DEL
 {
@@ -52,7 +52,7 @@ int	main(int ac, char **av, char **env)
 	(void)ac; (void)av;
 	int			exit = 1;
 
-	globa.herve = 0;
+	g_globa.herve = 0;
 	com = NULL;
 	lenv = NULL;
 	create_env_lst(&lenv, env);
@@ -60,7 +60,7 @@ int	main(int ac, char **av, char **env)
 	prompt = "minishell$ ";
 	while (exit)
 	{
-		globa.pid = -1;
+		g_globa.pid = -1;
 		lst = NULL;
 		ft_setsignal();
 		rl = readline(prompt);
@@ -92,7 +92,7 @@ int	main(int ac, char **av, char **env)
 				if (ret == 888)
 					exit = 0;
 				else
-					globa.herve = ret;
+					g_globa.herve = ret;
 			}
 			else
 			{
@@ -107,5 +107,5 @@ int	main(int ac, char **av, char **env)
 	}
 	rl_clear_history();
 	free_env(lenv);
-	return (globa.herve);
+	return (g_globa.herve);
 }

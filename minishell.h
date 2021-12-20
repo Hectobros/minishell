@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 10:10:08 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 10:23:39 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -33,13 +33,13 @@ typedef struct s_global
 }		t_global;
 typedef struct s_mini
 {
-	int		pipe[2];
-	char	**cmd;
-	int		fdin;
-	int		fdout;
-	int		pid;
-	int		content;
-	char	*crashword;
+	int				pipe[2];
+	char			**cmd;
+	int				fdin;
+	int				fdout;
+	int				pid;
+	int				content;
+	char			*crashword;
 	struct s_mini	*next;
 	struct s_mini	*prev;
 }				t_mini;
@@ -63,7 +63,7 @@ typedef struct s_utils
 	int		dq;
 	char	*dest;
 }				t_utils;
-extern t_global globa;
+extern t_global	g_globa;
 int				env42(char **cmd, t_env *lst);
 int				exit42(char **cmd);
 int				unset42(char **cmd, t_env **lst);
@@ -113,9 +113,9 @@ void			run_command(t_mini *l, t_env *lenv, char **env, int saveout);
 char			*ft_strdupn(const char *s1);
 int				ft_lstok(t_content *l);
 int				ft_nbpipe(t_content *l);
-char 			**ft_tabdupgrand(char **tab, char *str);
+char			**ft_tabdupgrand(char **tab, char *str);
 void			ft_addcom(char *content, t_mini *commande);
-int 			ft_open(t_content *l, t_mini *com, int token);
+int				ft_open(t_content *l, t_mini *com, int token);
 int				ft_openone(t_content *l, t_mini *com, int token);
 void			ft_opendeux(t_content *l, t_mini *com, int token, int fd);
 void			ft_finishcom(t_mini *com, int *fd);

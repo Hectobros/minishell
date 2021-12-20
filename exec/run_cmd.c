@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 09:34:17 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 09:40:35 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 10:33:45 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,30 +28,6 @@ char	*make_path(const char *cmd, const char *path)
 		buff[i++] = *cmd++;
 	buff[i] = '\0';
 	return (buff);
-}
-
-void	run_builtin(t_mini *l, t_env *lenv)
-{
-	int	ret;
-
-	ret = 0;
-	if (!l->cmd)
-		ret = 0;
-	else if (str_comp(l->cmd[0], "echo"))
-		ret = echo42(l->cmd);
-	else if (str_comp(l->cmd[0], "cd"))
-		ret = cd42(l->cmd, lenv);
-	else if (str_comp(l->cmd[0], "pwd"))
-		ret = pwd42(l->cmd);
-	else if (str_comp(l->cmd[0], "env"))
-		ret = env42(l->cmd, lenv);
-	else if (str_comp(l->cmd[0], "export"))
-		ret = export42(l->cmd, &lenv);
-	else if (str_comp(l->cmd[0], "unset"))
-		ret = unset42(l->cmd, &lenv);
-	free_env(lenv);
-	ft_destroy(l);
-	exit(ret);
 }
 
 char	**get_path(t_env *lenv)
@@ -102,8 +78,6 @@ void	run_command(t_mini *l, t_env *lenv, char **env, int saveout)
 	int		i;
 
 	i = 0;
-	if (is_builtin(l))
-		run_builtin(l, lenv);
 	path = get_path(lenv);
 	execve(l->cmd[0], l->cmd, env);
 	while (path && path[i])

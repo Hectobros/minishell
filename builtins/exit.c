@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:44:39 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 08:44:41 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 10:25:12 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ int	exit2(char **cmd)
 	if (isnumeric(cmd[1]) != 0)
 	{
 		printf("minishell: exit: %s: numeric argument required\n", cmd[1]);
-		globa.herve = 2;
+		g_globa.herve = 2;
 	}
 	else
-		globa.herve = (long long int)ft_bigatoi(cmd[1]) % 256;
+		g_globa.herve = (long long int)ft_bigatoi(cmd[1]) % 256;
 	return (888);
 }
 
@@ -92,7 +92,7 @@ int	exit42(char **cmd)
 	x = sizeoftab(cmd);
 	if (x == 1)
 	{
-		globa.herve = 0;
+		g_globa.herve = 0;
 		return (888);
 	}
 	else if (x == 2)
@@ -102,12 +102,12 @@ int	exit42(char **cmd)
 		if (isnumeric(cmd[1]) != 0)
 		{
 			printf("minishell: exit: %s: numeric argument required\n", cmd[1]);
-			globa.herve = 2;
+			g_globa.herve = 2;
 			return (888);
 		}
 		else
 			printf("minishell: exit: too many arguments\n");
-		globa.herve = 1;
+		g_globa.herve = 1;
 		return (1);
 	}
 }

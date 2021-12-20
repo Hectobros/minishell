@@ -6,7 +6,7 @@
 /*   By: jvermeer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 09:49:37 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 09:52:15 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 10:27:05 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	wait_all(t_mini *l)
 	{
 		waitpid(l->pid, &status, 0);
 		if (WIFEXITED(status))
-			globa.herve = (WEXITSTATUS(status) % 256);
+			g_globa.herve = (WEXITSTATUS(status) % 256);
 		l = l->next;
 	}
 }

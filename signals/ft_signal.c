@@ -2,14 +2,14 @@
 
 void	routine(int sig)
 {
-	if (globa.pid != -1)
+	if (g_globa.pid != -1)
 	{
-		globa.herve = 130;
-		kill(globa.pid, sig);
-		globa.pid = -1;
+		g_globa.herve = 130;
+		kill(g_globa.pid, sig);
+		g_globa.pid = -1;
 		printf("\n");
 	}
-	else if (globa.pid)
+	else if (g_globa.pid)
 	{
 		printf("\n");
 		rl_on_new_line();
@@ -20,12 +20,12 @@ void	routine(int sig)
 
 void	rout(int sig)
 {
-	if (globa.pid != -1)
+	if (g_globa.pid != -1)
 	{
-		globa.herve = 131;
-		kill(globa.pid, sig);
+		g_globa.herve = 131;
+		kill(g_globa.pid, sig);
 		printf("Quit (core dumped)\n");
-		globa.pid = -1;
+		g_globa.pid = -1;
 	}
 	else
 		write(1, "\b\b  \b\b", 6);
