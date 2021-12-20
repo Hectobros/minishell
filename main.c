@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 10:33:55 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 10:25:34 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 11:12:11 by jvermeer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,38 +32,59 @@ void	print_lst(t_content *lst)//DEL
 		lst = lst->next;
 	}
 }
+//	print_env(lenv);
+//	print_lst(lst);
+//	ft_printcomm(com);
 
 
 
 
+int	lexer_ok(char *rl, t_content *lst, t_env *lenv, char **env)
+{
+	t_mini	*com;
+	int		ret;
 
-
-
-
+	com = NULL;
+	free(rl);
+	com = ft_buildpipe(lst, lenv);
+	free_content_lst(lst);
+	add_prev_mini(com);
+	if (len_mini(com) == 1 && is_parent(com))
+	{
+		ret = dad_is_running(com, lenv);
+		if (ret == 888)
+			return (0);;
+		g_globa.herve = ret;
+	}
+	else
+	{
+		if (mini_exec(com, lenv, env, com))
+			return (1);
+		wait_all(com);
+	}
+	ft_destroy(com);
+	return (1);
+}
 
 int	main(int ac, char **av, char **env)
 {
 	t_content	*lst;
 	t_env		*lenv;
 	char		*rl;
-	const char	*prompt;
-	t_mini		*com;
-	int			ret;
-	(void)ac; (void)av;
-	int			exit = 1;
+	int			exit;
 
-	g_globa.herve = 0;
-	com = NULL;
+	(void)ac;
+	(void)av;
+	exit = 1;
 	lenv = NULL;
+	g_globa.herve = 0;
 	create_env_lst(&lenv, env);
-	//	print_env(lenv);
-	prompt = "minishell$ ";
 	while (exit)
 	{
-		g_globa.pid = -1;
 		lst = NULL;
+		g_globa.pid = -1;
 		ft_setsignal();
-		rl = readline(prompt);
+		rl = readline("minishell$ ");
 		if (rl == NULL)
 		{
 			rl_clear_history();
@@ -75,35 +96,7 @@ int	main(int ac, char **av, char **env)
 		if (ft_strlen(rl) != 0)
 			add_history(rl);
 		if (!make_token(rl, &lst, lenv))
-		{
-			//		print_lst(lst);
-			com = ft_buildpipe(lst, lenv);
-			add_prev_mini(com);
-
-			free_content_lst(lst);
-			free(rl);
-
-			//		if (com != NULL)
-			//						ft_printcomm(com);
-
-			if (len_mini(com) == 1 && is_parent(com))
-			{
-				ret = dad_is_running(com, lenv);
-				if (ret == 888)
-					exit = 0;
-				else
-					g_globa.herve = ret;
-			}
-			else
-			{
-				if (mini_exec(com, lenv, env, com))
-					return (1);
-				wait_all(com);
-			}
-			ft_destroy(com);
-		}
-		//		exit = 0;
-		//		printf("glo:%d\n", globa.herve);
+			exit = lexer_ok(rl, lst, lenv, env);
 	}
 	rl_clear_history();
 	free_env(lenv);
