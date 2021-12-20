@@ -6,7 +6,7 @@
 /*   By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 10:55:30 by jvermeer          #+#    #+#             */
-/*   Updated: 2021/12/20 09:15:49 by jvermeer         ###   ########.fr       */
+/*   Updated: 2021/12/20 09:39:18 by jvermeer         ###   ########.fr       */
 /*   Updated: 2021/12/14 19:33:14 by nschmitt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -31,14 +31,12 @@ typedef struct s_global
 	pid_t	pid;
 	int		herve;
 }		t_global;
-
 typedef struct s_mini
 {
 	int		pipe[2];
-	//add pfd ? 
-	char	**cmd;//cmd name + all flags + argus
-	int		fdin;// = -500
-	int		fdout;// = -500
+	char	**cmd;
+	int		fdin;
+	int		fdout;
 	int		pid;
 	int		content;
 	char	*crashword;
@@ -47,9 +45,9 @@ typedef struct s_mini
 }				t_mini;
 typedef struct s_content
 {
-	int					token;// W:1  >:2  >>:3  <:4  <<:5  |:6  if '$no':666
-	char				*content;//W = anything O=">"
-	int					pfd[2];//reading size: pfd[0]
+	int					token;
+	char				*content;
+	int					pfd[2];
 	struct s_content	*next;
 }				t_content;
 typedef struct s_env
@@ -65,20 +63,18 @@ typedef struct s_utils
 	int		dq;
 	char	*dest;
 }				t_utils;
-
 extern t_global globa;
-
-int	env42(char **cmd, t_env *lst);
-int	exit42(char **cmd);
-int	unset42(char **cmd, t_env **lst);
-int	export42(char **cmd, t_env **lst);
-int	echo42(char **cmd);
-int	pwd42(char **cmd);
-int	cd42(char **cmd, t_env *lst);
-void	put_s(char *s);
-void	putstr_and_s(const char *message, char *s);
-char		*ft_strjoin(char const *s1, char const *s2);
-int	write_error(const char *err, char *s);
+int				env42(char **cmd, t_env *lst);
+int				exit42(char **cmd);
+int				unset42(char **cmd, t_env **lst);
+int				export42(char **cmd, t_env **lst);
+int				echo42(char **cmd);
+int				pwd42(char **cmd);
+int				cd42(char **cmd, t_env *lst);
+void			put_s(char *s);
+void			putstr_and_s(const char *message, char *s);
+char			*ft_strjoin(char const *s1, char const *s2);
+int				write_error(const char *err, char *s);
 char			*re_alloc(char *buff, int hl, int limit);
 int				str_comp(char *name, char *unset);
 char			*get_env42(t_env *lenv, char *name);
@@ -95,8 +91,8 @@ int				check_open_quotes(char *str);
 int				split_all_content(char *line, t_content **lst);
 char			*change_content(char *cont, t_env *lenv);
 int				free_content_lst(t_content *lst);
-t_env	*new_env(char *name, char *value);
-void	add_back_env(t_env **lst, t_env *lnew);
+t_env			*new_env(char *name, char *value);
+void			add_back_env(t_env **lst, t_env *lnew);
 int				free_env(t_env *lst);
 char			*get_env_value(const char *env);
 int				create_env_lst(t_env **lst, char **env);
@@ -105,7 +101,8 @@ char			*dol_is_interrog(t_utils *u, char **cont);
 char			*dol_is_env(t_utils *u, char **cont, t_env *lenv);
 int				replace_env(t_content *lst, t_env *lenv);
 int				make_token(char *rl, t_content **lst, t_env *lenv);
-//fonctions Niels
+int				is_builtin(t_mini *l);
+void			run_command(t_mini *l, t_env *lenv, char **env, int saveout);
 char			*ft_strdupn(const char *s1);
 int				ft_lstok(t_content *l);
 int				ft_nbpipe(t_content *l);
@@ -132,11 +129,11 @@ int				ft_ambigous(t_content *l, t_mini *com, int i);
 int				ft_errorsyntax(int x, t_content *l, t_env *lenv);
 int				ft_printcomm(t_mini *com);
 void			ft_printab(char **tab);
-void    routine(int sig);
-void    rout(int sig);
-void    ft_setsignal(void);
-void    ft_delsignal(void);
-int		ft_errord(int x);
-int		exit2(char **cmd);
+void			routine(int sig);
+void			rout(int sig);
+void			ft_setsignal(void);
+void			ft_delsignal(void);
+int				ft_errord(int x);
+int				exit2(char **cmd);
 
 #endif

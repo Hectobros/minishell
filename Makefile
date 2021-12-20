@@ -6,7 +6,7 @@
 #    By: nschmitt <nschmitt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/24 10:54:11 by jvermeer          #+#    #+#              #
-#    Updated: 2021/12/20 08:41:09 by jvermeer         ###   ########.fr        #
+#    Updated: 2021/12/20 09:35:00 by jvermeer         ###   ########.fr        #
 #    Updated: 2021/12/14 19:30:31 by nschmitt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -46,6 +46,7 @@ SRCS = main.c \
 	   ./signals/ft_signal.c\
 	   ./utils/create_heredoc.c \
 	   ./utils/free_func.c \
+	   ./exec/run_cmd.c\
 
 OBJS = ${SRCS:.c=.o}
 
