@@ -142,5 +142,7 @@ void			ft_setsignal(void);
 void			ft_delsignal(void);
 int				ft_errord(int x);
 int				exit2(char **cmd);
+void			declare(int ac, char **av, int *exit, t_env **lenv);
+int				ctrld(t_env *lenv);
 
 #endif

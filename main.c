@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-t_global g_globa;
+t_global	g_globa;
 
-void	print_env(t_env *lenv)//DEL
+void	print_env(t_env *lenv)
 {
 	while (lenv)
 	{
@@ -23,7 +23,7 @@ void	print_env(t_env *lenv)//DEL
 	}
 }
 
-void	print_lst(t_content *lst)//DEL
+void	print_lst(t_content *lst)
 {
 	while (lst)
 	{
@@ -32,12 +32,6 @@ void	print_lst(t_content *lst)//DEL
 		lst = lst->next;
 	}
 }
-//	print_env(lenv);
-//	print_lst(lst);
-//	ft_printcomm(com);
-
-
-
 
 int	lexer_ok(char *rl, t_content *lst, t_env *lenv, char **env)
 {
@@ -53,7 +47,7 @@ int	lexer_ok(char *rl, t_content *lst, t_env *lenv, char **env)
 	{
 		ret = dad_is_running(com, lenv);
 		if (ret == 888)
-			return (0);;
+			return (0);
 		g_globa.herve = ret;
 	}
 	else
@@ -66,6 +60,14 @@ int	lexer_ok(char *rl, t_content *lst, t_env *lenv, char **env)
 	return (1);
 }
 
+int	ctrld(t_env *lenv)
+{
+	rl_clear_history();
+	free_env(lenv);
+	printf("exit\n");
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_content	*lst;
@@ -73,10 +75,7 @@ int	main(int ac, char **av, char **env)
 	char		*rl;
 	int			exit;
 
-	(void)ac;
-	(void)av;
-	exit = 1;
-	lenv = NULL;
+	declare(ac, av, &exit, &lenv);
 	g_globa.herve = 0;
 	create_env_lst(&lenv, env);
 	while (exit)
@@ -86,12 +85,7 @@ int	main(int ac, char **av, char **env)
 		ft_setsignal();
 		rl = readline("minishell$ ");
 		if (rl == NULL)
-		{
-			rl_clear_history();
-			free_env(lenv);
-			printf("exit\n");
-			return(0);
-		}
+			return (ctrld(lenv));
 		rl = pipe_at_end(rl);
 		if (ft_strlen(rl) != 0)
 			add_history(rl);

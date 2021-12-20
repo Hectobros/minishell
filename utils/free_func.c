@@ -40,3 +40,11 @@ int	free_content_lst(t_content *lst)
 	}
 	return (0);
 }
+
+void	declare(int ac, char **av, int *exit, t_env **lenv)
+{
+	(void)ac;
+	(void)av;
+	*exit = 1;
+	*lenv = NULL;
+}
