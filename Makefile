@@ -33,6 +33,9 @@ SRCS = main.c \
 	   ./ns/ft_strdupn.c \
 	   ./ns/ft_lstlastm.c \
 	   ./ns/ft_lstadd_backmini.c \
+	   ./ns/ft_parsdeux.c \
+	   ./ns/ft_openner.c \
+	   ./ns/parsutils.c \
 	   ./builtins/cd_pwd.c \
 	   ./builtins/echo.c \
 	   ./builtins/env.c \

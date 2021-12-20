@@ -105,6 +105,8 @@ int				ft_nbpipe(t_content *l);
 char 			**ft_tabdupgrand(char **tab, char *str);
 void			ft_addcom(char *content, t_mini *commande);
 int 			ft_open(t_content *l, t_mini *com, int token);
+int				ft_openone(t_content *l, t_mini *com, int token);
+void			ft_opendeux(t_content *l, t_mini *com, int token, int fd);
 void			ft_finishcom(t_mini *com, int *fd);
 void			ft_createcom(t_mini *com, t_content *l);
 t_mini			*ft_createliste(int x);
@@ -118,7 +120,6 @@ void			ft_lstadd_backm(t_mini **alst, t_mini *n);
 t_mini			*ft_lstlastm(t_mini	*lst);
 void			ft_printab(char **tab);
 int				ft_printcomm(t_mini *com);
-int				ft_spheredoc(t_content *l, int x);
 int				ft_isdir(t_content *l, t_mini *com);
 int				ft_ambigous(t_content *l, t_mini *com, int i);
 int				ft_errorsyntax(int x, t_content *l, t_env *lenv);
@@ -128,5 +129,6 @@ void    routine(int sig);
 void    rout(int sig);
 void    ft_setsignal();
 void    ft_delsignal();
+int		ft_errord(int x);
 
 #endif
