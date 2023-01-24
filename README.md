@@ -2,7 +2,7 @@
 
 Projet fait avec Jvermeer.
 
-Projet de l'école 𝟰２. Le but de cet exercice est de créer un shell
+Projet de l'école 𝟰２. Le but de cet exercice est de créer un shell (Sous Linux)
 
 Utilisation:
 
